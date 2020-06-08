@@ -8,6 +8,8 @@ import NewBoard from "./NewBoard";
 import Boards from "./Boards";
 import { useSelector } from "react-redux";
 import ProgressLists from "./ProgresList/ProgresLists";
+import NewProgressList from "./ProgresList/NewProgressList";
+import BoardDND from "./ProgresList/CaseList/BoardDND";
 
 let Content = () => {
   return (
@@ -15,6 +17,7 @@ let Content = () => {
         <NewBoard/>
         <Boards />
         <ProgressLists/>
+        {/* <BoardDND/> */}
     </div>
   );
 };

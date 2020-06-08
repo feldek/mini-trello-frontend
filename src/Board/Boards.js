@@ -4,28 +4,36 @@ import s from "./Boards.module.css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveActiveObject } from "../Data/BoardReducer";
+import { getBoardList, getNumberBoard, getNameBoard } from "../Data/Selectors";
+import NewBoard from "./NewBoard";
 
 let Boards = () => {
-  let boards = useSelector((state) => state.board).listBoard;
   const dispatch = useDispatch();
   let nameBoards = [];
-  for (let elem in boards) {
+  let state = useSelector((state) => state);
+  let boards = getBoardList(state);
+
+  for (let numberBoards in boards) {
     nameBoards.push(
       <Link
-        to={`/board${boards[elem].id}`}
+        to={`/board${getNumberBoard(state, numberBoards)}`}
         className={s.box}
-        key={boards[elem].id}
-        onClick={
-          ()=>{
-            dispatch(saveActiveObject(boards[elem].id))
-          }
-        }
+        key={getNumberBoard(state, numberBoards)}
+        onClick={() => {
+          dispatch(saveActiveObject(getNumberBoard(state, numberBoards)));
+        }}
       >
-        {boards[elem].nameBoard}
+        {getNameBoard(state, numberBoards)}
       </Link>
     );
   }
-return <div>{nameBoards}</div>;
+  // debugger
+  return (
+    <div>
+      <NewBoard />
+      {nameBoards}
+    </div>
+  );
 };
 
 export default Boards;

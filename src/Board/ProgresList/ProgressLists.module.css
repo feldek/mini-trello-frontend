@@ -1,12 +1,17 @@
 .progressList{
   width: 150px;
-  height: 50px;
+  height: 100px;
   background-color: antiquewhite;
   display: flex;
   justify-content: center;
   align-items: center;  
+  flex-direction: column;
   border: 1px solid black;
   margin: 20px;
+}
+.nameAndCaseList{
+  display: flex;
+  flex-direction: column;
 }
 .boxProgressList{
   display: flex;

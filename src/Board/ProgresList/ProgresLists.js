@@ -6,20 +6,49 @@ import * as yup from "yup";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import s from "./ProgressLists.module.css";
+import {
+  getProgressList,
+  getNameActiveBoard,
+  getNumberActiveBoard,
+  getNameProgressList,
+} from "../../Data/Selectors";
+import NewProgressList from "./NewProgressList";
+import CaseList from "./CaseList/CaseList";
+import CreateCase from "./CaseList/CreateCase";
 
 let ProgressLists = () => {
-  let boards = useSelector((state) => state.board).listBoard;
-  let activeBoardID = useSelector((state) => state.board).activeObject.id;
+  const state = useSelector((state) => state);
+  let idActiveBoard = getNumberActiveBoard(state);
   let nameProgressLists = [];
 
-  let progressList = boards[`board ${activeBoardID}`].progressList;
+  let progressList = getProgressList(state, getNameActiveBoard(state));
 
-  for (let elemProgress in progressList) {
+  if (!progressList) return <div className={s.boxProgressList}></div>;
+
+  for (let nameObjectProgressList in progressList) {
+    let nameProgressList = getNameProgressList(
+      state,
+      getNameActiveBoard(state),
+      nameObjectProgressList
+    );
+    // debugger
     nameProgressLists.push(
-      <div className={s.progressList}>{progressList[elemProgress]}</div>
+      <div className={s.nameAndCaseList}>
+      <div className={s.progressList} key={s.nameObjectProgressList}>
+       <div> {nameProgressList}</div>
+        <CreateCase nameObjectProgressList={nameObjectProgressList}/>
+      </div>
+      <CaseList nameObjectProgressList={nameObjectProgressList}/>
+      </div>
     );
   }
-  return <div className={s.boxProgressList}>{nameProgressLists}</div>;
+  return (
+    <div className={s.boxProgressList}>
+      {nameProgressLists}
+      
+      <NewProgressList />
+    </div>
+  );
 };
 
 export default ProgressLists;

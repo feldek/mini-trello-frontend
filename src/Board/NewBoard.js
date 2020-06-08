@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { createBoard, testText } from "../Data/BoardReducer";
 import { useSelector } from "react-redux";
+import { getBoardList } from "../Data/Selectors";
 
 let NewBoard = () => {
   const [localStorage, setLocalStorage] = useLocalStorage("dataUser", "");
@@ -12,9 +13,13 @@ let NewBoard = () => {
 
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const calculationId = useSelector(
-    (state) => Object.keys(state.board.listBoard).length + 1
+  const calculationNumberBoard = useSelector(
+    (state) => Object.keys(getBoardList(state)).length + 1
   );
+  
+  // const calculationNumberBoard = useSelector(
+  //   (state) => Object.keys(state.board.boardList).length + 1
+  // );
 
   let style = {
     width: "200px",
@@ -31,7 +36,7 @@ let NewBoard = () => {
     <div style={style}>
       <form
         onSubmit={handleSubmit((e) => {
-          dispatch(createBoard(e.boardName, calculationId));
+          dispatch(createBoard(e.boardName, calculationNumberBoard));
         })}
       >
         <input name="boardName" ref={register()} />
