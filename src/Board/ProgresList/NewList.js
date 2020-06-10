@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import useLocalStorage from "local-storage-hook";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-
 import { useSelector } from "react-redux";
-import { getBoardList } from "../Data/Selectors";
+import { createProgressList } from "../../Data/BoardReducerOld";
+import { createList } from "../../Data/ListReducer";
+import { createEmptyCase } from "../../Data/CaseReducer";
 import { uuid } from "uuidv4";
-import { createBoard } from "../Data/BoardReducer";
+import { useLocation } from "react-router-dom";
 
-let NewBoard = () => {
-  const [localStorage, setLocalStorage] = useLocalStorage("dataUser", "");
+let NewList = () => {
+  let boardId = useLocation().pathname.replace("/board/", "");
   const dispatch = useDispatch();
-  const { handleSubmit, register, errors, reset } = useForm();  
-
+  const { handleSubmit, register, errors, reset } = useForm();
   let style = {
     width: "200px",
     height: "100px",
@@ -29,7 +28,8 @@ let NewBoard = () => {
     <div style={style}>
       <form
         onSubmit={handleSubmit((e) => {
-          dispatch(createBoard(e.name, uuid()));
+          dispatch(createEmptyCase());
+          dispatch(createList(e.name, uuid(), boardId));          
         })}
       >
         <input name="name" ref={register()} />
@@ -39,18 +39,12 @@ let NewBoard = () => {
     </div>
   );
 };
-//   const [localStorage, setLocalStorage] = useLocalStorage("dataUser", "");
+// let NewList = () => {
+
 //   const dispatch = useDispatch();
-
 //   const { handleSubmit, register, errors, reset } = useForm();
-
-//   const calculationNumberBoard = useSelector(
-//     (state) => Object.keys(getBoardList(state)).length + 1
-//   );
-  
-//   // const calculationNumberBoard = useSelector(
-//   //   (state) => Object.keys(state.board.boardList).length + 1
-//   // );
+//   const state = useSelector((state) => state);
+//   let calculationNumberProgressList = Object.keys(getProgressList(state, getNameActiveBoard(state))).length + 1;
 
 //   let style = {
 //     width: "200px",
@@ -66,16 +60,22 @@ let NewBoard = () => {
 //   return (
 //     <div style={style}>
 //       <form
-//         onSubmit={handleSubmit((e) => {
-//           dispatch(createBoard(e.boardName, calculationNumberBoard));
-//         })}
+//       onSubmit={handleSubmit((e) => {
+//         dispatch(
+//           createProgressList(
+//             e.nameProgressList,
+//             getNumberActiveBoard(state),
+//             calculationNumberProgressList
+//           )
+//         );
+//       })}
 //       >
-//         <input name="boardName" ref={register()} />
-//         {errors.boardName && errors.boardName.message}
+//         <input name="nameProgressList" ref={register()} />
+//         {errors.nameProgressList && errors.nameProgressList.message}
 //         <button type="submit">Add</button>
 //       </form>
 //     </div>
 //   );
 // };
 
-export default NewBoard;
+export default NewList;

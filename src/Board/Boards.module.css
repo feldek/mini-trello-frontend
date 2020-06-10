@@ -1,4 +1,4 @@
-.box{
+.boxBoard{
   width: 200px;
   height: 150px;
   background-color: antiquewhite;
@@ -7,4 +7,9 @@
   align-items: center;
   border: 1px solid black;
   margin: 20px;
+}
+.boxContent{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }

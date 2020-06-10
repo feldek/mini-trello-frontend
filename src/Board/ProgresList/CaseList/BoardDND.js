@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useForm } from "react-hook-form";
+import { uuid } from "uuidv4";
+import { useSelector } from "react-redux";
+import Lists from "../Lists";
+import NewList from "../NewList";
+import ListInDND from "../ListInDND";
 
 // fake data generator
-
 
 const getItems = (count, offset = 0) =>
   Array.from({ length: count }, (v, k) => k).map((k) => ({
     id: `item-${k + offset}-${new Date().getTime()}`,
-    content: `item ${k + offset}`,
+    name: `item ${k + offset}`,
   }));
 
 const reorder = (list, startIndex, endIndex) => {
@@ -56,24 +61,12 @@ const getListStyle = (isDraggingOver) => ({
 });
 
 let BoardDND = () => {
-  const [count, setCount]= useState(1);
+  const listState = useSelector((state) => state.lists);
+  const [count, setCount] = useState(1);
+  const { handleSubmit, register, errors, reset } = useForm();
+  const caseState = useSelector((state) => state.cases);
 
-  const list1 = [
-    {id: "1", content: "list1 deal1"},
-    {id: "2", content: "list1 deal2"},
-    {id: "3", content: "list1 deal3"},
-  ]
-  const list2 = [
-    {id: "4", content: "list2 deal1"},
-    {id: "5", content: "list2 deal2"},
-    {id: "6", content: "list2 deal3"},
-  ]
-
-
-
-  const [state, setState] = useState([getItems(10), getItems(5, 10)]);
-  // const [state, setState] = useState([list1, list2]);
-  // debugger
+  const [state, setState] = useState(caseState, []);
 
   function onDragEnd(result) {
     const { source, destination } = result;
@@ -100,6 +93,10 @@ let BoardDND = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   return (
     <div>
       <button
@@ -118,60 +115,87 @@ let BoardDND = () => {
       >
         Add new item
       </button>
+      <NewList />
       <div style={{ display: "flex" }}>
         <DragDropContext onDragEnd={onDragEnd}>
           {state.map((el, ind) => (
-            <Droppable key={ind} droppableId={`${ind}`}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
-                  {...provided.droppableProps}
-                >
-                  {el.map((item, index) => (
-                    <Draggable
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style
-                          )}
-                        >
+            <div key={ind}>
+              <ListInDND ind={ind}/>
+              <form
+                onSubmit={handleSubmit((elem) => {
+                  setState(
+                    state.map((elemState, elemStateInd) => {
+                      if (elemStateInd === ind)
+                        return [
+                          ...elemState,
+                          {
+                            id: uuid(),
+                            name: elem[`nameList${listState[ind].id}`],
+                            listId: listState[ind].id,
+                          },
+                        ];
+                      else return [...elemState];
+                    })
+                  );
+                })}
+              >
+                <input name={`nameList${listState[ind].id}`} ref={register()} />
+                {errors.nameList && errors.nameList.message}
+                <button type="submit">Add</button>
+              </form>
+
+              <Droppable droppableId={`${ind}`}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                    {...provided.droppableProps}
+                  >
+                    {el.map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
                           <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-around",
-                            }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
                           >
-                            {item.content}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const newState = [...state];
-                                newState[ind].splice(index, 1);
-                                setState(
-                                  newState.filter((group) => group.length)
-                                );
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-around",
                               }}
                             >
-                              delete
-                            </button>
+                              {item.name}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newState = [...state];
+                                  newState[ind].splice(index, 1);
+                                  setState(
+                                    newState.filter((group) => group.length)
+                                  );
+                                }}
+                              >
+                                delete
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
           ))}
         </DragDropContext>
       </div>
@@ -179,5 +203,4 @@ let BoardDND = () => {
   );
 };
 
-// export default BoardDND;
-
+export default BoardDND;

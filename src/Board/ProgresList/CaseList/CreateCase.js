@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import s from "./CaseList.module.css";
 import { useForm } from "react-hook-form";
-import { createCaseList } from "../../../Data/BoardReducer";
+import { createCaseList } from "../../../Data/BoardReducerOld";
 import { getNumberActiveBoard } from "../../../Data/Selectors";
 
 let CreateCase = ({ nameObjectProgressList }) => {
