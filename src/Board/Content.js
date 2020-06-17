@@ -1,26 +1,16 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import useLocalStorage from "local-storage-hook";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import NewBoard from "./NewBoard";
 import Boards from "./Boards";
-import { useSelector } from "react-redux";
-import Lists from "./ProgresList/Lists";
-import NewProgressList from "./ProgresList/NewList";
-import BoardDND from "./ProgresList/CaseList/BoardDND";
+import Case from "./ProgresList/CaseList/Case";
+import { Switch, Route } from "react-router-dom";
+import PageNotFound from "./PageNotFound";
 
-
-let Content = () => {
-  // console.log(uuid());
-
-
+let Content = (props) => {
   return (
-    <div>
-      <Boards/>   
-      {/* <Lists/>    */}
-      <BoardDND />
-    </div>
+    <Switch>
+      <Route exact path="/" component={Boards} />
+      <Route exact path="/board/:boardId" component={Case} />
+      <Route component={PageNotFound} />
+    </Switch>
   );
 };
 

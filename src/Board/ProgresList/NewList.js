@@ -1,81 +1,47 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { useSelector } from "react-redux";
-import { createProgressList } from "../../Data/BoardReducerOld";
 import { createList } from "../../Data/ListReducer";
 import { createEmptyCase } from "../../Data/CaseReducer";
 import { uuid } from "uuidv4";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import s from "./NewList.module.css";
 
 let NewList = () => {
   let boardId = useLocation().pathname.replace("/board/", "");
   const dispatch = useDispatch();
   const { handleSubmit, register, errors, reset } = useForm();
-  let style = {
-    width: "200px",
-    height: "100px",
-    backgroundColor: "antiquewhite",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "1px solid black",
-    margin: "20px",
-  };
 
   return (
-    <div style={style}>
-      <form
-        onSubmit={handleSubmit((e) => {
-          dispatch(createEmptyCase());
-          dispatch(createList(e.name, uuid(), boardId));          
-        })}
-      >
-        <input name="name" ref={register()} />
-        {errors.name && errors.name.message}
-        <button type="submit">Add</button>
-      </form>
+    <div className={s.formAndBack}>
+      <div className={s.box}>
+        <form
+          className={s.form}
+          onSubmit={handleSubmit((elem, e) => {
+            let listId = uuid();
+            dispatch(createEmptyCase(listId));
+            dispatch(createList(elem.name, listId, boardId));
+            e.target.reset();
+          })}
+        >
+          <label>
+            <input
+              name="name"
+              className={s.input}
+              ref={register()}
+              placeholder="new list"
+            />
+            {errors.name && errors.name.message}
+          </label>
+          <button className={s.button} type="submit">
+            Add
+          </button>
+        </form>
+      </div>
+      <Link to="/" className={s.back}>
+        <button>Back to board</button>
+      </Link>
     </div>
   );
 };
-// let NewList = () => {
-
-//   const dispatch = useDispatch();
-//   const { handleSubmit, register, errors, reset } = useForm();
-//   const state = useSelector((state) => state);
-//   let calculationNumberProgressList = Object.keys(getProgressList(state, getNameActiveBoard(state))).length + 1;
-
-//   let style = {
-//     width: "200px",
-//     height: "100px",
-//     backgroundColor: "antiquewhite",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     border: "1px solid black",
-//     margin: "20px",
-//   };
-
-//   return (
-//     <div style={style}>
-//       <form
-//       onSubmit={handleSubmit((e) => {
-//         dispatch(
-//           createProgressList(
-//             e.nameProgressList,
-//             getNumberActiveBoard(state),
-//             calculationNumberProgressList
-//           )
-//         );
-//       })}
-//       >
-//         <input name="nameProgressList" ref={register()} />
-//         {errors.nameProgressList && errors.nameProgressList.message}
-//         <button type="submit">Add</button>
-//       </form>
-//     </div>
-//   );
-// };
-
 export default NewList;

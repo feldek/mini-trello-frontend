@@ -1,0 +1,63 @@
+.content {
+  margin-top: 100px;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+}
+.lists {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: "flex";
+  justify-content: "flex-start";
+  width: "100%";
+}
+.header {
+  display: "flex";
+  justify-content: "center";
+  flex-direction: "column";
+  margin: 20px 20px 0px 20px;
+  box-shadow: 0 0 5px 2px rgb(51, 50, 50);
+  background-color: #ffffffd0;
+  width: 240px;
+}
+.list {
+  margin: 20px;
+  box-shadow: 0 0 5px 2px rgb(51, 50, 50);
+  background-color: #ffffffd0;
+}
+.cases {
+  margin: 5px 20px 20px 20px;
+  box-shadow: 0 0 5px 2px rgb(51, 50, 50);
+  background-color: #ffffffd0;
+}
+.case {
+  box-shadow: 0px 4px 5px 2px rgb(51, 50, 50), 20px 0 20px -20px #000 inset,
+    -20px 0 20px -20px #000 inset;
+  font-weight: 600;
+  font-size: 18px;
+}
+.textCase button {
+  height: 25.75px;
+  position: relative;
+  top: -10px;
+  right: -10px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+.icon {  
+  box-shadow: 0px 0px 8px 0px #000 inset;
+  transition-duration: 0.6s;
+}
+.icon:hover {
+  background-color: red;
+}
+.textCase {
+  box-shadow: 0px 4px 5px 2px rgb(51, 50, 50), 20px 0 20px -20px #000 inset,
+    -20px 0 20px -20px #000 inset;
+  font-weight: 600;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  border-top-right-radius: 15px;
+}

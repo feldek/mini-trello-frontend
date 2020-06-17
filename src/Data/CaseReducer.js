@@ -1,28 +1,32 @@
+import { uuid } from "uuidv4";
+
 const CREATE_EMPTY_CASE = "CREATE_EMPTY_CASE";
+const SET_CASE_STATE = "SET_CASE_STATE";
+const DELETE_CASE_LIST = "DELETE_CASE_LIST";
+const DELETE_CASE_BOARD = "DELETE_CASE_BOARD";
 
-let initialState = [
-  [
-    { name: "list1 deal1", id: "1", listId: "list1" },
-    { name: "list1 deal2", id: "2", listId: "list1" },
-    { name: "list1 deal3", id: "3", listId: "list1" },
-  ],
-  [
-    { name: "list2 deal1", id: "4", listId: "list2" },
-    { name: "list2 deal2", id: "5", listId: "list2" },
-    { name: "list2 deal3", id: "6", listId: "list2" },
-  ],
-  [
-    { name: "list3 deal1", id: "7", listId: "list3" },
-    { name: "list3 deal2", id: "8", listId: "list3" },
-    { name: "list3 deal3", id: "9", listId: "list3" },
-  ],
-];
-
-const CaseReducer = (state = initialState, action) => {
+const CaseReducer = (
+  state = JSON.parse(window.localStorage.getItem("dataUserCase")),
+  action
+) => {
   switch (action.type) {
     case CREATE_EMPTY_CASE: {
+      let stateCopy = !state ? [] : [...state];
+      stateCopy.push([{ id: uuid(), name: "", listId: action.listId }]);
+      return stateCopy;
+    }
+    case SET_CASE_STATE: {
+      return [...action.stateArr];
+    }
+    case DELETE_CASE_LIST: {
       let stateCopy = [...state];
-      stateCopy.push([]);
+      stateCopy.splice(action.ind, 1);
+      return stateCopy;
+    }
+    case DELETE_CASE_BOARD: {
+      let stateCopy = state.filter(
+        (item) => !action.listId.includes(item[0].listId)
+      );
       return stateCopy;
     }
     default:
@@ -30,8 +34,17 @@ const CaseReducer = (state = initialState, action) => {
   }
 };
 
-export const createEmptyCase = () => {
-  return { type: CREATE_EMPTY_CASE };
+export const createEmptyCase = (listId) => {
+  return { type: CREATE_EMPTY_CASE, listId };
+};
+export const setCaseState = (stateArr) => {
+  return { type: SET_CASE_STATE, stateArr };
+};
+export const deleteCaseList = (ind) => {
+  return { type: DELETE_CASE_LIST, ind };
+};
+export const deleteCaseBoard = (listId) => {
+  return { type: DELETE_CASE_LIST, listId };
 };
 
 export default CaseReducer;

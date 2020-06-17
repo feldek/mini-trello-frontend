@@ -1,15 +1,61 @@
-.boxBoard{
-  width: 200px;
-  height: 150px;
-  background-color: antiquewhite;
+.content {
+  margin-top: 100px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  margin: 20px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 70%;
 }
-.boxContent{
+.boards {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.board {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  font-size: 24px;
+  margin: 10px 10px;
+  -webkit-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 2px solid rgb(175, 175, 175);
+  border-radius: 5px;
+  box-shadow: 20px 0 20px -20px #000 inset, -20px 0 20px -20px #000 inset;
+  border-top-right-radius: 17px;  
+}
+.box{
+  margin: 0px 0px 50px 0px;
+  width: 240px;
+  min-height: 120px;
+}
+.board a{ 
+  color: black;
+}
+
+.board:hover {
+  background-color: rgb(175, 175, 175);
+  color: white;
+}
+.button {
+  position: relative;
+  height: 25px;
+  top: 36px;
+  right: -203px;
+  cursor: pointer;
+  border-radius: 15px;
+  transition-duration: 0.6s;
+  background: rgb(175, 175, 175);
+  box-shadow: 0px 0px 8px 0px #000 inset;
+}
+.button {
+}
+.button:hover {
+  background-color: red;
 }

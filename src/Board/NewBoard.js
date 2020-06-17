@@ -1,81 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import useLocalStorage from "local-storage-hook";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-
-import { useSelector } from "react-redux";
-import { getBoardList } from "../Data/Selectors";
 import { uuid } from "uuidv4";
 import { createBoard } from "../Data/BoardReducer";
+import s from "./NewBoard.module.css";
 
-let NewBoard = () => {
-  const [localStorage, setLocalStorage] = useLocalStorage("dataUser", "");
+let NewBoard = () => {  
   const dispatch = useDispatch();
-  const { handleSubmit, register, errors, reset } = useForm();  
+  const { handleSubmit, register, errors } = useForm();
 
-  let style = {
-    width: "200px",
-    height: "100px",
-    backgroundColor: "antiquewhite",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "1px solid black",
-    margin: "20px",
-  };
+  const [toggle, setToggle] = useState(false);
 
   return (
-    <div style={style}>
-      <form
-        onSubmit={handleSubmit((e) => {
-          dispatch(createBoard(e.name, uuid()));
-        })}
-      >
-        <input name="name" ref={register()} />
-        {errors.name && errors.name.message}
-        <button type="submit">Add</button>
-      </form>
-    </div>
+    <>
+      {!toggle && (
+        <button className={s.create} onClick={() => setToggle(true)}>
+          Create new board
+        </button>
+      )}
+      {toggle && (
+        <div className={s.box}>
+          <form
+            className={s.form}
+            onSubmit={handleSubmit((elem, e) => {
+              dispatch(createBoard(elem.name, uuid()));
+              e.target.reset();
+            })}
+          >
+            <label>
+              Create new board
+              <input name="name" className={s.input} ref={register()} />
+              {errors.name && errors.name.message}
+            </label>
+            <div className={s.buttons}>
+              <button type="submit">Create</button>
+              <button type="submit" onClick={() => setToggle(false)}>
+                Cansel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </>
   );
 };
-//   const [localStorage, setLocalStorage] = useLocalStorage("dataUser", "");
-//   const dispatch = useDispatch();
-
-//   const { handleSubmit, register, errors, reset } = useForm();
-
-//   const calculationNumberBoard = useSelector(
-//     (state) => Object.keys(getBoardList(state)).length + 1
-//   );
-  
-//   // const calculationNumberBoard = useSelector(
-//   //   (state) => Object.keys(state.board.boardList).length + 1
-//   // );
-
-//   let style = {
-//     width: "200px",
-//     height: "100px",
-//     backgroundColor: "antiquewhite",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     border: "1px solid black",
-//     margin: "20px",
-//   };
-
-//   return (
-//     <div style={style}>
-//       <form
-//         onSubmit={handleSubmit((e) => {
-//           dispatch(createBoard(e.boardName, calculationNumberBoard));
-//         })}
-//       >
-//         <input name="boardName" ref={register()} />
-//         {errors.boardName && errors.boardName.message}
-//         <button type="submit">Add</button>
-//       </form>
-//     </div>
-//   );
-// };
 
 export default NewBoard;

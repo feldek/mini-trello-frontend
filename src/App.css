@@ -6,6 +6,16 @@
   height: 40vmin;
   pointer-events: none;
 }
+button,
+a {
+  text-decoration: none;
+  border: none;
+  outline: none;
+}
+button:focus {
+  text-decoration: none;
+  border: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

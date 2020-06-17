@@ -1,23 +1,28 @@
 const CREATE_LIST = "CREATE_LIST";
+const DELETE_LIST = "DELETE_LIST";
+const DELETE_LISTS_BOARD = "DELETE_LISTS_BOARD";
 
-let initialState = [
-  { name: "Board1 List1", id: "list1", boardId: "board1" },
-  { name: "Board1 List2", id: "list2", boardId: "board1" },
-  { name: "Board1 List3", id: "list3", boardId: "board1" },
-  { name: "Board2 List1", id: "list4", boardId: "board2" },
-  { name: "Board2 List2", id: "list5", boardId: "board2" },
-  { name: "Board2 List3", id: "list6", boardId: "board2" },
-];
-
-const ListReduser = (state = initialState, action) => {
+let localStorage = JSON.parse(window.localStorage.getItem("dataUserList"));
+const ListReduser = (state = localStorage, action) => {
   switch (action.type) {
     case CREATE_LIST: {
-      let stateCopy = [...state];
+      let stateCopy = !state ? [] : [...state];
       stateCopy.push({
         id: action.id,
         name: action.name,
         boardId: action.boardId,
       });
+      return stateCopy;
+    }
+    case DELETE_LIST: {
+      let stateCopy = [...state];
+      stateCopy.splice(action.ind, 1);
+      return stateCopy;
+    }
+    case DELETE_LISTS_BOARD: {
+      let stateCopy = state.filter(
+        (item) => !action.boardId.includes(item.boardId)
+      );
       return stateCopy;
     }
     default:
@@ -32,6 +37,13 @@ export const createList = (name, id, boardId) => {
     id,
     boardId,
   };
+};
+
+export const deleteList = (ind) => {
+  return { type: DELETE_LIST, ind };
+};
+export const deleteListsBoard = (boardId) => {
+  return { type: DELETE_LISTS_BOARD, boardId };
 };
 
 export default ListReduser;
