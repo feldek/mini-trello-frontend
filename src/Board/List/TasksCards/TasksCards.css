@@ -1,0 +1,8 @@
+.ant-card-body {
+  padding: 4px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.ant-card-grid {
+  width: 100%;
+}

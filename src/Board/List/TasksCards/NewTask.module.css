@@ -1,0 +1,26 @@
+.box {
+  margin: auto;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+form label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 100%;
+}
+.buttons{
+  display: flex;
+  justify-content: space-between;
+}
+

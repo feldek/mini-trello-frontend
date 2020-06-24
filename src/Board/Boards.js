@@ -7,9 +7,10 @@ import NewBoard from "./NewBoard";
 import { deleteBoard } from "../Data/BoardReducer";
 import useLocalStorage from "local-storage-hook";
 import { deleteListsBoard } from "../Data/ListReducer";
-import { deleteCaseBoard } from "../Data/CaseReducer";
+import { deleteTaskBoard } from "../Data/TaskReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Card } from "antd";
 
 let Boards = (props) => {
   const dispatch = useDispatch();
@@ -21,11 +22,11 @@ let Boards = (props) => {
   const [localDataUserList, setLocalDataUserList] = useLocalStorage(
     "dataUserList"
   );
-  const [localDataUserCase, setLocalDataUserCase] = useLocalStorage(
-    "dataUserCase"
+  const [localDataUserTask, setLocalDataUserTask] = useLocalStorage(
+    "dataUserTask"
   );
   const stateList = useSelector((state) => state.lists);
-  const stateCase = useSelector((state) => state.cases);
+  const stateTask = useSelector((state) => state.tasks);
   useEffect(() => {
     setLocalDataUserBoard(stateBoard);
   }, [stateBoard]);
@@ -33,39 +34,45 @@ let Boards = (props) => {
     setLocalDataUserList(stateList);
   }, [stateList]);
   useEffect(() => {
-    setLocalDataUserCase(stateCase);
-  }, [stateCase]);
+    setLocalDataUserTask(stateTask);
+  }, [stateTask]);
   return (
     <div className={s.content}>
-      <NewBoard />
-      <div className={s.boards}>
-        {useSelector((state) => state.boards).map((elem) => (
-          <div key={`boardBox${elem.id}`} className={s.box}>
-            <button
-              key={`boardButton${elem.id}`}
-              className={s.button}
-              onClick={() => (
-                dispatch(deleteBoard(elem.id)),
-                dispatch(deleteListsBoard(elem.id)),
-                stateList
-                  .filter((el) => el.boardId === elem.id)
-                  .forEach((element) => {
-                    dispatch(deleteCaseBoard(element.id));
-                  })
-              )}
-            >
-              <FontAwesomeIcon icon={faTimes} style={{ fontSize: "20px" }} />
-            </button>
-            <Link
-              to={`/board/${elem.id}`}
+      <Card title={<NewBoard />}>
+        <div className={s.boards}>
+          {useSelector((state) => state.boards).map((elem) => (
+            <Card.Grid
               key={`board${elem.id}`}
-              className={s.board}
+              className={s.boxBoard}
+              style={{ padding: 0, width: "33.33%" }}
             >
-              {elem.name}
-            </Link>
-          </div>
-        ))}
-      </div>
+              <button
+                key={`boardButton${elem.id}`}
+                className={s.button}
+                data-title="delete"
+                onClick={() => (
+                  dispatch(deleteBoard(elem.id)),
+                  dispatch(deleteListsBoard(elem.id)),
+                  stateList
+                    .filter((el) => el.boardId === elem.id)
+                    .forEach((element) => {
+                      dispatch(deleteTaskBoard(element.id));
+                    })
+                )}
+              >
+                <FontAwesomeIcon icon={faTimes} style={{ fontSize: "20px" }} />
+              </button>
+              <Link
+                to={`/board/${elem.id}`}
+                key={`board${elem.id}`}
+                className={s.boardLink}
+              >
+                {elem.name}
+              </Link>
+            </Card.Grid>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 };

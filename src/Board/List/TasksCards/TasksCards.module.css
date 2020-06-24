@@ -1,0 +1,32 @@
+.taskText {
+  width: 100%;
+  word-wrap: break-word;
+}
+.taskContainer {
+  font-weight: 600;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  display: flex;
+  position: relative;
+}
+.buttonTaskDelete {
+  height: 25.75px;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  cursor: pointer;
+  background: none;
+  transition-duration: 0.6s;
+}
+.buttonTaskDelete:hover {
+  color: rgb(221, 0, 0);
+}
+.totalCard {
+  width: 80%;
+  margin-top: 50px;
+}
+.tasksHeader {
+  width: 100%;
+  padding: 0px;
+}

@@ -1,12 +1,12 @@
 import { combineReducers, createStore } from "redux";
 import BoardReduser from "./BoardReducer";
 import ListReduser from "./ListReducer";
-import CaseReducer from "./CaseReducer";
+import TaskReducer from "./TaskReducer";
 
 let reducers = combineReducers({
   boards: BoardReduser,
   lists: ListReduser,
-  cases: CaseReducer,
+  tasks: TaskReducer,
 });
 
 let store = createStore(reducers);

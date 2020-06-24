@@ -1,54 +1,6 @@
-.create {
-  margin: auto;
-  width: 100%;
-  height: 150px;
+.createAntd {
+  height: 100px;
   font-size: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 16px 28px;
-  text-decoration: none;
-  font-size: 24px;
-  margin: 4px 2px;
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.6s;
-  cursor: pointer;
-  background-color: white;
-  color: black;
-  border: 2px solid rgb(175, 175, 175);
-  border-radius: 50px;
-  box-shadow: 40px 0 40px -40px #000 inset, -40px 0 40px -40px #000 inset;
-}
-.create:hover {
-  background-color: rgb(175, 175, 175);
-  color: white;
-}
-.box {
-  margin: auto;
-  width: 100%;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  text-decoration: none;
-  font-size: 24px;
-  margin: 4px 2px;
-  cursor: pointer;
-  background-color: white;
-  color: black;
-  border: 2px solid rgb(175, 175, 175);
-  border-radius: 50px;
-  box-shadow: 40px 0 40px -40px #000 inset, -40px 0 40px -40px #000 inset;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
 }
 .form label {
   display: flex;
@@ -58,36 +10,8 @@
   font-size: 26px;
   width: 100%;
 }
-.form input {
-  height: 30px;
-  width: 100%;
-}
-
 .buttons {
-  width: 100%;
+  margin: 0;
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  justify-content: flex-start;
 }
-
-.buttons button {
-  width: 100px;
-  display: inline-block;
-  padding: 7px 13px;
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  border-radius: 15px;
-  background-color: white;
-  color: black;
-  border: 2px solid rgb(175, 175, 175);
-  transition: all 0.5s ease;
-  box-shadow: 15px 0 20px -20px #000 inset, -15px 0 20px -20px #000 inset;
-}
-.buttons button:hover {
-  background-color: rgb(175, 175, 175);
-  color: white;
-}
-

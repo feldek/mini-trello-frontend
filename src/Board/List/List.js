@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import s from "./List.module.css";
 import useLocalStorage from "local-storage-hook";
 
-let ListInDND = ({ listId }) => {
+let List = ({ listId }) => {
   let boardId = useLocation().pathname.replace("/board/", "");
   let stateList = useSelector((state) => state.lists);
   let list = stateList
@@ -19,16 +19,11 @@ let ListInDND = ({ listId }) => {
     setLocalDataUserList(stateList);
   }, [stateList]);
 
-
   return (
     <div className={s.boxLists} key={`list${list.id}`}>
-      {list && (
-        <div className={s.list} >
-          {list.name}
-        </div>
-      )}
+      {list && <div className={s.list}>{list.name}</div>}
     </div>
   );
 };
 
-export default ListInDND;
+export default List;

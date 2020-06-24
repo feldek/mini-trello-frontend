@@ -2,60 +2,48 @@
   margin-top: 100px;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   width: 70%;
+}
+.button:hover {
+  color: red;
 }
 .boards {
   display: flex;
-  flex-direction: row;
+  width: 100%;
   flex-wrap: wrap;
 }
-
-.board {
-  height: 100%;
+.boxBoard {
+  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  text-decoration: none;
-  font-size: 24px;
-  margin: 10px 10px;
+  justify-content: center;
+}
+
+.boardLink {
+  flex: 1;
+  padding: 24px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 3px;
+  cursor: pointer;
+  background: none;
   -webkit-transition-duration: 0.6s;
   transition-duration: 0.6s;
-  cursor: pointer;
-  background-color: white;
-  color: black;
-  border: 2px solid rgb(175, 175, 175);
+}
+.button:hover:before {
   border-radius: 5px;
-  box-shadow: 20px 0 20px -20px #000 inset, -20px 0 20px -20px #000 inset;
-  border-top-right-radius: 17px;  
-}
-.box{
-  margin: 0px 0px 50px 0px;
-  width: 240px;
-  min-height: 120px;
-}
-.board a{ 
-  color: black;
-}
-
-.board:hover {
-  background-color: rgb(175, 175, 175);
+  font-size: 10px;
   color: white;
-}
-.button {
-  position: relative;
-  height: 25px;
-  top: 36px;
-  right: -203px;
-  cursor: pointer;
-  border-radius: 15px;
-  transition-duration: 0.6s;
-  background: rgb(175, 175, 175);
-  box-shadow: 0px 0px 8px 0px #000 inset;
-}
-.button {
-}
-.button:hover {
-  background-color: red;
+  background-color: rgb(121, 120, 126);
+  position: absolute;
+  padding: 2px 4px;
+  top: 100%;
+  left: -20%;
+  content: attr(data-title);
 }

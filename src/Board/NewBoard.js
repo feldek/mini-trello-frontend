@@ -1,45 +1,96 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
 import { uuid } from "uuidv4";
 import { createBoard } from "../Data/BoardReducer";
+import { Form, Input, Button, Radio } from "antd";
+import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 
-let NewBoard = () => {  
+let NewBoard = () => {
   const dispatch = useDispatch();
-  const { handleSubmit, register, errors } = useForm();
+  const [form] = Form.useForm();
 
   const [toggle, setToggle] = useState(false);
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+  const tailLayout = {
+    wrapperCol: {
+      span: 16,
+    },
+  };
+
+  const onFinish = (elem) => {
+    dispatch(createBoard(elem.nameBoard, uuid()));
+    onReset();
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  const onReset = () => {
+    form.resetFields();
+  };
 
   return (
     <>
       {!toggle && (
-        <button className={s.create} onClick={() => setToggle(true)}>
+        <Button
+          value="large"
+          className={s.createAntd}
+          style={{ marginBottom: "28px" }}
+          onClick={() => setToggle(true)}
+        >
           Create new board
-        </button>
+        </Button>
       )}
       {toggle && (
-        <div className={s.box}>
-          <form
-            className={s.form}
-            onSubmit={handleSubmit((elem, e) => {
-              dispatch(createBoard(elem.name, uuid()));
-              e.target.reset();
-            })}
+        <Form
+          {...layout}
+          form={form}
+          name="control-hooks"
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          className={s.form}
+        >
+          <Form.Item
+            name="nameBoard"
+            rules={[
+              {
+                required: true,
+                message: "Please input boardname!",
+              },
+            ]}
           >
             <label>
               Create new board
-              <input name="name" className={s.input} ref={register()} />
-              {errors.name && errors.name.message}
+              <Input placeholder="input boardname" />
             </label>
-            <div className={s.buttons}>
-              <button type="submit">Create</button>
-              <button type="submit" onClick={() => setToggle(false)}>
-                Cansel
-              </button>
-            </div>
-          </form>
-        </div>
+          </Form.Item>
+
+          <Form.Item {...tailLayout} className={s.buttons}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <Button type="link" htmlType="button" onClick={onReset}>
+              Reset
+            </Button>
+            <Button
+              htmlType="submit"
+              onClick={() => setToggle(false)}
+              style={{ float: "right" }}
+            >
+              Cancel
+            </Button>
+          </Form.Item>
+        </Form>
       )}
     </>
   );
