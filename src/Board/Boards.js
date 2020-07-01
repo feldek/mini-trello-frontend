@@ -16,8 +16,7 @@ let Boards = (props) => {
   const dispatch = useDispatch();
   const stateBoard = useSelector((state) => state.boards);
   const [localDataUserBoard, setLocalDataUserBoard] = useLocalStorage(
-    "dataUserBoard",
-    false
+    "dataUserBoard"
   );
   const [localDataUserList, setLocalDataUserList] = useLocalStorage(
     "dataUserList"

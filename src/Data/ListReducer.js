@@ -15,8 +15,7 @@ const ListReduser = (state = localStorage, action) => {
       return stateCopy;
     }
     case DELETE_LIST: {
-      let stateCopy = [...state];
-      stateCopy.splice(action.ind, 1);
+      let stateCopy = state.filter((el) => action.listId !== el.id);
       return stateCopy;
     }
     case DELETE_LISTS_BOARD: {
@@ -39,8 +38,8 @@ export const createList = (name, id, boardId) => {
   };
 };
 
-export const deleteList = (ind) => {
-  return { type: DELETE_LIST, ind };
+export const deleteList = (listId) => {
+  return { type: DELETE_LIST, listId };
 };
 export const deleteListsBoard = (boardId) => {
   return { type: DELETE_LISTS_BOARD, boardId };

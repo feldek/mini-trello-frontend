@@ -5,6 +5,8 @@ const SET_TASK_STATE = "SET_TASK_STATE";
 const DELETE_TASK_LIST = "DELETE_TASK_LIST";
 const DELETE_TASK_BOARD = "DELETE_TASK_BOARD";
 
+
+
 const TaskReducer = (
   state = JSON.parse(window.localStorage.getItem("dataUserTask")),
   action
@@ -19,8 +21,7 @@ const TaskReducer = (
       return [...action.stateArr];
     }
     case DELETE_TASK_LIST: {
-      let stateCopy = [...state];
-      stateCopy.splice(action.ind, 1);
+      let stateCopy = state.filter((el) => action.listId !== el[0].listId);
       return stateCopy;
     }
     case DELETE_TASK_BOARD: {
@@ -40,8 +41,8 @@ export const createEmptyTask = (listId) => {
 export const setTaskState = (stateArr) => {
   return { type: SET_TASK_STATE, stateArr };
 };
-export const deleteTaskList = (ind) => {
-  return { type: DELETE_TASK_LIST, ind };
+export const deleteTaskList = (listId) => {
+  return { type: DELETE_TASK_LIST, listId };
 };
 export const deleteTaskBoard = (listId) => {
   return { type: DELETE_TASK_LIST, listId };

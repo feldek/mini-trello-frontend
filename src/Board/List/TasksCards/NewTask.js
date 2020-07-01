@@ -5,28 +5,29 @@ import { Form, Input, Button, Radio } from "antd";
 import s from "./NewTask.module.css";
 import { deleteList } from "../../../Data/ListReducer";
 
-const NewTask = ({ index, uuid }) => {
+
+const NewTask = ({uuid, listId }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const listState = useSelector((state) => state.lists);
-  const state = useSelector((state) => state.tasks);
+  const stateTasks = useSelector((state) => state.tasks);
 
   const onFinish = (elem) => {
     dispatch(
       setTaskState(
-        state.map((elemState, elemStateInd) => {
-          if (elemStateInd === index)
+        stateTasks.map((elemState) => {
+          if (listId === elemState[0].listId)
             return [
               ...elemState,
               {
                 id: uuid,
                 name: elem[uuid],
-                listId: listState[index].id,
+                listId: listId,
               },
             ];
           else return [...elemState];
         })
       )
+      
     );
     onReset();
   };
@@ -68,7 +69,7 @@ const NewTask = ({ index, uuid }) => {
           htmlType="submit"
           style={{ float: "right" }}
           onClick={() => (
-            dispatch(deleteList(index)), dispatch(deleteTaskList(index))
+            dispatch(deleteList(listId)), dispatch(deleteTaskList(listId))
           )}
         >
           Delete list

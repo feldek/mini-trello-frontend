@@ -42,8 +42,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: "none",
   padding: grid,
   paddingLeft: 2 * grid,
-  paddingTop: 1.4 * grid,
-  margin: `0 0 ${grid + 1}px 0`,
+  margin: `${grid + 1}px`,
   background: isDragging ? "#c2dcf7" : "#e1f0ff",
   ...draggableStyle,
 });
@@ -53,17 +52,13 @@ const getListStyle = (isDraggingOver) => ({
 });
 
 let TasksCards = () => {
-  const [localDataUserTask, setLocalDataUserTask] = useLocalStorage(
-    "dataUserTask",
-    false
-  );
   const params = useParams();
-  const dispatch = useDispatch();
-  const listState = useSelector((state) => state.lists);
-  const taskState = useSelector((state) => state.tasks);
-  const state = useSelector((state) => state.tasks);
   const boardId = params.boardId;
-
+  const [localDataUserTask, setLocalDataUserTask] = useLocalStorage(
+    "dataUserTask"
+  );
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.tasks);
   const stateList = useSelector((state) => state.lists);
 
   const listFilter = stateList
@@ -109,20 +104,16 @@ let TasksCards = () => {
   }
 
   return (
-    <Card title={<NewList />} className={s.totalCard}>
+    <Card title={""} className={s.totalCard}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {state &&
-          state.map((el, ind) => (
-            <div
-              key={`allBox${el[0].listId}`}
-              style={{ margin: "0px", maxWidth: "30%" }}
-            >
-              {el.length !== 0 &&
+        {
+          state &&
+            // {
+            state.map(
+              (el, ind) =>
+                el.length !== 0 &&
                 listFilter.find((elem) => elem.id === el[0].listId) && (
-                  <Card.Grid
-                    key={`boxList${el[0].listId}`}
-                    style={{ padding: "8px" }}
-                  >
+                  <Card.Grid key={`boxList${el[0].listId}`} className={s.card}>
                     <Card
                       className={s.tasksHeader}
                       key={`listone${el[0].listId}`}
@@ -133,7 +124,7 @@ let TasksCards = () => {
                             key={`lists${el[0].listId}`}
                           />
                           <NewTask
-                            index={ind}
+                            listId={el[0].listId}
                             uuid={uuid()}
                             key={`newTask${el[0].listId}`}
                           />
@@ -217,9 +208,13 @@ let TasksCards = () => {
                       </Droppable>
                     </Card>
                   </Card.Grid>
-                )}
-            </div>
-          ))}
+                )
+            )
+          // }
+        }
+        <Card.Grid className={s.card}>
+          <NewList />
+        </Card.Grid>
       </DragDropContext>
     </Card>
   );
