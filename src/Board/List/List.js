@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import s from "./List.module.css";
 import useLocalStorage from "local-storage-hook";
 
 let List = ({ listId }) => {
-  let boardId = useLocation().pathname.replace("/board/", "");
+  let boardId = useRouteMatch().params.boardId;
   let stateList = useSelector((state) => state.lists);
   let list = stateList
     .filter((elem) => elem.boardId === boardId)

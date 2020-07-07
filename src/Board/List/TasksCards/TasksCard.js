@@ -4,8 +4,11 @@ import { uuid } from "uuidv4";
 import { useSelector, useDispatch } from "react-redux";
 import NewList from "../NewList";
 import List from "../List";
-import { setTaskState, deleteTaskList } from "../../../Data/TaskReducer";
-import { useParams } from "react-router-dom";
+import {
+  setTaskState,
+  deleteTask,
+} from "../../../Data/TaskReducer";
+import { useParams, useRouteMatch, Link } from "react-router-dom";
 import NewTask from "./NewTask";
 import PageNotFound from "../../PageNotFound";
 
@@ -15,6 +18,7 @@ import useLocalStorage from "local-storage-hook";
 import { Card } from "antd";
 import "./TasksCards.css";
 import s from "./TasksCards.module.css";
+import { deleteDescription } from "../../../Data/DescriptionReducer";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -40,8 +44,8 @@ const grid = 7;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: "none",
-  padding: grid,
-  paddingLeft: 2 * grid,
+  // padding: grid,
+  // paddingLeft: 2 * grid,
   margin: `${grid + 1}px`,
   background: isDragging ? "#c2dcf7" : "#e1f0ff",
   ...draggableStyle,
@@ -54,19 +58,26 @@ const getListStyle = (isDraggingOver) => ({
 let TasksCards = () => {
   const params = useParams();
   const boardId = params.boardId;
+  let match = useRouteMatch();
+ 
   const [localDataUserTask, setLocalDataUserTask] = useLocalStorage(
     "dataUserTask"
   );
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state.tasks);
-  const stateList = useSelector((state) => state.lists);
 
+  const dispatch = useDispatch();
+  const stateList = useSelector((state) => state.lists);
   const listFilter = stateList
     ? stateList.filter((elem) => elem.boardId === boardId)
     : [];
+  let listsId = listFilter.map((el) => el.id);
+  let allState = useSelector((state) => state.tasks);
+ 
+  let state = useSelector((state) => state.tasks);
+  state = state ? state.filter((item) => listsId.includes(item[0].listId)) : [];
+
   useEffect(() => {
-    setLocalDataUserTask(state);
-  }, [state]);
+    setLocalDataUserTask(allState);
+  }, [allState]);
 
   if (
     !useSelector((state) => state.boards).find((elem) => elem.id === boardId)
@@ -85,7 +96,8 @@ let TasksCards = () => {
       const items = reorder(state[sInd], source.index, destination.index);
       const newState = [...state];
       newState[sInd] = items;
-      dispatch(setTaskState(newState));
+
+      dispatch(setTaskState(newState, listsId));
     } else {
       const result = move(state[sInd], state[dInd], source, destination);
       const newState = [...state];
@@ -98,8 +110,12 @@ let TasksCards = () => {
               ? { id: elem.id, name: elem.name, listId: listId }
               : elem)
       );
-
-      dispatch(setTaskState(newState.filter((group) => group.length)));
+      dispatch(
+        setTaskState(
+          newState.filter((group) => group.length),
+          listsId
+        )
+      );
     }
   }
 
@@ -124,6 +140,8 @@ let TasksCards = () => {
                             key={`lists${el[0].listId}`}
                           />
                           <NewTask
+                            stateTasks={state}
+                            listsId={listsId}
                             listId={el[0].listId}
                             uuid={uuid()}
                             key={`newTask${el[0].listId}`}
@@ -169,13 +187,10 @@ let TasksCards = () => {
                                             className={s.buttonTaskDelete}
                                             type="button"
                                             onClick={() => {
-                                              const newState = [...state];
-                                              newState[ind].splice(index, 1);
                                               dispatch(
-                                                setTaskState(
-                                                  newState.filter(
-                                                    (group) => group.length
-                                                  )
+                                                deleteTask(
+                                                  item.id, 
+                                                  item.listId
                                                 )
                                               );
                                             }}
@@ -189,12 +204,13 @@ let TasksCards = () => {
                                               }}
                                             />
                                           </button>
-                                          <div
+                                          <Link
+                                            to={`${match.url}/description/${item.id}`}
                                             key={`content${item.id}`}
                                             className={s.taskText}
                                           >
                                             {item.name}
-                                          </div>
+                                          </Link>
                                         </div>
                                       )}
                                     </Draggable>

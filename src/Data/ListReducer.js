@@ -1,6 +1,7 @@
 const CREATE_LIST = "CREATE_LIST";
 const DELETE_LIST = "DELETE_LIST";
-const DELETE_LISTS_BOARD = "DELETE_LISTS_BOARD";
+const DELETE_BOARD = "DELETE_BOARD";
+
 
 let localStorage = JSON.parse(window.localStorage.getItem("dataUserList"));
 const ListReduser = (state = localStorage, action) => {
@@ -18,10 +19,11 @@ const ListReduser = (state = localStorage, action) => {
       let stateCopy = state.filter((el) => action.listId !== el.id);
       return stateCopy;
     }
-    case DELETE_LISTS_BOARD: {
-      let stateCopy = state.filter(
-        (item) => !action.boardId.includes(item.boardId)
-      );
+
+
+
+    case DELETE_BOARD: {
+      let stateCopy = state.filter((item) => action.boardId !== item.boardId);
       return stateCopy;
     }
     default:
@@ -38,11 +40,8 @@ export const createList = (name, id, boardId) => {
   };
 };
 
-export const deleteList = (listId) => {
-  return { type: DELETE_LIST, listId };
-};
-export const deleteListsBoard = (boardId) => {
-  return { type: DELETE_LISTS_BOARD, boardId };
+export const deleteList = (listId, tasksId) => {
+  return { type: DELETE_LIST, listId, tasksId };
 };
 
 export default ListReduser;

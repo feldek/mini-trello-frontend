@@ -1,15 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setTaskState, deleteTaskList } from "../../../Data/TaskReducer";
+import { setTaskState } from "../../../Data/TaskReducer";
 import { Form, Input, Button, Radio } from "antd";
 import s from "./NewTask.module.css";
 import { deleteList } from "../../../Data/ListReducer";
 
-
-const NewTask = ({uuid, listId }) => {
+const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const stateTasks = useSelector((state) => state.tasks);
+  // const stateTasks = useSelector((state) => state.tasks);
 
   const onFinish = (elem) => {
     dispatch(
@@ -25,9 +24,9 @@ const NewTask = ({uuid, listId }) => {
               },
             ];
           else return [...elemState];
-        })
+        }),
+        listsId
       )
-      
     );
     onReset();
   };
@@ -39,6 +38,11 @@ const NewTask = ({uuid, listId }) => {
   const onReset = () => {
     form.resetFields();
   };
+
+  let test = stateTasks
+  .find((el) => el[0].listId === listId)
+  .map((item) => item.id)
+
   return (
     <Form
       form={form}
@@ -68,9 +72,16 @@ const NewTask = ({uuid, listId }) => {
           danger
           htmlType="submit"
           style={{ float: "right" }}
-          onClick={() => (
-            dispatch(deleteList(listId)), dispatch(deleteTaskList(listId))
-          )}
+          onClick={() =>
+            dispatch(
+              deleteList(
+                listId,
+                stateTasks
+                  .find((el) => el[0].listId === listId)
+                  .map((item) => item.id)
+              )
+            )
+          }
         >
           Delete list
         </Button>

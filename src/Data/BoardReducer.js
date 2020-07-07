@@ -11,7 +11,7 @@ const BoardReduser = (state = initialState, action) => {
       return stateCopy;
     }
     case DELETE_BOARD: {
-      let stateCopy = state.filter((item) => !action.boardId.includes(item.id));
+      let stateCopy = state.filter((item) => action.boardId !== item.id);
       return stateCopy;
     }
     default:
@@ -23,8 +23,8 @@ export const createBoard = (name, id) => {
   return { type: CREATE_BOARD, name, id };
 };
 
-export const deleteBoard = (boardId) => {
-  return { type: DELETE_BOARD, boardId };
+export const deleteBoard = (boardId, listsId, tasksId) => {
+  return { type: DELETE_BOARD, boardId, listsId, tasksId };
 };
 
 export default BoardReduser;

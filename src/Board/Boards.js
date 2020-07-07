@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import NewBoard from "./NewBoard";
 import { deleteBoard } from "../Data/BoardReducer";
 import useLocalStorage from "local-storage-hook";
-import { deleteListsBoard } from "../Data/ListReducer";
-import { deleteTaskBoard } from "../Data/TaskReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "antd";
@@ -35,6 +33,8 @@ let Boards = (props) => {
   useEffect(() => {
     setLocalDataUserTask(stateTask);
   }, [stateTask]);
+
+  // debugger
   return (
     <div className={s.content}>
       <Card title={<NewBoard />}>
@@ -49,15 +49,22 @@ let Boards = (props) => {
                 key={`boardButton${elem.id}`}
                 className={s.button}
                 data-title="delete"
-                onClick={() => (
-                  dispatch(deleteBoard(elem.id)),
-                  dispatch(deleteListsBoard(elem.id)),
-                  stateList
+                onClick={() => {
+                  let filterStateList = stateList
                     .filter((el) => el.boardId === elem.id)
-                    .forEach((element) => {
-                      dispatch(deleteTaskBoard(element.id));
-                    })
-                )}
+                    .map((el) => el.id);
+                  dispatch(
+                    deleteBoard(
+                      elem.id,
+                      filterStateList,
+                      stateTask
+                        .filter((el) => filterStateList.includes(el[0].listId))
+                        .map((el) => el.map((item) => item.id))
+                        .join()
+                        .split(",")
+                    )
+                  );
+                }}
               >
                 <FontAwesomeIcon icon={faTimes} style={{ fontSize: "20px" }} />
               </button>

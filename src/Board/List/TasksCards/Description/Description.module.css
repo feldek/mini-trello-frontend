@@ -1,0 +1,43 @@
+.linkToBoard {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(241, 241, 241, 0.521);
+  z-index: 2; 
+}
+.background {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+.container {
+  height: 500px;
+  align-items: center;
+  margin-top: 100px;
+  cursor: default;
+  z-index: 3; 
+}
+.card {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  outline: 1px solid #f0f0f0;
+  outline-offset: -10px;
+}
+.form {
+  width: 400px;
+}
+.textArea {
+  min-height: 97px !important;
+}
+.textDescription {
+  max-height: 358px;
+  min-height: 97px;
+  padding: 0px 12px;
+  border: 1px solid #f0f0f0;
+}
