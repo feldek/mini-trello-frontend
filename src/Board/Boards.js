@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import s from "./Boards.module.css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import NewBoard from "./NewBoard";
@@ -9,6 +8,7 @@ import useLocalStorage from "local-storage-hook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "antd";
+import s from "./Boards.module.css";
 
 let Boards = (props) => {
   const dispatch = useDispatch();
@@ -34,17 +34,12 @@ let Boards = (props) => {
     setLocalDataUserTask(stateTask);
   }, [stateTask]);
 
-  // debugger
   return (
     <div className={s.content}>
       <Card title={<NewBoard />}>
         <div className={s.boards}>
           {useSelector((state) => state.boards).map((elem) => (
-            <Card.Grid
-              key={`board${elem.id}`}
-              className={s.boxBoard}
-              style={{ padding: 0, width: "33.33%" }}
-            >
+            <Card.Grid key={`board${elem.id}`} className={s.boxBoard}>
               <button
                 key={`boardButton${elem.id}`}
                 className={s.button}

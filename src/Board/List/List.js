@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import s from "./List.module.css";
 import useLocalStorage from "local-storage-hook";
 
@@ -21,7 +21,7 @@ let List = ({ listId }) => {
 
   return (
     <div className={s.boxLists} key={`list${list.id}`}>
-      {list && <div className={s.list}>{list.name}</div>}
+      <div className={s.list}>{list.name}</div>
     </div>
   );
 };

@@ -1,45 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link, useRouteMatch } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { Card } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { Form, Input, Button, Radio } from "antd";
+import { Form, Input, Button } from "antd";
 import {
   createDescription,
   deleteDescription,
-} from "../../../../Data/DescriptionReducer";
+} from "../../../../Data/TaskReducer";
 import s from "./Description.module.css";
-import useLocalStorage from "local-storage-hook";
+import PageNotFound from "../../../PageNotFound";
 
-let Description = () => {
+export let ContainerDescription = () => {
+  let id = useParams().descriptionId;
+  let tasks = useSelector((state) => state.tasks).find((el) =>
+    el.find((item) => item.id === id)
+  );
+  let content = !tasks ? <PageNotFound /> : <Description tasks={tasks} />;
+  return content;
+};
+
+let Description = ({ tasks }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const stateDescription = useSelector((state) => state.descriptions);
-  const [
-    localDataUserDescription,
-    setLocalDataUserDescription,
-  ] = useLocalStorage("dataUserDescription");
-  useEffect(() => {
-    setLocalDataUserDescription(stateDescription);
-  }, [stateDescription]);
-  
 
-  let taskId = useParams().descriptionId;
+  let id = useParams().descriptionId;
   let boardId = useParams().boardId;
-
-  let title = useSelector((state) => state.tasks)
-    .find((el) => el.find((item) => item.id === taskId))
-    .find((item) => item.id === taskId);
-
-  let description = useSelector((state) => state.descriptions);
-  description = !description ? [] : description;
-
-  let textDescription = description.find((el) => el.taskId === taskId);
-  textDescription = !textDescription ? "" : textDescription.name;
-
-  let [toggle, setToggle] = useState(textDescription !== "");
+  let task = tasks.find((item) => item.id === id);
+  let [toggle, setToggle] = useState(task.description !== "");
 
   const onFinish = (elem) => {
-    !toggle && dispatch(createDescription(`${elem.description}`, taskId));
+    !toggle && dispatch(createDescription(`${elem.description}`, id));
     setToggle(!toggle);
   };
 
@@ -50,8 +40,9 @@ let Description = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   let textArea = (
-    <div key={`textArea${taskId}`}>
+    <div key={`textArea${id}`}>
       <Form.Item name="description">
         <Input.TextArea
           className={s.textArea}
@@ -59,11 +50,11 @@ let Description = () => {
           placeholder="Create new Description"
         />
       </Form.Item>
+
       <Form.Item style={{ marginBottom: "0" }}>
         <Button type="primary" htmlType="submit">
           Confirm
         </Button>
-
         <Link to={`/board/${boardId}`}>
           <Button style={{ float: "right" }}>Back to board</Button>
         </Link>
@@ -80,12 +71,12 @@ let Description = () => {
   );
 
   let descriptionText = (
-    <div key={`textArea${taskId}`}>
+    <div key={`descriptionText${id}`}>
       <Form.Item
         onDoubleClick={() => setToggle(false)}
         className={s.textDescription}
       >
-        {textDescription !== "undefined" ? textDescription : ""}
+        {task.description}
       </Form.Item>
       <Form.Item style={{ marginBottom: "0" }}>
         <Button type="primary" htmlType="submit">
@@ -97,7 +88,7 @@ let Description = () => {
           <Button
             danger
             htmlType="button"
-            onClick={() => dispatch(deleteDescription(taskId))}
+            onClick={() => dispatch(deleteDescription(id, task.listId))}
             style={{ float: "right", margin: "0px 4px" }}
           >
             Delete
@@ -108,11 +99,10 @@ let Description = () => {
   );
 
   return (
-    <div className={s.background}>
+    <div className={s.background} key={`container${id}`}>
       <Link to={`/board/${boardId}`} className={s.linkToBoard}></Link>
-
       <div className={s.container}>
-        <Card title={<div>{title.name}</div>} className={s.card}>
+        <Card title={<div>{task.name}</div>} className={s.card}>
           <div>
             <Form
               form={form}
@@ -124,14 +114,11 @@ let Description = () => {
               fields={[
                 {
                   name: ["description"],
-                  value: textDescription !== "undefined" ? textDescription : "",
+                  value: task.description,
                 },
               ]}
             >
               <div>{toggle ? descriptionText : textArea}</div>
-              {/* <div>{descriptionText}</div>
-              <div>{textArea}</div>
-              <div>{`${toggle}`}</div> */}
             </Form>
           </div>
         </Card>

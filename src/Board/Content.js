@@ -3,7 +3,7 @@ import Boards from "./Boards";
 import TasksCards from "./List/TasksCards/TasksCard";
 import { Switch, Route } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
-import Description from "./List/TasksCards/Description/Description";
+import { ContainerDescription } from "./List/TasksCards/Description/Description";
 
 let Content = (props) => {
   return (
@@ -17,9 +17,8 @@ let Content = (props) => {
         <Route
           exact
           path="/board/:boardId/description/:descriptionId"
-          component={Description}
+          component={ContainerDescription}
         />
-        {/* <Route component={PageNotFound} /> */}
       </Switch>
     </>
   );

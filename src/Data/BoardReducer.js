@@ -1,8 +1,8 @@
 const CREATE_BOARD = "CREATE_BOARD";
 const DELETE_BOARD = "DELETE_BOARD";
 
-let localBoard = JSON.parse(window.localStorage.getItem("dataUserBoard"));
-let initialState = localBoard ? localBoard : [];
+let localStorage = JSON.parse(window.localStorage.getItem("dataUserBoard"));
+let initialState = localStorage ? localStorage : [];
 const BoardReduser = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_BOARD: {

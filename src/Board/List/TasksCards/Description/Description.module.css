@@ -3,7 +3,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(241, 241, 241, 0.521);
-  z-index: 2; 
+  z-index: 2;
 }
 .background {
   position: absolute;
@@ -17,7 +17,7 @@
   align-items: center;
   margin-top: 100px;
   cursor: default;
-  z-index: 3; 
+  z-index: 3;
 }
 .card {
   width: 500px;

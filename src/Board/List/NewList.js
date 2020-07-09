@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createList } from "../../Data/ListReducer";
-import { createEmptyTask } from "../../Data/TaskReducer";
 import { uuid } from "uuidv4";
 import { useLocation, Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
@@ -14,9 +13,8 @@ let NewList = () => {
   const [form] = Form.useForm();
 
   const onFinish = (elem) => {
-    let listId = uuid();
-    dispatch(createEmptyTask(listId));
-    dispatch(createList(elem.nameList, listId, boardId));
+    let id = uuid();
+    dispatch(createList(elem.nameList, id, boardId));
     setToggle(false);
     onReset();
   };
@@ -58,7 +56,7 @@ let NewList = () => {
           layout="vertical"
           form={form}
           name="control-hooks123"
-          onFinish={(onFinish)}
+          onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           className={s.form}
         >

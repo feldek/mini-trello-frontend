@@ -1,14 +1,12 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setTaskState } from "../../../Data/TaskReducer";
-import { Form, Input, Button, Radio } from "antd";
-import s from "./NewTask.module.css";
+import { Form, Input, Button } from "antd";
 import { deleteList } from "../../../Data/ListReducer";
 
 const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  // const stateTasks = useSelector((state) => state.tasks);
 
   const onFinish = (elem) => {
     dispatch(
@@ -21,6 +19,7 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
                 id: uuid,
                 name: elem[uuid],
                 listId: listId,
+                description: "",
               },
             ];
           else return [...elemState];
@@ -39,10 +38,6 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
     form.resetFields();
   };
 
-  let test = stateTasks
-  .find((el) => el[0].listId === listId)
-  .map((item) => item.id)
-
   return (
     <Form
       form={form}
@@ -56,7 +51,7 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
         rules={[
           {
             required: true,
-            message: "Please input boardname!",
+            message: "Please input task name!",
           },
         ]}
       >

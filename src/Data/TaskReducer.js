@@ -1,20 +1,22 @@
 import { uuid } from "uuidv4";
 
-const CREATE_EMPTY_TASK = "CREATE_EMPTY_TASK";
+const CREATE_LIST = "CREATE_LIST";
 const SET_TASK_STATE = "SET_TASK_STATE";
 const DELETE_TASK = "DELETE_TASK";
 const DELETE_LIST = "DELETE_LIST";
 const DELETE_BOARD = "DELETE_BOARD";
+const CREATE_DESCRIPTION = "CREATE_DESCRIPTION";
+const DELETE_DESCRIPTION = "DELETE_DESCRIPTION";
 
-
-const TaskReducer = (
-  state = JSON.parse(window.localStorage.getItem("dataUserTask")),
-  action
-) => {
+let localStorage = JSON.parse(window.localStorage.getItem("dataUserTask"));
+let initialState = localStorage ? localStorage : [];
+const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_EMPTY_TASK: {
-      let stateCopy = !state ? [] : [...state];
-      stateCopy.push([{ id: uuid(), name: "", listId: action.listId }]);
+    case CREATE_LIST: {
+      let stateCopy = [...state];
+      stateCopy.push([
+        { id: uuid(), name: "", listId: action.id, description: "" },
+      ]);
       return stateCopy;
     }
     case SET_TASK_STATE: {
@@ -36,9 +38,40 @@ const TaskReducer = (
       return stateCopy;
     }
     case DELETE_BOARD: {
-      debugger
       let stateCopy = state.filter(
         (item) => !action.listsId.includes(item[0].listId)
+      );
+      return stateCopy;
+    }
+    case CREATE_DESCRIPTION: {
+      let stateCopy = state.map((el) =>
+        el.map((item) =>
+          item.id !== action.id
+            ? item
+            : {
+                id: item.id,
+                name: item.name,
+                listId: item.listId,
+                description: action.description,
+              }
+        )
+      );
+      return stateCopy;
+    }
+    case DELETE_DESCRIPTION: {
+      let stateCopy = state.map((el) =>
+        action.listId !== el[0].listId
+          ? el
+          : el.map((item) =>
+              action.id !== item.id
+                ? item
+                : {
+                    id: item.id,
+                    name: item.name,
+                    listId: item.listId,
+                    description: "",
+                  }
+            )
       );
       return stateCopy;
     }
@@ -47,13 +80,25 @@ const TaskReducer = (
   }
 };
 
-export const createEmptyTask = (listId) => {
-  return { type: CREATE_EMPTY_TASK, listId };
-};
 export const setTaskState = (stateArr, listsId) => {
   return { type: SET_TASK_STATE, stateArr, listsId };
 };
 export const deleteTask = (taskId, listId) => {
   return { type: DELETE_TASK, taskId, listId };
 };
+export const createDescription = (description, id) => {
+  return {
+    type: CREATE_DESCRIPTION,
+    description,
+    id,
+  };
+};
+export const deleteDescription = (id, listId) => {
+  return {
+    type: DELETE_DESCRIPTION,
+    id,
+    listId,
+  };
+};
+
 export default TaskReducer;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { uuid } from "uuidv4";
 import { createBoard } from "../Data/BoardReducer";
-import { Form, Input, Button, Radio } from "antd";
+import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 
@@ -11,19 +11,6 @@ let NewBoard = () => {
   const [form] = Form.useForm();
 
   const [toggle, setToggle] = useState(false);
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      span: 16,
-    },
-  };
 
   const onFinish = (elem) => {
     dispatch(createBoard(elem.nameBoard, uuid()));
@@ -52,7 +39,6 @@ let NewBoard = () => {
       )}
       {toggle && (
         <Form
-          {...layout}
           form={form}
           name="control-hooks"
           layout="vertical"
@@ -75,7 +61,7 @@ let NewBoard = () => {
             </label>
           </Form.Item>
 
-          <Form.Item {...tailLayout} className={s.buttons}>
+          <Form.Item className={s.buttons}>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>

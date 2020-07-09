@@ -15,3 +15,17 @@
   display: flex;
   justify-content: flex-start;
 }
+.form {
+  width: 552px;
+}
+
+@media (min-width: 650px) and (max-width: 900px) {
+  .form {
+    width: 370px;
+  }
+}
+@media (max-width: 650px) {
+  .form {
+    width: 250px;
+  }
+}
