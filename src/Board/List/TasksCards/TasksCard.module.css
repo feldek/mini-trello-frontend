@@ -27,7 +27,6 @@
 .buttonTaskDelete:hover {
   color: rgb(221, 0, 0);
 }
-
 .tasksHeader {
   width: 100%;
   padding: 0px;
@@ -38,13 +37,27 @@
 .card {
   padding: 8px;
   margin: 0;
-  width: 239px;
 }
-@media (min-width: 600px) {
+
+@media (min-width: 1000px) {
   .totalCard {
     width: 80%;
     margin-top: 50px;
     margin-bottom: 50px;
+  }
+  .card {
+    width: 240px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1000px) {
+  .totalCard {
+    width: 90%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .card {
+    width: 220px;
   }
 }
 
@@ -52,11 +65,12 @@
   .totalCard {
     width: 100%;
   }
-}
-@media (max-width: 480px) {
   .card {
     padding: 0px;
     margin: 0;
-    width: 203px;
+  }
+  .test {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }

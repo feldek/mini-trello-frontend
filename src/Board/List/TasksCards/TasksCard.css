@@ -1,0 +1,26 @@
+.ant-card-body {
+  padding: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ant-card-grid {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .totalCard > .ant-card-body::before {
+    content: none;
+  }
+  .totalCard > .ant-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .tasksHeader > .ant-card-head {
+    padding: 0 8px;
+  }
+}

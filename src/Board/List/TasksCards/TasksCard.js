@@ -12,8 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import useLocalStorage from "local-storage-hook";
 import { Card } from "antd";
-import "./TasksCards.css";
-import s from "./TasksCards.module.css";
+import "./TasksCard.css";
+import s from "./TasksCard.module.css";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -122,12 +122,12 @@ let TasksCards = () => {
   }
 
   return (
-    <Card className={s.totalCard}>
+    <Card className={`${s.totalCard} totalCard`}>
       <DragDropContext onDragEnd={onDragEnd}>
         {tasksFilter.map((el, ind) => (
           <Card.Grid key={`boxList${el[0].listId}`} className={s.card}>
             <Card
-              className={s.tasksHeader}
+              className={`${s.tasksHeader} tasksHeader`}
               key={`listone${el[0].listId}`}
               title={
                 <div key={`headerCard${el[0].listId}`}>

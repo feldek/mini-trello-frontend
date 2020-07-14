@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { setTaskState } from "../../../Data/TaskReducer";
 import { Form, Input, Button } from "antd";
 import { deleteList } from "../../../Data/ListReducer";
+import s from "./NewTask.module.css";
 
 const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
   const [form] = Form.useForm();
@@ -60,10 +61,11 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
         </label>
       </Form.Item>
       <Form.Item style={{ marginBottom: "0" }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" className={s.button}>
           Add
         </Button>
         <Button
+          className={s.button}
           danger
           htmlType="submit"
           style={{ float: "right" }}

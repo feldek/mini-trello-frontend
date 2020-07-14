@@ -12,14 +12,12 @@
   width: 100%;
   flex-wrap: wrap;
 }
-.boxBoard {
+.board {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  width: 300px !important;
-  max-width: 350px;
 }
 
 .boardLink {
@@ -28,7 +26,6 @@
   font-weight: 500;
   font-size: 16px;
 }
-
 .button {
   position: absolute;
   top: 0px;
@@ -51,14 +48,28 @@
   content: attr(data-title);
 }
 
-@media (max-width: 650px) {
-  .boxBoard {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    width: 180px !important;
-    max-width: 350px;
+@media (min-width: 1000px) {
+  .board {
+    width: 300px !important;
+  }
+}
+@media (min-width: 600px) and (max-width: 1000px) {
+  .content {
+    margin-top: 50px;
+    width: 90%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .content {
+    margin-top: 30px;
+    width: 95%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }

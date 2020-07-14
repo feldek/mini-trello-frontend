@@ -52,13 +52,16 @@ let Description = ({ tasks }) => {
       </Form.Item>
 
       <Form.Item style={{ marginBottom: "0" }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" className={s.button}>
           Confirm
         </Button>
         <Link to={`/board/${boardId}`}>
-          <Button style={{ float: "right" }}>Back to board</Button>
+          <Button style={{ float: "right" }} className={s.button}>
+            Back to board
+          </Button>
         </Link>
         <Button
+          className={s.button}
           type="link"
           htmlType="button"
           onClick={onReset}

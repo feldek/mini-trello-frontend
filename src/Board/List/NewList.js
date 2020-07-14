@@ -58,7 +58,7 @@ let NewList = () => {
           name="control-hooks123"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          className={s.form}
+          className={s.formInput}
         >
           <Form.Item
             name="nameList"
@@ -75,7 +75,7 @@ let NewList = () => {
             </label>
           </Form.Item>
 
-          <Form.Item layout="horizontal" style={{ width: "100%" }}>
+          <Form.Item layout="horizontal">
             <Button type="primary" htmlType="submit" style={{ float: "left" }}>
               Submit
             </Button>

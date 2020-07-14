@@ -31,7 +31,6 @@ let NewBoard = () => {
         <Button
           value="large"
           className={s.createAntd}
-          style={{ marginBottom: "28px" }}
           onClick={() => setToggle(true)}
         >
           Create new board

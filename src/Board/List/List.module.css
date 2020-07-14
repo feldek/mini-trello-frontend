@@ -8,3 +8,9 @@
 .boxLists {
   font-size: 24px;
 }
+
+@media (max-width: 600px) {
+  .boxLists {
+    font-size: 18px;
+  }
+}

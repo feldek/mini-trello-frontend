@@ -37,9 +37,9 @@ let Boards = (props) => {
   return (
     <div className={s.content}>
       <Card title={<NewBoard />}>
-        <div className={s.boards}>
+        <div className={s.boards}>         
           {useSelector((state) => state.boards).map((elem) => (
-            <Card.Grid key={`board${elem.id}`} className={s.boxBoard}>
+            <Card.Grid key={`board${elem.id}`} className={s.board} >
               <button
                 key={`boardButton${elem.id}`}
                 className={s.button}
@@ -72,7 +72,8 @@ let Boards = (props) => {
               </Link>
             </Card.Grid>
           ))}
-        </div>
+          </div>
+
       </Card>
     </div>
   );
