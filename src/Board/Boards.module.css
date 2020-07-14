@@ -1,0 +1,75 @@
+.content {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+.button:hover {
+  color: red;
+}
+.boards {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.boardLink {
+  flex: 1;
+  padding: 24px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 3px;
+  cursor: pointer;
+  background: none;
+  -webkit-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+}
+.button:hover:before {
+  border-radius: 5px;
+  font-size: 10px;
+  color: white;
+  background-color: rgb(121, 120, 126);
+  position: absolute;
+  padding: 2px 4px;
+  top: 100%;
+  left: -20%;
+  content: attr(data-title);
+}
+
+@media (min-width: 1000px) {
+  .board {
+    width: 300px !important;
+  }
+}
+@media (min-width: 600px) and (max-width: 1000px) {
+  .content {
+    margin-top: 50px;
+    width: 90%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .content {
+    margin-top: 30px;
+    width: 95%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
