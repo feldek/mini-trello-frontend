@@ -13,7 +13,7 @@ let NewBoard = () => {
   const [toggle, setToggle] = useState(false);
 
   const onFinish = (elem) => {
-    dispatch(createBoard(elem.nameBoard, uuid()));
+    dispatch(createBoard(elem.nameBoard));
     onReset();
   };
 

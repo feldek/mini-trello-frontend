@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { uuid } from "uuidv4";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,6 @@ import NewTask from "./NewTask";
 import PageNotFound from "../../PageNotFound";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import useLocalStorage from "local-storage-hook";
 import { Card } from "antd";
 import "./TasksCard.css";
 import s from "./TasksCard.module.css";
@@ -52,24 +51,24 @@ let TasksCards = () => {
   const boardId = params.boardId;
   let match = useRouteMatch();
 
-  const [localDataUserTask, setLocalDataUserTask] = useLocalStorage(
-    "dataUserTask"
-  );
-
   const dispatch = useDispatch();
   const stateList = useSelector((state) => state.lists);
+
   const listsFilter = stateList.filter((elem) => elem.boardId === boardId);
-
   let listsId = listsFilter.map((el) => el.id);
-  let stateTask = useSelector((state) => state.tasks);
 
-  let tasksFilter = stateTask.filter((item) =>
-    listsId.includes(item[0].listId)
+  const stateTask = useSelector((state) => state.tasks);
+  console.log(stateTask);
+  let tasksFilter = stateTask.filter((item) => listsId.includes(item.listId));
+  // let j=0;
+  let dragState = [];
+  // for(let i=0; i<listsId.length; i++){
+  //   dragState[i].push(tasksFilter.filter(task=> task.listId===listsId[i]))
+  // }
+  listsId.map((item) =>
+    dragState.push(tasksFilter.filter((task) => task.listId === item))
   );
-
-  useEffect(() => {
-    setLocalDataUserTask(stateTask);
-  }, [stateTask]);
+  tasksFilter = dragState;
 
   if (
     !useSelector((state) => state.boards).find((elem) => elem.id === boardId)
@@ -88,8 +87,13 @@ let TasksCards = () => {
       const items = reorder(tasksFilter[sInd], source.index, destination.index);
       const newState = [...tasksFilter];
       newState[sInd] = items;
-
-      dispatch(setTaskState(newState, listsId));
+      let reducerState = [];
+      newState.map((item) => reducerState.push(...item));
+      // for(let i=0; i<newState.length; i++){
+      //   test.push(...newState[i])
+      // }
+      // newState=newState.map(item=> )
+      dispatch(setTaskState(reducerState));
     } else {
       const result = move(
         tasksFilter[sInd],
@@ -99,7 +103,7 @@ let TasksCards = () => {
       );
       const newState = [...tasksFilter];
       newState[sInd] = result[sInd];
-      let listId = result[dInd][0].listId;
+      let listId = listsFilter[dInd].id;
       newState[dInd] = result[dInd].map(
         (elem, ind) =>
           (elem =
@@ -112,100 +116,124 @@ let TasksCards = () => {
                 }
               : elem)
       );
-      dispatch(
-        setTaskState(
-          newState.filter((group) => group.length),
-          listsId
-        )
-      );
+      let reducerState = [];
+      newState.map((item) => reducerState.push(...item));
+      dispatch(setTaskState(reducerState));
     }
+    // } else {
+    //   const result = move(
+    //     tasksFilter[sInd],
+    //     tasksFilter[dInd],
+    //     source,
+    //     destination
+    //   );
+    //   const newState = [...tasksFilter];
+    //   newState[sInd] = result[sInd];
+    //   let listId = result[dInd][0].listId;
+    //   newState[dInd] = result[dInd].map(
+    //     (elem, ind) =>
+    //       (elem =
+    //         ind === destination.index
+    //           ? {
+    //               id: elem.id,
+    //               name: elem.name,
+    //               listId: listId,
+    //               description: elem.description,
+    //             }
+    //           : elem)
+    //   );
+    //   dispatch(
+    //     setTaskState(
+    //       newState.filter((group) => group.length),
+    //       listsId
+    //     )
+    //   );
+    // }
   }
 
   return (
     <Card className={`${s.totalCard} totalCard`}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {tasksFilter.map((el, ind) => (
-          <Card.Grid key={`boxList${el[0].listId}`} className={s.card}>
+        {/* {tasksFilter.map((el, ind) => (           */}
+        {listsFilter.map((el, ind) => (
+          <Card.Grid key={`boxList${el.id}`} className={s.card}>
             <Card
               className={`${s.tasksHeader} tasksHeader`}
-              key={`listone${el[0].listId}`}
+              key={`listone${el.id}`}
               title={
-                <div key={`headerCard${el[0].listId}`}>
-                  <List listId={el[0].listId} key={`lists${el[0].listId}`} />
+                <div key={`headerCard${el.id}`}>
+                  <List listId={el.id} key={`lists${el.id}`} />
                   <NewTask
-                    stateTasks={tasksFilter}
-                    listsId={listsId}
-                    listId={el[0].listId}
+                    // stateTasks={tasksFilter}
+                    // listsId={listsId}
+                    listId={el.id}
                     uuid={uuid()}
-                    key={`newTask${el[0].listId}`}
+                    key={`newTask${el.id}`}
                   />
                 </div>
               }
             >
-              <Droppable
-                droppableId={`${ind}`}
-                key={`droppable${el[0].listId}`}
-              >
+              <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
                 {(provided, snapshot) => (
                   <div
-                    key={`tasks${el[0].listId}`}
+                    key={`tasks${el.id}`}
                     ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
+                    style={
+                      (getListStyle(snapshot.isDraggingOver), { width: "100%" })
+                    }
                     {...provided.droppableProps}
-                    style={{ width: "100%" }}
                   >
-                    {el.map((item, index) => (
+                    {tasksFilter[ind].map((item, index) => (
                       <div key={`task${item.id}`}>
-                        {item.name !== "" && (
-                          <div key={`boxdragable${item.id}`}>
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id}
-                              index={index}
-                            >
-                              {(provided, snapshot) => (
-                                <div
-                                  key={`boxTask${item.id}`}
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={getItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
-                                  )}
-                                  className={s.taskContainer}
+                        {/* {item.name !== "" && (       */}
+
+                        <div key={`boxdragable${item.id}`}>
+                          <Draggable
+                            key={item.id}
+                            draggableId={item.id}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                key={`boxTask${item.id}`}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={getItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style
+                                )}
+                                className={s.taskContainer}
+                              >
+                                <button
+                                  key={`buttons${item.id}`}
+                                  className={s.buttonTaskDelete}
+                                  type="button"
+                                  onClick={() => {
+                                    dispatch(deleteTask(item.id));
+                                  }}
                                 >
-                                  <button
-                                    key={`buttons${item.id}`}
-                                    className={s.buttonTaskDelete}
-                                    type="button"
-                                    onClick={() => {
-                                      dispatch(
-                                        deleteTask(item.id, item.listId)
-                                      );
+                                  <FontAwesomeIcon
+                                    key={`icon${item.id}`}
+                                    icon={faTimes}
+                                    style={{
+                                      fontSize: "28px",
+                                      padding: "4px",
                                     }}
-                                  >
-                                    <FontAwesomeIcon
-                                      key={`icon${item.id}`}
-                                      icon={faTimes}
-                                      style={{
-                                        fontSize: "28px",
-                                        padding: "4px",
-                                      }}
-                                    />
-                                  </button>
-                                  <Link
-                                    to={`${match.url}/description/${item.id}`}
-                                    key={`content${item.id}`}
-                                    className={s.taskText}
-                                  >
-                                    {item.name}
-                                  </Link>
-                                </div>
-                              )}
-                            </Draggable>
-                          </div>
-                        )}
+                                  />
+                                </button>
+                                <Link
+                                  to={`${match.url}/description/${item.id}`}
+                                  key={`content${item.id}`}
+                                  className={s.taskText}
+                                >
+                                  {item.name}
+                                </Link>
+                              </div>
+                            )}
+                          </Draggable>
+                        </div>
+                        {/* )} */}
                       </div>
                     ))}
                     {provided.placeholder}

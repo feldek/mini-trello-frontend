@@ -1,33 +1,39 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setTaskState } from "../../../Data/TaskReducer";
+import { createTask } from "../../../Data/TaskReducer";
 import { Form, Input, Button } from "antd";
 import { deleteList } from "../../../Data/ListReducer";
 import s from "./NewTask.module.css";
+import { uuid } from "uuidv4";
 
-const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
+const NewTask = ({ uuid, listId }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-
-  const onFinish = (elem) => {
-    dispatch(
-      setTaskState(
-        stateTasks.map((elemState) => {
-          if (listId === elemState[0].listId)
-            return [
-              ...elemState,
-              {
-                id: uuid,
-                name: elem[uuid],
-                listId: listId,
-                description: "",
-              },
-            ];
-          else return [...elemState];
-        }),
-        listsId
-      )
-    );
+  // let uuid = uuid();
+  // debugger
+  // const onFinish = (elem) => {
+  //   dispatch(
+  //     setTaskState(
+  //       stateTasks.map((elemState) => {
+  //         if (listId === elemState[0].listId)
+  //           return [
+  //             ...elemState,
+  //             {
+  //               id: uuid,
+  //               name: elem[uuid],
+  //               listId: listId,
+  //               description: "",
+  //             },
+  //           ];
+  //         else return [...elemState];
+  //       }),
+  //       listsId
+  //     )
+  //   );
+  //   onReset();
+  // };
+  const createNewTask = (elem) => {
+    dispatch(createTask(elem[uuid], listId));
     onReset();
   };
 
@@ -38,13 +44,16 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
   const onReset = () => {
     form.resetFields();
   };
+  const funcDeleteList = () => {
+    dispatch(deleteList(listId));
+  };
 
   return (
     <Form
       form={form}
       name="control-hooks"
       layout="vertical"
-      onFinish={onFinish}
+      onFinish={createNewTask}
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
@@ -69,16 +78,7 @@ const NewTask = ({ uuid, listId, listsId, stateTasks }) => {
           danger
           htmlType="submit"
           style={{ float: "right" }}
-          onClick={() =>
-            dispatch(
-              deleteList(
-                listId,
-                stateTasks
-                  .find((el) => el[0].listId === listId)
-                  .map((item) => item.id)
-              )
-            )
-          }
+          onClick={funcDeleteList}
         >
           Delete list
         </Button>

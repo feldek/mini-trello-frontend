@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import s from "./List.module.css";
-import useLocalStorage from "local-storage-hook";
 
 let List = ({ listId }) => {
   let boardId = useRouteMatch().params.boardId;
@@ -10,15 +9,6 @@ let List = ({ listId }) => {
   let list = stateList
     .filter((elem) => elem.boardId === boardId)
     .find((elem) => elem.id === listId);
-  const [localDataUserList, setLocalDataUserList] = useLocalStorage(
-    "dataUserList",
-    false
-  );
-
-  useEffect(() => {
-    setLocalDataUserList(stateList);
-  }, [stateList]);
-
   return (
     <div className={s.boxLists} key={`list${list.id}`}>
       <div className={s.list}>{list.name}</div>

@@ -3,7 +3,7 @@ import Boards from "./Boards";
 import TasksCards from "./List/TasksCards/TasksCard";
 import { Switch, Route } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
-import { ContainerDescription } from "./List/TasksCards/Description/Description";
+import ContainerDescription from "./List/TasksCards/Description/Description";
 
 let Content = (props) => {
   return (

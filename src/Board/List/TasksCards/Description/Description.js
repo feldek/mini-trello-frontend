@@ -10,22 +10,22 @@ import {
 import s from "./Description.module.css";
 import PageNotFound from "../../../PageNotFound";
 
-export let ContainerDescription = () => {
-  let id = useParams().descriptionId;
-  let tasks = useSelector((state) => state.tasks).find((el) =>
-    el.find((item) => item.id === id)
+ let ContainerDescription = () => {
+
+  let id = useParams().descriptionId;    
+  let task = useSelector((state) => state.tasks).find(
+    (item) => item.id === id
   );
-  let content = !tasks ? <PageNotFound /> : <Description tasks={tasks} />;
+  let content = !task ? <PageNotFound /> : <Description task={task} id={id}/>;
   return content;
 };
 
-let Description = ({ tasks }) => {
+ export let Description = ({ task, id }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  let id = useParams().descriptionId;
+  // let id = useParams().descriptionId;
   let boardId = useParams().boardId;
-  let task = tasks.find((item) => item.id === id);
   let [toggle, setToggle] = useState(task.description !== "");
 
   const onFinish = (elem) => {
@@ -91,7 +91,7 @@ let Description = ({ tasks }) => {
           <Button
             danger
             htmlType="button"
-            onClick={() => dispatch(deleteDescription(id, task.listId))}
+            onClick={() => dispatch(deleteDescription(id))}
             style={{ float: "right", margin: "0px 4px" }}
           >
             Delete
@@ -130,4 +130,5 @@ let Description = ({ tasks }) => {
   );
 };
 
-export default Description;
+// export default Description;
+export default ContainerDescription;

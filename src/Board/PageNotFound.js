@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Descriptions } from "antd";
+import { Button } from "antd";
 import s from "./PageNotFound.module.css";
 
 const PageNotFound = ({ style }) => {

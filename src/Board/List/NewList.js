@@ -13,8 +13,7 @@ let NewList = () => {
   const [form] = Form.useForm();
 
   const onFinish = (elem) => {
-    let id = uuid();
-    dispatch(createList(elem.nameList, id, boardId));
+    dispatch(createList(elem.nameList, boardId));
     setToggle(false);
     onReset();
   };

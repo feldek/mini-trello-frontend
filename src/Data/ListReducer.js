@@ -1,15 +1,17 @@
+import { uuid } from "uuidv4";
 const CREATE_LIST = "CREATE_LIST";
 const DELETE_LIST = "DELETE_LIST";
 const DELETE_BOARD = "DELETE_BOARD";
 
-let localStorage = JSON.parse(window.localStorage.getItem("dataUserList"));
-let initialState = localStorage ? localStorage : [];
+let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
+let initialState = localStorage ? localStorage.lists : [];
 const ListReduser = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_LIST: {
+      let id = uuid();
       let stateCopy = [...state];
       stateCopy.push({
-        id: action.id,
+        id: id,
         name: action.name,
         boardId: action.boardId,
       });
@@ -29,17 +31,16 @@ const ListReduser = (state = initialState, action) => {
   }
 };
 
-export const createList = (name, id, boardId) => {
+export const createList = (name, boardId) => {
   return {
     type: CREATE_LIST,
     name,
-    id,
     boardId,
   };
 };
 
-export const deleteList = (listId, tasksId) => {
-  return { type: DELETE_LIST, listId, tasksId };
+export const deleteList = (listId) => {
+  return { type: DELETE_LIST, listId };
 };
 
 export default ListReduser;

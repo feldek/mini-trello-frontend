@@ -1,13 +1,14 @@
+import { uuid } from "uuidv4";
 const CREATE_BOARD = "CREATE_BOARD";
 const DELETE_BOARD = "DELETE_BOARD";
 
-let localStorage = JSON.parse(window.localStorage.getItem("dataUserBoard"));
-let initialState = localStorage ? localStorage : [];
+let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
+let initialState = localStorage ? localStorage.boards : [];
 const BoardReduser = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_BOARD: {
       let stateCopy = [...state];
-      stateCopy.push({ id: action.id, name: action.name });
+      stateCopy.push({ id: uuid(), name: action.name });
       return stateCopy;
     }
     case DELETE_BOARD: {
@@ -19,12 +20,12 @@ const BoardReduser = (state = initialState, action) => {
   }
 };
 
-export const createBoard = (name, id) => {
-  return { type: CREATE_BOARD, name, id };
+export const createBoard = (name) => {
+  return { type: CREATE_BOARD, name };
 };
 
-export const deleteBoard = (boardId, listsId, tasksId) => {
-  return { type: DELETE_BOARD, boardId, listsId, tasksId };
+export const deleteBoard = (boardId, listsId) => {
+  return { type: DELETE_BOARD, boardId, listsId };
 };
 
 export default BoardReduser;
