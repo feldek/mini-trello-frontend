@@ -5,7 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
 import ContainerDescription from "./List/TasksCards/Description/Description";
 
-let Content = (props) => {
+let Router = () => {
   return (
     <>
       <Switch>
@@ -24,4 +24,4 @@ let Content = (props) => {
   );
 };
 
-export default Content;
+export default Router;

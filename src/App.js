@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import Content from "./Board/Content";
+import Router from "./Board/Router";
 
 function App() {
-  return <Content />;
+  return <Router />;
 }
 
 export default App;

@@ -1,6 +1,5 @@
 import { uuid } from "uuidv4";
 
-// const CREATE_LIST = "CREATE_LIST";
 const CREATE_TASK = "CREATE_TASK";
 const SET_TASK_STATE = "SET_TASK_STATE";
 const DELETE_TASK = "DELETE_TASK";
@@ -13,13 +12,6 @@ let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
 let initialState = localStorage ? localStorage.tasks : [];
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case CREATE_LIST: {
-    //   let stateCopy = [...state];
-    //   stateCopy.push(
-    //     { id: uuid(), name: "", listId: action.id, description: "" },
-    //   );
-    //   return stateCopy;
-    // }
     case CREATE_TASK: {
       let stateCopy = [...state];
       stateCopy.push({
@@ -30,14 +22,11 @@ const TaskReducer = (state = initialState, action) => {
       });
       return stateCopy;
     }
-    // case SET_TASK_STATE: {
-    //   let stateCopy = state.filter(
-    //     (el) => !action.listsId.includes(el[0].listId)
-    //   );
-    //   return [...stateCopy, ...action.stateArr];
-    // }
     case SET_TASK_STATE: {
-      return [...action.state];
+      let listsId = action.state.map((task) => task.listId);
+      listsId.push(action.oldlist);
+      let stateCopy = state.filter((task) => !listsId.includes(task.listId));
+      return [...stateCopy, ...action.state];
     }
     case DELETE_TASK: {
       let stateCopy = state.filter((item) => item.id !== action.id);
@@ -84,8 +73,8 @@ const TaskReducer = (state = initialState, action) => {
   }
 };
 
-export const setTaskState = (state) => {
-  return { type: SET_TASK_STATE, state};
+export const setTaskState = (state, oldlist) => {
+  return { type: SET_TASK_STATE, state, oldlist };
 };
 export const createTask = (name, listId) => {
   return { type: CREATE_TASK, name, listId };

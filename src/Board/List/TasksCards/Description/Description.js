@@ -10,21 +10,17 @@ import {
 import s from "./Description.module.css";
 import PageNotFound from "../../../PageNotFound";
 
- let ContainerDescription = () => {
-
-  let id = useParams().descriptionId;    
-  let task = useSelector((state) => state.tasks).find(
-    (item) => item.id === id
-  );
-  let content = !task ? <PageNotFound /> : <Description task={task} id={id}/>;
+let ContainerDescription = () => {
+  let id = useParams().descriptionId;
+  let task = useSelector((state) => state.tasks).find((item) => item.id === id);
+  let content = !task ? <PageNotFound /> : <Description task={task} id={id} />;
   return content;
 };
 
- export let Description = ({ task, id }) => {
+export let Description = ({ task, id }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  // let id = useParams().descriptionId;
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
 
@@ -130,5 +126,4 @@ import PageNotFound from "../../../PageNotFound";
   );
 };
 
-// export default Description;
 export default ContainerDescription;

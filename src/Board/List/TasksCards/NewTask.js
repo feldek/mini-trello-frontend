@@ -4,34 +4,10 @@ import { createTask } from "../../../Data/TaskReducer";
 import { Form, Input, Button } from "antd";
 import { deleteList } from "../../../Data/ListReducer";
 import s from "./NewTask.module.css";
-import { uuid } from "uuidv4";
 
 const NewTask = ({ uuid, listId }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  // let uuid = uuid();
-  // debugger
-  // const onFinish = (elem) => {
-  //   dispatch(
-  //     setTaskState(
-  //       stateTasks.map((elemState) => {
-  //         if (listId === elemState[0].listId)
-  //           return [
-  //             ...elemState,
-  //             {
-  //               id: uuid,
-  //               name: elem[uuid],
-  //               listId: listId,
-  //               description: "",
-  //             },
-  //           ];
-  //         else return [...elemState];
-  //       }),
-  //       listsId
-  //     )
-  //   );
-  //   onReset();
-  // };
   const createNewTask = (elem) => {
     dispatch(createTask(elem[uuid], listId));
     onReset();
