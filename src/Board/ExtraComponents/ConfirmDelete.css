@@ -1,0 +1,11 @@
+.ConfirmDeleteContent .ant-form-item-control-input-content {
+  display: flex;
+  justify-content: space-between;
+}
+.ConfirmDeleteBox .ant-form {
+  margin-top: 20px;
+  width: 75%;
+}
+.ConfirmDeleteBox .ant-form-item {
+  margin-bottom: 0px;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createList } from "../../Data/ListReducer";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import s from "./NewList.module.css";
 
@@ -38,13 +38,6 @@ let NewList = () => {
             >
               Create new List
             </Button>
-          </Form.Item>
-          <Form.Item layout="vertical">
-            <Link to="/">
-              <Button htmlType="button" className={s.formButton}>
-                Back to board
-              </Button>
-            </Link>
           </Form.Item>
         </div>
       )}

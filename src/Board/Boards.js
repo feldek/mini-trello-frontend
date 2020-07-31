@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,10 +8,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "antd";
 import s from "./Boards.module.css";
+import "./Boards.css";
+import ConfirmDelete from "./ExtraComponents/ConfirmDelete";
 
-let Boards = () => {
+const Boards = () => {
   const dispatch = useDispatch();
+  const [toggleDelete, setToggleDelete] = useState(false);
+  const [param, setParam] = useState(false);
   const stateList = useSelector((state) => state.lists);
+
   const funcDeleteBoard = (item) => {
     let filterStateList = stateList
       .filter((el) => el.boardId === item.id)
@@ -19,8 +24,13 @@ let Boards = () => {
     dispatch(deleteBoard(item.id, filterStateList));
   };
 
+  const callConfirmDelete = (el) => {
+    setToggleDelete(true);
+    setParam(el);
+  };
+
   return (
-    <div className={s.content}>
+    <div className={`${s.content} boardsContent`}>
       <Card title={<NewBoard />}>
         <div className={s.boards}>
           {useSelector((state) => state.boards).map((elem) => (
@@ -29,7 +39,7 @@ let Boards = () => {
                 key={`boardButton${elem.id}`}
                 className={s.button}
                 data-title="delete"
-                onClick={() => funcDeleteBoard(elem)}
+                onClick={() => callConfirmDelete(elem)}
               >
                 <FontAwesomeIcon icon={faTimes} style={{ fontSize: "20px" }} />
               </button>
@@ -44,6 +54,12 @@ let Boards = () => {
           ))}
         </div>
       </Card>
+      {toggleDelete && (
+        <ConfirmDelete
+          onConfirm={() => funcDeleteBoard(param)}
+          setToggle={setToggleDelete}
+        />
+      )}
     </div>
   );
 };

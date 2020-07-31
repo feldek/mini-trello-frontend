@@ -9,6 +9,7 @@ let List = ({ listId }) => {
   let list = stateList
     .filter((elem) => elem.boardId === boardId)
     .find((elem) => elem.id === listId);
+
   return (
     <div className={s.boxLists} key={`list${list.id}`}>
       <div className={s.list}>{list.name}</div>

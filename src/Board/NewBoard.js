@@ -4,6 +4,7 @@ import { createBoard } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
+import "./NewBoard.css";
 
 let NewBoard = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ let NewBoard = () => {
       {toggle && (
         <Form
           form={form}
-          name="control-hooks"
+          name="newBoardForm"
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -59,18 +60,11 @@ let NewBoard = () => {
             </label>
           </Form.Item>
 
-          <Form.Item className={s.buttons}>
+          <Form.Item className={`${s.buttons} NewBoardButtons`}>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
-            <Button type="link" htmlType="button" onClick={onReset}>
-              Reset
-            </Button>
-            <Button
-              htmlType="submit"
-              onClick={() => setToggle(false)}
-              style={{ float: "right" }}
-            >
+            <Button htmlType="submit" onClick={() => setToggle(false)}>
               Cancel
             </Button>
           </Form.Item>

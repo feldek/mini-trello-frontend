@@ -8,7 +8,8 @@ import {
   deleteDescription,
 } from "../../../../Data/TaskReducer";
 import s from "./Description.module.css";
-import PageNotFound from "../../../PageNotFound";
+import PageNotFound from "../../../ExtraComponents/PageNotFound";
+import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
@@ -24,10 +25,12 @@ export let Description = ({ task, id }) => {
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
 
-  const onFinish = (elem) => {
+  const funcCreateDescription = (elem) => {
     !toggle && dispatch(createDescription(`${elem.description}`, id));
     setToggle(!toggle);
   };
+
+  let [toggleDelete, setToggleDelete] = useState(false);
 
   const onReset = () => {
     form.resetFields();
@@ -53,7 +56,7 @@ export let Description = ({ task, id }) => {
         </Button>
         <Link to={`/board/${boardId}`}>
           <Button style={{ float: "right" }} className={s.button}>
-            Back to board
+            Back
           </Button>
         </Link>
         <Button
@@ -71,28 +74,26 @@ export let Description = ({ task, id }) => {
 
   let descriptionText = (
     <div key={`descriptionText${id}`}>
-      <Form.Item
-        onDoubleClick={() => setToggle(false)}
-        className={s.textDescription}
-      >
+      <Form.Item onClick={() => setToggle(false)} className={s.textDescription}>
         {task.description}
       </Form.Item>
       <Form.Item style={{ marginBottom: "0" }}>
-        <Button type="primary" htmlType="submit">
-          Edit
-        </Button>
         <Link to={`/board/${boardId}`}>
-          <Button style={{ float: "right" }}>Back to board</Button>
-
-          <Button
-            danger
-            htmlType="button"
-            onClick={() => dispatch(deleteDescription(id))}
-            style={{ float: "right", margin: "0px 4px" }}
-          >
-            Delete
+          <Button type="primary" htmlType="submit">
+            Edit
           </Button>
         </Link>
+        <Link to={`/board/${boardId}`}>
+          <Button style={{ float: "right" }}>Back</Button>
+        </Link>
+        <Button
+          danger
+          htmlType="button"
+          onClick={() => setToggleDelete(true)}
+          style={{ float: "right", margin: "0px 4px" }}
+        >
+          Delete
+        </Button>
       </Form.Item>
     </div>
   );
@@ -107,7 +108,7 @@ export let Description = ({ task, id }) => {
               form={form}
               name="control-hooks"
               layout="vertical"
-              onFinish={onFinish}
+              onFinish={funcCreateDescription}
               onFinishFailed={onFinishFailed}
               className={s.form}
               fields={[
@@ -122,6 +123,14 @@ export let Description = ({ task, id }) => {
           </div>
         </Card>
       </div>
+
+      {toggleDelete && (
+        <ConfirmDelete
+          onConfirm={() => dispatch(deleteDescription(id))}
+          setToggle={setToggleDelete}
+          linkToBack={`/board/${boardId}`}
+        />
+      )}
     </div>
   );
 };
