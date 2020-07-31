@@ -1,14 +1,12 @@
-.ant-card-body {
-  padding: 0px;
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1;
+.tasksHeader .ant-row.ant-form-item {
+  margin-bottom: 0;
 }
-
-.ant-card-grid {
-  width: 100%;
+.tasksHeader > .ant-card-head {
+  padding: 0px 8px;
 }
-
+.totalCard > .ant-card-body {
+  margin: -3px;
+}
 @media (max-width: 600px) {
   .totalCard > .ant-card-body::before {
     content: none;
@@ -16,11 +14,8 @@
   .totalCard > .ant-card-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 380px) {
-  .tasksHeader > .ant-card-head {
-    padding: 0 8px;
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    margin: 0;
   }
 }

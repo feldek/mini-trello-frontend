@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import s from "./TasksCard.module.css";
 import { deleteTask } from "../../../Data/TaskReducer";
@@ -6,10 +6,13 @@ import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Link, useRouteMatch } from "react-router-dom";
+import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
 
 const Drag = ({ listTask }) => {
   const dispatch = useDispatch();
-  let match = useRouteMatch();
+  const [toggleDelete, setToggleDelete] = useState(false);
+  const [taskId, setTaskId] = useState(false);
+  const match = useRouteMatch();
   const grid = 7;
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
@@ -17,6 +20,11 @@ const Drag = ({ listTask }) => {
     background: isDragging ? "#c2dcf7" : "#e1f0ff",
     ...draggableStyle,
   });
+
+  const handleDelete = (el) => {
+    setToggleDelete(true);
+    setTaskId(el);
+  };
 
   return (
     <>
@@ -40,9 +48,7 @@ const Drag = ({ listTask }) => {
                     key={`buttons${item.id}`}
                     className={s.buttonTaskDelete}
                     type="button"
-                    onClick={() => {
-                      dispatch(deleteTask(item.id));
-                    }}
+                    onClick={() => handleDelete(item.id)}
                   >
                     <FontAwesomeIcon
                       key={`icon${item.id}`}
@@ -66,6 +72,12 @@ const Drag = ({ listTask }) => {
           </div>
         </div>
       ))}
+      {toggleDelete && (
+        <ConfirmDelete
+          onConfirm={() => dispatch(deleteTask(taskId))}
+          setToggle={setToggleDelete}
+        />
+      )}
     </>
   );
 };
