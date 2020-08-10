@@ -23,7 +23,6 @@ const NewTask = ({ uuid, listId }) => {
   return (
     <Form
       form={form}
-      name={`control-hooks ${uuid}`}
       layout="horizontal"
       onFinish={handleCreate}
       onFinishFailed={onFinishFailed}

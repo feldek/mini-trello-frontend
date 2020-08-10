@@ -11,6 +11,7 @@
   height: 100vh;
   display: flex;
   justify-content: center;
+  z-index: 3;
 }
 .container {
   height: 500px;
@@ -43,7 +44,13 @@
   padding: 0px 12px;
   border: 1px solid #f0f0f0;
 }
-
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.button {
+  margin-left: 4px;
+}
 @media (max-width: 600px) {
   .card {
     width: 95vw;

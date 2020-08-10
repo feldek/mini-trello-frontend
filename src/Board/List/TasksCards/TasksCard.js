@@ -12,12 +12,13 @@ import { Card, Button } from "antd";
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
 
-import Drag from "./Tasks";
+import Tasks from "./Tasks";
 import s from "./TasksCard.module.css";
 import { deleteList } from "../../../Data/ListReducer";
-import { faTimes, faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
+import DeleteIcon from "../../ExtraComponents/DeleteIcon";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -89,7 +90,7 @@ let TasksCards = () => {
       const newState = [...tasksFilter];
       newState[sInd] = items;
       let reducerState = [];
-      newState.map((item) => reducerState.push(...item));
+      reducerState = newState.flat();
       dispatch(setTaskState(reducerState));
     } else {
       const result = move(
@@ -115,30 +116,15 @@ let TasksCards = () => {
               : elem)
       );
       let reducerState = [];
-      newState.map((item) => reducerState.push(...item));
+      reducerState = newState.flat();
       dispatch(setTaskState(reducerState, tasksFilter[sInd][0].listId));
     }
   }
-  let deteleButton = (item) => (
-    <button
-      key={`buttons${item.id}`}
-      className={s.buttonListDelete}
-      type="button"
-      onClick={() => handleDelete(item.id)}
-    >
-      <FontAwesomeIcon
-        key={`icon${item.id}`}
-        icon={faTimes}
-        style={{
-          fontSize: "35px",
-          padding: "4px",
-        }}
-      />
-    </button>
-  );
-
+  let classNames = require("classnames");
   return (
     <div className={s.content}>
+      <div className={classNames(`${s.content}`, "boardsContent")}></div>
+      <div className={`${s.content} boardsContent`}></div>
       <Link to="/">
         <Button htmlType="button" className={s.backButton}>
           <FontAwesomeIcon
@@ -155,25 +141,24 @@ let TasksCards = () => {
         <DragDropContext onDragEnd={onDragEnd}>
           {listsFilter.map((el, ind) => (
             <Card.Grid key={`boxList${el.id}`} className={s.card}>
-              {deteleButton(el)}
+              <DeleteIcon
+                size={"l"}
+                handleDelete={() => handleDelete(el.id)}
+                styleParams={{ margin: "8px" }}
+              />
               <Card
                 className={`${s.tasksHeader} tasksHeader`}
                 key={`listone${el.id}`}
                 title={
                   <div key={`headerCard${el.id}`}>
-                    <List listId={el.id} key={`lists${el.id}`} />
-                    <NewTask
-                      listId={el.id}
-                      uuid={uuid()}
-                      key={`newTask${el.id}`}
-                    />
+                    <List listId={el.id} />
+                    <NewTask listId={el.id} uuid={uuid()} />
                   </div>
                 }
               >
                 <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
                   {(provided, snapshot) => (
                     <div
-                      key={`tasks${el.id}`}
                       ref={provided.innerRef}
                       style={
                         (getListStyle(snapshot.isDraggingOver),
@@ -181,7 +166,7 @@ let TasksCards = () => {
                       }
                       {...provided.droppableProps}
                     >
-                      {<Drag listTask={tasksFilter[ind]} />}
+                      {<Tasks listTask={tasksFilter[ind]} />}
                       {provided.placeholder}
                     </div>
                   )}

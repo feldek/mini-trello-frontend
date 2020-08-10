@@ -3,10 +3,9 @@ import { Draggable } from "react-beautiful-dnd";
 import s from "./TasksCard.module.css";
 import { deleteTask } from "../../../Data/TaskReducer";
 import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Link, useRouteMatch } from "react-router-dom";
 import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
+import DeleteIcon from "../../ExtraComponents/DeleteIcon";
 
 const Drag = ({ listTask }) => {
   const dispatch = useDispatch();
@@ -30,11 +29,10 @@ const Drag = ({ listTask }) => {
     <>
       {listTask.map((item, index) => (
         <div key={`task${item.id}`}>
-          <div key={`boxdragable${item.id}`}>
+          <div>
             <Draggable key={item.id} draggableId={item.id} index={index}>
               {(provided, snapshot) => (
                 <div
-                  key={`boxTask${item.id}`}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
@@ -44,24 +42,12 @@ const Drag = ({ listTask }) => {
                   )}
                   className={s.taskContainer}
                 >
-                  <button
-                    key={`buttons${item.id}`}
-                    className={s.buttonTaskDelete}
-                    type="button"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    <FontAwesomeIcon
-                      key={`icon${item.id}`}
-                      icon={faTimes}
-                      style={{
-                        fontSize: "28px",
-                        padding: "4px",
-                      }}
-                    />
-                  </button>
+                  <DeleteIcon
+                    size={"s"}
+                    handleDelete={() => handleDelete(item.id)}
+                  />
                   <Link
                     to={`${match.url}/description/${item.id}`}
-                    key={`content${item.id}`}
                     className={s.taskText}
                   >
                     {item.name}

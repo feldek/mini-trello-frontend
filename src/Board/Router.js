@@ -14,7 +14,6 @@ let Router = () => {
         <Route path="/board/:boardId" component={TasksCards} />
         <Route exact path="/2222" component={ConfirmDelete} />
         <Route component={PageNotFound} />
-        
       </Switch>
       <Switch>
         <Route

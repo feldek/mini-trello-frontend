@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { Card } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Input, Button } from "antd";
@@ -17,8 +17,8 @@ let ContainerDescription = () => {
   let content = !task ? <PageNotFound /> : <Description task={task} id={id} />;
   return content;
 };
-
 export let Description = ({ task, id }) => {
+  let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -27,7 +27,8 @@ export let Description = ({ task, id }) => {
 
   const handleCreate = (elem) => {
     !toggle && dispatch(createDescription(`${elem.description}`, id));
-    setToggle(!toggle);
+    !toggle && history.push(`/board/${boardId}`);
+    toggle && setToggle(!toggle);
   };
 
   let [toggleDelete, setToggleDelete] = useState(false);
@@ -50,24 +51,25 @@ export let Description = ({ task, id }) => {
         />
       </Form.Item>
 
-      <Form.Item style={{ marginBottom: "0" }}>
-        <Button type="primary" htmlType="submit" className={s.button}>
-          Confirm
-        </Button>
-        <Link to={`/board/${boardId}`}>
-          <Button style={{ float: "right" }} className={s.button}>
-            Back
+      <Form.Item>
+        <div className={s.buttonsContainer}>
+          <Button type="primary" htmlType="submit" className={s.button}>
+            Confirm
           </Button>
-        </Link>
-        <Button
-          className={s.button}
-          type="link"
-          htmlType="button"
-          onClick={onReset}
-          style={{ float: "right" }}
-        >
-          Reset
-        </Button>
+          <div>
+            <Button
+              className={s.button}
+              type="link"
+              htmlType="button"
+              onClick={onReset}
+            >
+              Reset
+            </Button>
+            <Link to={`/board/${boardId}`}>
+              <Button className={s.button}>Back</Button>
+            </Link>
+          </div>
+        </div>
       </Form.Item>
     </div>
   );
@@ -77,23 +79,27 @@ export let Description = ({ task, id }) => {
       <Form.Item onClick={() => setToggle(false)} className={s.textDescription}>
         {task.description}
       </Form.Item>
-      <Form.Item style={{ marginBottom: "0" }}>
-        <Link to={`/board/${boardId}`}>
+
+      <Form.Item>
+        <div className={s.buttonsContainer}>
           <Button type="primary" htmlType="submit">
             Edit
           </Button>
-        </Link>
-        <Link to={`/board/${boardId}`}>
-          <Button style={{ float: "right" }}>Back</Button>
-        </Link>
-        <Button
-          danger
-          htmlType="button"
-          onClick={() => setToggleDelete(true)}
-          style={{ float: "right", margin: "0px 4px" }}
-        >
-          Delete
-        </Button>
+
+          <div>
+            <Button
+              danger
+              htmlType="button"
+              onClick={() => setToggleDelete(true)}
+            >
+              Delete
+            </Button>
+
+            <Link to={`/board/${boardId}`}>
+              <Button className={s.button}>Back</Button>
+            </Link>
+          </div>
+        </div>
       </Form.Item>
     </div>
   );
