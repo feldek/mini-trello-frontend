@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import s from "./TasksCard.module.css";
 import { deleteTask } from "../../../Data/TaskReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
 import DeleteIcon from "../../ExtraComponents/DeleteIcon";
@@ -11,6 +11,7 @@ const Drag = ({ listTask }) => {
   const dispatch = useDispatch();
   const [toggleDelete, setToggleDelete] = useState(false);
   const [taskId, setTaskId] = useState(false);
+  const stateTask = useSelector((state) => state.tasks);
   const match = useRouteMatch();
   const grid = 7;
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -60,7 +61,7 @@ const Drag = ({ listTask }) => {
       ))}
       {toggleDelete && (
         <ConfirmDelete
-          onConfirm={() => dispatch(deleteTask(taskId))}
+          onConfirm={() => dispatch(deleteTask(stateTask, taskId))}
           setToggle={setToggleDelete}
         />
       )}

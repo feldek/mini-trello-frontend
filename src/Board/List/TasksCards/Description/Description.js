@@ -21,12 +21,13 @@ export let Description = ({ task, id }) => {
   let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const stateTask = useSelector((state) => state.tasks);
 
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
 
   const handleCreate = (elem) => {
-    !toggle && dispatch(createDescription(`${elem.description}`, id));
+    !toggle && dispatch(createDescription(stateTask, elem.description, id));
     !toggle && history.push(`/board/${boardId}`);
     toggle && setToggle(!toggle);
   };
@@ -132,7 +133,7 @@ export let Description = ({ task, id }) => {
 
       {toggleDelete && (
         <ConfirmDelete
-          onConfirm={() => dispatch(deleteDescription(id))}
+          onConfirm={() => dispatch(deleteDescription(stateTask, id))}
           setToggle={setToggleDelete}
           linkToBack={`/board/${boardId}`}
         />

@@ -15,12 +15,16 @@ const Boards = () => {
   const [toggleDelete, setToggleDelete] = useState(false);
   const [param, setParam] = useState(false);
   const stateList = useSelector((state) => state.lists);
+  const stateBoard = useSelector((state) => state.boards);
+  const stateTask = useSelector((state) => state.tasks);
 
   const handleDelete = (item) => {
     let filterStateList = stateList
       .filter((el) => el.boardId === item.id)
       .map((el) => el.id);
-    dispatch(deleteBoard(item.id, filterStateList));
+    dispatch(
+      deleteBoard(stateBoard, item.id, filterStateList, stateList, stateTask)
+    );
   };
 
   const callConfirmDelete = (el) => {
@@ -28,8 +32,10 @@ const Boards = () => {
     setParam(el);
   };
 
+  const classNames = require("classnames");
+
   return (
-    <div className={`${s.content} boardsContent`}>
+    <div className={classNames(`${s.content}`, "boardsContent")}>
       <Card title={<NewBoard />}>
         <div className={s.boards}>
           {useSelector((state) => state.boards).map((elem) => (

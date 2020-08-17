@@ -9,38 +9,41 @@ const ListReduser = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_LIST: {
       let id = uuid();
-      let stateCopy = [...state];
-      stateCopy.push({
+      let newState = [...action.state];
+      newState.push({
         id: id,
         name: action.name,
         boardId: action.boardId,
       });
-      return stateCopy;
+      return newState;
     }
     case DELETE_LIST: {
-      let stateCopy = state.filter((el) => action.listId !== el.id);
-      return stateCopy;
+      let newState = action.stateList.filter((el) => action.listId !== el.id);
+      return newState;
     }
 
     case DELETE_BOARD: {
-      let stateCopy = state.filter((item) => action.boardId !== item.boardId);
-      return stateCopy;
+      let newState = action.stateList.filter(
+        (item) => action.boardId !== item.boardId
+      );
+      return newState;
     }
     default:
       return state;
   }
 };
 
-export const createList = (name, boardId) => {
+export const createList = (state, name, boardId) => {
   return {
     type: CREATE_LIST,
+    state,
     name,
     boardId,
   };
 };
 
-export const deleteList = (listId) => {
-  return { type: DELETE_LIST, listId };
+export const deleteList = (stateList, listId, stateTask) => {
+  return { type: DELETE_LIST, stateList, listId, stateTask };
 };
 
 export default ListReduser;

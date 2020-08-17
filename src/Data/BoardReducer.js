@@ -7,25 +7,40 @@ let initialState = localStorage ? localStorage.boards : [];
 const BoardReduser = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_BOARD: {
-      let stateCopy = [...state];
-      stateCopy.push({ id: uuid(), name: action.name });
-      return stateCopy;
+      let newState = [...action.state];
+      newState.push({ id: uuid(), name: action.name });
+      return newState;
     }
     case DELETE_BOARD: {
-      let stateCopy = state.filter((item) => action.boardId !== item.id);
-      return stateCopy;
+      let newState = action.stateBoard.filter(
+        (item) => action.boardId !== item.id
+      );
+      return newState;
     }
     default:
       return state;
   }
 };
 
-export const createBoard = (name) => {
-  return { type: CREATE_BOARD, name };
+export const createBoard = (state, name) => {
+  return { type: CREATE_BOARD, state, name };
 };
 
-export const deleteBoard = (boardId, listsId) => {
-  return { type: DELETE_BOARD, boardId, listsId };
+export const deleteBoard = (
+  stateBoard,
+  boardId,
+  listsId,
+  stateList,
+  stateTask
+) => {
+  return {
+    type: DELETE_BOARD,
+    stateBoard,
+    boardId,
+    listsId,
+    stateList,
+    stateTask,
+  };
 };
 
 export default BoardReduser;

@@ -13,37 +13,39 @@ let initialState = localStorage ? localStorage.tasks : [];
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_TASK: {
-      let stateCopy = [...state];
-      stateCopy.push({
+      let newState = [...action.state];
+      newState.push({
         id: uuid(),
         name: action.name,
         listId: action.listId,
         description: "",
       });
-      return stateCopy;
+      return newState;
     }
     case SET_TASK_STATE: {
       let listsId = action.state.map((task) => task.listId);
       listsId.push(action.oldlist);
-      let stateCopy = state.filter((task) => !listsId.includes(task.listId));
-      return [...stateCopy, ...action.state];
+      let newState = state.filter((task) => !listsId.includes(task.listId));
+      return [...newState, ...action.state];
     }
     case DELETE_TASK: {
-      let stateCopy = state.filter((item) => item.id !== action.id);
-      return stateCopy;
+      let newState = action.state.filter((item) => item.id !== action.id);
+      return newState;
     }
     case DELETE_LIST: {
-      let stateCopy = state.filter((item) => item.listId !== action.listId);
-      return stateCopy;
+      let newState = action.stateTask.filter(
+        (item) => item.listId !== action.listId
+      );
+      return newState;
     }
     case DELETE_BOARD: {
-      let stateCopy = state.filter(
+      let newState = action.stateTask.filter(
         (item) => !action.listsId.includes(item.listId)
       );
-      return stateCopy;
+      return newState;
     }
     case CREATE_DESCRIPTION: {
-      let stateCopy = state.map((item) =>
+      let newState = action.state.map((item) =>
         item.id !== action.id
           ? item
           : {
@@ -53,10 +55,10 @@ const TaskReducer = (state = initialState, action) => {
               description: action.description,
             }
       );
-      return stateCopy;
+      return newState;
     }
     case DELETE_DESCRIPTION: {
-      let stateCopy = state.map((item) =>
+      let newState = action.state.map((item) =>
         action.id !== item.id
           ? item
           : {
@@ -66,7 +68,7 @@ const TaskReducer = (state = initialState, action) => {
               description: "",
             }
       );
-      return stateCopy;
+      return newState;
     }
     default:
       return state;
@@ -76,22 +78,24 @@ const TaskReducer = (state = initialState, action) => {
 export const setTaskState = (state, oldlist) => {
   return { type: SET_TASK_STATE, state, oldlist };
 };
-export const createTask = (name, listId) => {
-  return { type: CREATE_TASK, name, listId };
+export const createTask = (state, name, listId) => {
+  return { type: CREATE_TASK, state, name, listId };
 };
-export const deleteTask = (id) => {
-  return { type: DELETE_TASK, id };
+export const deleteTask = (state, id) => {
+  return { type: DELETE_TASK, state, id };
 };
-export const createDescription = (description, id) => {
+export const createDescription = (state, description, id) => {
   return {
     type: CREATE_DESCRIPTION,
+    state,
     description,
     id,
   };
 };
-export const deleteDescription = (id) => {
+export const deleteDescription = (state,id) => {
   return {
     type: DELETE_DESCRIPTION,
+    state,
     id,
   };
 };

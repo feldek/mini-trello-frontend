@@ -11,7 +11,6 @@ import PageNotFound from "../../ExtraComponents/PageNotFound";
 import { Card, Button } from "antd";
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
-
 import Tasks from "./Tasks";
 import s from "./TasksCard.module.css";
 import { deleteList } from "../../../Data/ListReducer";
@@ -57,6 +56,7 @@ let TasksCards = () => {
   const stateList = useSelector((state) => state.lists);
 
   const listsFilter = stateList.filter((elem) => elem.boardId === boardId);
+
   let listsId = listsFilter.map((el) => el.id);
 
   const stateTask = useSelector((state) => state.tasks);
@@ -120,11 +120,9 @@ let TasksCards = () => {
       dispatch(setTaskState(reducerState, tasksFilter[sInd][0].listId));
     }
   }
-  let classNames = require("classnames");
+  const classNames = require("classnames");
   return (
     <div className={s.content}>
-      <div className={classNames(`${s.content}`, "boardsContent")}></div>
-      <div className={`${s.content} boardsContent`}></div>
       <Link to="/">
         <Button htmlType="button" className={s.backButton}>
           <FontAwesomeIcon
@@ -146,8 +144,9 @@ let TasksCards = () => {
                 handleDelete={() => handleDelete(el.id)}
                 styleParams={{ margin: "8px" }}
               />
+
               <Card
-                className={`${s.tasksHeader} tasksHeader`}
+                className={classNames(`${s.tasksHeader}`, "tasksHeader")}
                 key={`listone${el.id}`}
                 title={
                   <div key={`headerCard${el.id}`}>
@@ -181,7 +180,7 @@ let TasksCards = () => {
       </Card>
       {toggleDelete && (
         <ConfirmDelete
-          onConfirm={() => dispatch(deleteList(listId))}
+          onConfirm={() => dispatch(deleteList(stateList, listId, stateTask))}
           setToggle={setToggleDelete}
         />
       )}

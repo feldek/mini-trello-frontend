@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createList } from "../../Data/ListReducer";
 import { useLocation } from "react-router-dom";
 import { Form, Input, Button } from "antd";
@@ -9,10 +9,11 @@ let NewList = () => {
   let [toggle, setToggle] = useState(false);
   let boardId = useLocation().pathname.replace("/board/", "");
   const dispatch = useDispatch();
+  const stateList = useSelector((state) => state.lists);
   const [form] = Form.useForm();
 
   const handleCreate = (elem) => {
-    dispatch(createList(elem.nameList, boardId));
+    dispatch(createList(stateList, elem.nameList, boardId));
     setToggle(false);
     onReset();
   };

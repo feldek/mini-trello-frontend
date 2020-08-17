@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBoard } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
@@ -11,9 +11,10 @@ let NewBoard = () => {
   const [form] = Form.useForm();
 
   const [toggle, setToggle] = useState(false);
+  const newState = useSelector((state) => state.boards);
 
   const handleCreate = (elem) => {
-    dispatch(createBoard(elem.nameBoard));
+    dispatch(createBoard(newState, elem.nameBoard));
     onReset();
   };
 
