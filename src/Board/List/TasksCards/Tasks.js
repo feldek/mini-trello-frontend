@@ -4,10 +4,10 @@ import s from "./TasksCard.module.css";
 import { deleteTask } from "../../../Data/TaskReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
-import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
-import DeleteIcon from "../../ExtraComponents/DeleteIcon";
+import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
+import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 
-const Drag = ({ listTask }) => {
+const Drag = ({ currentTask }) => {
   const dispatch = useDispatch();
   const [toggleDelete, setToggleDelete] = useState(false);
   const [taskId, setTaskId] = useState(false);
@@ -28,7 +28,7 @@ const Drag = ({ listTask }) => {
 
   return (
     <>
-      {listTask.map((item, index) => (
+      {currentTask.map((item, index) => (
         <div key={`task${item.id}`}>
           <div>
             <Draggable key={item.id} draggableId={item.id} index={index}>

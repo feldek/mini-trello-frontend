@@ -1,0 +1,26 @@
+.background {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(241, 241, 241, 0.521);
+  top: -80px;
+  left: 0;
+  z-index: 4;
+}
+.box {
+  width: 220px;
+  height: 150px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  outline: 1px solid #ebedee;
+  outline-offset: -10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 2px;
+}

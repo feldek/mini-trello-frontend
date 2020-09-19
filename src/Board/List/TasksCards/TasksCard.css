@@ -7,6 +7,9 @@
 .totalCard > .ant-card-body {
   margin: -3px;
 }
+.ant-card {
+  background: none;
+}
 @media (max-width: 600px) {
   .totalCard > .ant-card-body::before {
     content: none;

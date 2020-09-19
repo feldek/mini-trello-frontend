@@ -23,9 +23,7 @@ const ListReduser = (state = initialState, action) => {
     }
 
     case DELETE_BOARD: {
-      let newState = action.stateList.filter(
-        (item) => action.boardId !== item.boardId
-      );
+      let newState = action.stateList.filter((item) => action.boardId !== item.boardId);
       return newState;
     }
     default:

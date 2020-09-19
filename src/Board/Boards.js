@@ -7,8 +7,9 @@ import { deleteBoard } from "../Data/BoardReducer";
 import { Card } from "antd";
 import s from "./Boards.module.css";
 import "./Boards.css";
-import ConfirmDelete from "./ExtraComponents/ConfirmDelete";
-import DeleteIcon from "./ExtraComponents/DeleteIcon";
+import DeleteIcon from "../ExtraComponents/DeleteIcon";
+import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
+import Header from "./Header";
 
 const Boards = () => {
   const dispatch = useDispatch();
@@ -22,9 +23,7 @@ const Boards = () => {
     let filterStateList = stateList
       .filter((el) => el.boardId === item.id)
       .map((el) => el.id);
-    dispatch(
-      deleteBoard(stateBoard, item.id, filterStateList, stateList, stateTask)
-    );
+    dispatch(deleteBoard(stateBoard, item.id, filterStateList, stateList, stateTask));
   };
 
   const callConfirmDelete = (el) => {
@@ -36,14 +35,12 @@ const Boards = () => {
 
   return (
     <div className={classNames(`${s.content}`, "boardsContent")}>
+      <Header />
       <Card title={<NewBoard />}>
         <div className={s.boards}>
           {useSelector((state) => state.boards).map((elem) => (
             <Card.Grid key={`board${elem.id}`} className={s.board}>
-              <DeleteIcon
-                size={"m"}
-                handleDelete={() => callConfirmDelete(elem)}
-              />
+              <DeleteIcon size={"m"} handleDelete={() => callConfirmDelete(elem)} />
               <Link
                 to={`/board/${elem.id}`}
                 key={`board${elem.id}`}

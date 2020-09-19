@@ -1,5 +1,4 @@
-.content {
-  margin-top: 100px;
+.content {  
   display: flex;
   flex-direction: column;
 }
@@ -45,10 +44,13 @@
   left: -20%;
   content: attr(data-title);
 }
-
+.output:hover{
+  color: red;
+}
 @media (min-width: 1000px) {
   .content {
     width: 70%;
+    margin-top: 50px;
   }
   .board {
     width: 300px !important;
@@ -60,7 +62,7 @@
 }
 @media (min-width: 600px) and (max-width: 1000px) {
   .content {
-    margin-top: 50px;
+    margin-top: 30px;
     width: 90%;
   }
   .boards {
@@ -72,7 +74,7 @@
 }
 @media (max-width: 600px) {
   .content {
-    margin-top: 30px;
+    margin-top: 25px;
     width: 95%;
   }
   .boards {

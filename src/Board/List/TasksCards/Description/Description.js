@@ -3,13 +3,10 @@ import { useParams, Link, useHistory } from "react-router-dom";
 import { Card } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Input, Button } from "antd";
-import {
-  createDescription,
-  deleteDescription,
-} from "../../../../Data/TaskReducer";
+import { createDescription, deleteDescription } from "../../../../Data/TaskReducer";
 import s from "./Description.module.css";
-import PageNotFound from "../../../ExtraComponents/PageNotFound";
-import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
+import PageNotFound from "../../../../ExtraComponents/PageNotFound";
+import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
@@ -58,12 +55,7 @@ export let Description = ({ task, id }) => {
             Confirm
           </Button>
           <div>
-            <Button
-              className={s.button}
-              type="link"
-              htmlType="button"
-              onClick={onReset}
-            >
+            <Button className={s.button} type="link" htmlType="button" onClick={onReset}>
               Reset
             </Button>
             <Link to={`/board/${boardId}`}>
@@ -88,11 +80,7 @@ export let Description = ({ task, id }) => {
           </Button>
 
           <div>
-            <Button
-              danger
-              htmlType="button"
-              onClick={() => setToggleDelete(true)}
-            >
+            <Button danger htmlType="button" onClick={() => setToggleDelete(true)}>
               Delete
             </Button>
 

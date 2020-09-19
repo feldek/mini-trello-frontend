@@ -30,6 +30,7 @@
   height: 500px;
   outline: 1px solid #f0f0f0;
   outline-offset: -10px;
+  background: white;
 }
 .form {
   width: 400px;

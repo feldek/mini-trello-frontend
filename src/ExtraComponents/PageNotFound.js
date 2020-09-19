@@ -5,7 +5,7 @@ import s from "./PageNotFound.module.css";
 
 const PageNotFound = ({ style }) => {
   return (
-    <div className={s.style} style={style}>
+    <div className={s.background} style={style}>
       <div className={s.box}>
         Page not found
         <Link to="/">

@@ -38,7 +38,7 @@ const NewTask = ({ uuid, listId }) => {
           },
         ]}
       >
-        <label>
+        <label className={s.newTaskLabel}>
           <Input placeholder="Create new Task" />
           <Button type="primary" htmlType="submit" className={s.button}>
             Add

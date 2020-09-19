@@ -11,7 +11,7 @@
   background-color: white;
   color: black;
 }
-form label {
+form .newTaskLabel {
   display: flex;
   font-size: 20px;
   width: 100%;

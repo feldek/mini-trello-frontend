@@ -33,9 +33,7 @@ const TaskReducer = (state = initialState, action) => {
       return newState;
     }
     case DELETE_LIST: {
-      let newState = action.stateTask.filter(
-        (item) => item.listId !== action.listId
-      );
+      let newState = action.stateTask.filter((item) => item.listId !== action.listId);
       return newState;
     }
     case DELETE_BOARD: {
@@ -92,7 +90,7 @@ export const createDescription = (state, description, id) => {
     id,
   };
 };
-export const deleteDescription = (state,id) => {
+export const deleteDescription = (state, id) => {
   return {
     type: DELETE_DESCRIPTION,
     state,

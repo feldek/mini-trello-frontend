@@ -18,6 +18,9 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
         fontSize: "20px",
         width: "20px",
       };
+      styleParams = {
+        padding: "3px",
+      };
       break;
     }
     case "l": {
@@ -25,6 +28,7 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
         fontSize: "26px",
         width: "26px",
       };
+
       break;
     }
     case "xl": {

@@ -7,7 +7,7 @@ import List from "../List";
 import { setTaskState } from "../../../Data/TaskReducer";
 import { useParams, Link } from "react-router-dom";
 import NewTask from "./NewTask";
-import PageNotFound from "../../ExtraComponents/PageNotFound";
+import PageNotFound from "../../../ExtraComponents/PageNotFound";
 import { Card, Button } from "antd";
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
@@ -16,10 +16,12 @@ import s from "./TasksCard.module.css";
 import { deleteList } from "../../../Data/ListReducer";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ConfirmDelete from "../../ExtraComponents/ConfirmDelete";
-import DeleteIcon from "../../ExtraComponents/DeleteIcon";
+
+import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
+import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 
 const reorder = (list, startIndex, endIndex) => {
+  debugger;
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -45,7 +47,7 @@ const getListStyle = (isDraggingOver) => ({
   padding: grid,
 });
 
-let TasksCards = () => {
+let TasksCard = () => {
   const params = useParams();
   const boardId = params.boardId;
 
@@ -53,19 +55,19 @@ let TasksCards = () => {
   let [listId, setListId] = useState(false);
 
   const dispatch = useDispatch();
-  const stateList = useSelector((state) => state.lists);
+  const lists = useSelector((state) => state.lists);
 
-  const listsFilter = stateList.filter((elem) => elem.boardId === boardId);
+  const currentLists = lists.filter((elem) => elem.boardId === boardId);
 
-  let listsId = listsFilter.map((el) => el.id);
+  let listsId = currentLists.map((el) => el.id);
 
-  const stateTask = useSelector((state) => state.tasks);
-  let tasksFilter = stateTask.filter((item) => listsId.includes(item.listId));
+  const tasks = useSelector((state) => state.tasks);
+  let currentTasks = tasks.filter((item) => listsId.includes(item.listId));
   let dragState = [];
   listsId.map((item) =>
-    dragState.push(tasksFilter.filter((task) => task.listId === item))
+    dragState.push(currentTasks.filter((task) => task.listId === item))
   );
-  tasksFilter = dragState;
+  currentTasks = dragState;
 
   const handleDelete = (el) => {
     setToggleDelete(true);
@@ -86,22 +88,26 @@ let TasksCards = () => {
     const dInd = +destination.droppableId;
 
     if (sInd === dInd) {
-      const items = reorder(tasksFilter[sInd], source.index, destination.index);
-      const newState = [...tasksFilter];
+      const items = reorder(
+        currentTasks[sInd],
+        source.index,
+        destination.index
+      );
+      const newState = [...currentTasks];
       newState[sInd] = items;
       let reducerState = [];
       reducerState = newState.flat();
       dispatch(setTaskState(reducerState));
     } else {
       const result = move(
-        tasksFilter[sInd],
-        tasksFilter[dInd],
+        currentTasks[sInd],
+        currentTasks[dInd],
         source,
         destination
       );
-      const newState = [...tasksFilter];
+      const newState = [...currentTasks];
       newState[sInd] = result[sInd];
-      let listId = listsFilter[dInd].id;
+      let listId = currentLists[dInd].id;
 
       newState[dInd] = result[dInd].map(
         (elem, ind) =>
@@ -117,7 +123,7 @@ let TasksCards = () => {
       );
       let reducerState = [];
       reducerState = newState.flat();
-      dispatch(setTaskState(reducerState, tasksFilter[sInd][0].listId));
+      dispatch(setTaskState(reducerState, currentTasks[sInd][0].listId));
     }
   }
   const classNames = require("classnames");
@@ -128,7 +134,7 @@ let TasksCards = () => {
           <FontAwesomeIcon
             icon={faArrowCircleLeft}
             style={{
-              fontSize: "35px",
+              fontSize: "31px",
               padding: "4px",
             }}
           />
@@ -137,7 +143,7 @@ let TasksCards = () => {
       </Link>
       <Card className={`${s.totalCard} totalCard`}>
         <DragDropContext onDragEnd={onDragEnd}>
-          {listsFilter.map((el, ind) => (
+          {currentLists.map((el, ind) => (
             <Card.Grid key={`boxList${el.id}`} className={s.card}>
               <DeleteIcon
                 size={"l"}
@@ -165,7 +171,7 @@ let TasksCards = () => {
                       }
                       {...provided.droppableProps}
                     >
-                      {<Tasks listTask={tasksFilter[ind]} />}
+                      {<Tasks currentTask={currentTasks[ind]} />}
                       {provided.placeholder}
                     </div>
                   )}
@@ -173,14 +179,14 @@ let TasksCards = () => {
               </Card>
             </Card.Grid>
           ))}
-          <Card.Grid className={s.card}>
+          <Card.Grid className={`${s.card} ${s.cardNewList}`}>
             <NewList />
           </Card.Grid>
         </DragDropContext>
       </Card>
       {toggleDelete && (
         <ConfirmDelete
-          onConfirm={() => dispatch(deleteList(stateList, listId, stateTask))}
+          onConfirm={() => dispatch(deleteList(lists, listId, tasks))}
           setToggle={setToggleDelete}
         />
       )}
@@ -188,4 +194,4 @@ let TasksCards = () => {
   );
 };
 
-export default TasksCards;
+export default TasksCard;
