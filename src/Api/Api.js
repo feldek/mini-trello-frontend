@@ -1,6 +1,7 @@
 import { notification } from "antd";
 const serverHost = "https://server-to-do-list.herokuapp.com/";
 
+
 export const user = {
   postRequest(url, data) {
     return fetch(serverHost + url, {
@@ -15,42 +16,34 @@ export const user = {
         return res.json();
       })
       .then((result) => {
-        console.log(result);
+        console.log("Post req result:",result);
         return result;
       });
   },
   reqAutorization(url, { email, password }) {
     return this.postRequest(url, { email, password }).then((result) => {
-      this.notificationAutorization(result);
+      this.notification(result);
       return result;
     });
   },
-  notificationAutorization({ error = true, authorization = false, message = "Server error"}) {
-    if (!error && authorization) {
+
+  notification(result) {    
+    result.error = result.error === undefined ? true: result.error;
+    console.log("Notification result:",result)
+    if (!result.error) {
+      result.message = result.message || "The operation was successful";
+      result.description = result.description || "";
       notification.success({
-        message: "You are successfully logged in ",
+        message: result.message,
+        description: result.description,
         placement: "bottomLeft",
       });
     } else {
+      result.message = result.message || "Error";
+      result.description = result.description || "";
       notification.error({
-        message: "Error",
-        description: message,
-        placement: "bottomLeft",
-        duration: 10,
-      });
-    }
-  },
-  notification({ message, error = true }) {
-    if (!error) {
-      notification.success({
-        message: "The operation was successful",
-        description: message,
-        placement: "bottomLeft",
-      });
-    } else {
-      notification.error({
-        message: "Error",
-        description: message,
+        message: result.message,
+        description: result.description,
         placement: "bottomLeft",
         duration: 10,
       });
