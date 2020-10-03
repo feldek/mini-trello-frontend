@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import DataUserReducer from "./DataUserReducer";
+import UserReducer from "./UserReducer";
 
 const persistConfig = {
   key: "root",
@@ -18,7 +18,7 @@ let reducers = combineReducers({
   boards: BoardReduser,
   lists: ListReduser,
   tasks: TaskReducer,
-  dataUser: DataUserReducer,
+  dataUser: UserReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

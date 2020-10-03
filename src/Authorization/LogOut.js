@@ -1,11 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../Data/DataUserReducer";
+import { setBoards } from "../Data/BoardReducer";
+import { setUser } from "../Data/UserReducer";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 
 const LogOut = ({ visible, setVisible }) => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
+    dispatch(setBoards([]));
     dispatch(setUser("", "", false, false));
   };
 

@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
 import "./SignIn.css";
 import { useDispatch } from "react-redux";
-import { signIn } from "../Data/DataUserReducer";
+import { signIn } from "../Data/UserReducer";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { reqGetBoards } from "../Data/BoardReducer";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const handleAuthorization = (values) => {
+  const handleAuthorization = async (values) => {
     setLoading(true);
-    dispatch(signIn({ email: values.email, password: values.password })).then(() =>
-      setLoading(false)
-    );
+    await dispatch(signIn({ email: values.email, password: values.password }))
+      .then(() => setLoading(false))
+      .then(() => dispatch(reqGetBoards({ email: values.email })));
   };
 
   return (

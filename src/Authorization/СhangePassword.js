@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Form, Input } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../Data/DataUserReducer";
+import { changePassword } from "../Data/UserReducer";
 
 const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
   const [form] = Form.useForm();

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import NewBoard from "./NewBoard";
-import { deleteBoard } from "../Data/BoardReducer";
+import { reqDeleteBoard } from "../Data/BoardReducer";
 import { Card } from "antd";
 import s from "./Boards.module.css";
 import "./Boards.css";
@@ -18,20 +18,26 @@ const Boards = () => {
   const stateList = useSelector((state) => state.lists);
   const stateBoard = useSelector((state) => state.boards);
   const stateTask = useSelector((state) => state.tasks);
+  const classNames = require("classnames");
 
   const handleDelete = (item) => {
     let filterStateList = stateList
       .filter((el) => el.boardId === item.id)
       .map((el) => el.id);
-    dispatch(deleteBoard(stateBoard, item.id, filterStateList, stateList, stateTask));
+    dispatch(
+      reqDeleteBoard(stateBoard, {
+        boardId: item.id,
+        filterStateList,
+        stateList,
+        stateTask,
+      })
+    );
   };
 
   const callConfirmDelete = (el) => {
     setToggleDelete(true);
     setParam(el);
   };
-
-  const classNames = require("classnames");
 
   return (
     <div className={classNames(`${s.content}`, "boardsContent")}>

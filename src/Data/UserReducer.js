@@ -1,4 +1,4 @@
-import { user } from "../Api/Api";
+import { user } from "../Api/UserApi";
 
 const SET_USER = "SET_USER";
 
@@ -12,7 +12,7 @@ let initialState = localStorage
       error: false,
     };
 
-const DataUserReducer = (state = initialState, action) => {
+const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER: {
       return {
@@ -32,7 +32,7 @@ export const setUser = (email, password, authorization = false, error) => {
 };
 
 export const signIn = ({ email, password }) => (dispatch) => {
-  return user.reqAutorization("signIn", { email, password }).then(
+  return user.reqAutorization("users/signIn", { email, password }).then(
     (result) => {
       if (!result.error && result.authorization) {
         dispatch(setUser(email, password, true, result.error));
@@ -46,7 +46,7 @@ export const signIn = ({ email, password }) => (dispatch) => {
   );
 };
 export const signUp = ({ email, password }) => (dispatch) => {
-  return user.reqAutorization("signUp", { email, password }).then(
+  return user.reqAutorization("users/signUp", { email, password }).then(
     (result) => {
       if (!result.error && result.authorization) {
         dispatch(setUser(email, password, true, result.error));
@@ -67,4 +67,4 @@ export const changePassword = ({ email, oldPassword, newPassword }) => (dispatch
   return user.reqChangePassword({ email, oldPassword, newPassword });
 };
 
-export default DataUserReducer;
+export default UserReducer;
