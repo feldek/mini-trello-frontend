@@ -2,6 +2,7 @@ import { api } from "../Api/Api";
 const CREATE_BOARD = "CREATE_BOARD";
 const DELETE_BOARD = "DELETE_BOARD";
 const SET_BOARDS = "SET_BOARDS";
+const CLEAR_DATA = "CLEAR_DATA";
 
 let initialState = [];
 const BoardReduser = (state = initialState, action) => {
@@ -12,6 +13,10 @@ const BoardReduser = (state = initialState, action) => {
       return newState;
     }
     case SET_BOARDS: {
+      let newState = [...action.state];
+      return newState;
+    }
+    case CLEAR_DATA: {
       let newState = [...action.state];
       return newState;
     }
@@ -46,7 +51,6 @@ export const reqGetBoards = ({ email }) => (dispatch) => {
   return api.getRequest("boards/getBoards", { email }).then(
     (result) => {
       dispatch(setBoards(result));
-      console.log("Result reqGetBoards:", result);
     },
     (error) => {
       console.log(error);
@@ -58,7 +62,6 @@ export const reqCreateBoard = (state, { email, name }) => (dispatch) => {
     async (result) => {
       if (result.createdBoard === true) {
         await dispatch(createBoard(state, { name, id: result.id }));
-        console.log("Result reqCreateBoard:", result);
       }
     },
     (error) => {
@@ -73,7 +76,6 @@ export const reqDeleteBoard = (state, { boardId, listsId, stateList, stateTask }
     async (result) => {
       if (result.deletedBoard === true) {
         await dispatch(deleteBoard(state, { boardId, listsId, stateList, stateTask }));
-        console.log("Result reqDeleteBoard:", result);
       }
     },
     (error) => {

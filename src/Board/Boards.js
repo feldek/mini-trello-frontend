@@ -10,21 +10,24 @@ import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
+import { reqGetLists } from "../Data/ListReducer";
 
 const Boards = () => {
   const dispatch = useDispatch();
   const [toggleDelete, setToggleDelete] = useState(false);
   const [param, setParam] = useState(false);
+  let [idDisabled, setIdDisabled] = useState();
   const stateList = useSelector((state) => state.lists);
   const stateBoard = useSelector((state) => state.boards);
   const stateTask = useSelector((state) => state.tasks);
   const classNames = require("classnames");
 
-  const handleDelete = (item) => {
+  const handleDelete = async (item) => {
+    setIdDisabled(item.id);
     let filterStateList = stateList
       .filter((el) => el.boardId === item.id)
       .map((el) => el.id);
-    dispatch(
+    await dispatch(
       reqDeleteBoard(stateBoard, {
         boardId: item.id,
         filterStateList,
@@ -32,6 +35,11 @@ const Boards = () => {
         stateTask,
       })
     );
+    setIdDisabled();
+  };
+
+  const handleGetLists = async (boardId) => {
+    await dispatch(reqGetLists(stateList, { boardId }));
   };
 
   const callConfirmDelete = (el) => {
@@ -46,11 +54,17 @@ const Boards = () => {
         <div className={s.boards}>
           {useSelector((state) => state.boards).map((elem) => (
             <Card.Grid key={`board${elem.id}`} className={s.board}>
-              <DeleteIcon size={"m"} handleDelete={() => callConfirmDelete(elem)} />
+              <DeleteIcon
+                size={"m"}
+                handleDelete={() => callConfirmDelete(elem)}
+                id={elem.id}
+                idDisabled={idDisabled}
+              />
               <Link
                 to={`/board/${elem.id}`}
                 key={`board${elem.id}`}
                 className={s.boardLink}
+                onClick={() => handleGetLists(elem.id)}
               >
                 {elem.name}
               </Link>

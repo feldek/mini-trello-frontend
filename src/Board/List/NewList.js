@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createList } from "../../Data/ListReducer";
+import { reqCreateList } from "../../Data/ListReducer";
 import { useLocation } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import s from "./NewList.module.css";
@@ -12,8 +12,8 @@ let NewList = () => {
   const stateList = useSelector((state) => state.lists);
   const [form] = Form.useForm();
 
-  const handleCreate = (elem) => {
-    dispatch(createList(stateList, elem.nameList, boardId));
+  const handleCreate = async (elem) => {
+    await dispatch(reqCreateList(stateList, {name: elem.nameList, boardId}))
     setToggle(false);
     onReset();
   };

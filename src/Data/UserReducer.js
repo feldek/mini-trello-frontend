@@ -1,6 +1,7 @@
 import { user } from "../Api/UserApi";
 
 const SET_USER = "SET_USER";
+const CLEAR_DATA = "CLEAR_DATA";
 
 let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
 let initialState = localStorage
@@ -22,11 +23,21 @@ const UserReducer = (state = initialState, action) => {
         error: action.error,
       };
     }
+    case CLEAR_DATA: {
+      let newState = [...action.state];
+      return newState;
+    }
     default:
       return state;
   }
 };
 
+export const clearData = (state) => {
+  return {
+    type: CLEAR_DATA,
+    state,
+  };
+};
 export const setUser = (email, password, authorization = false, error) => {
   return { type: SET_USER, email, password, authorization, error };
 };

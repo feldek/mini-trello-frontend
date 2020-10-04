@@ -1,5 +1,4 @@
 const serverHost = "https://server-to-do-list.herokuapp.com/";
-// const serverHost = "http://localhost:3004/";
 
 export const api = {
   getRequest(url, data) {

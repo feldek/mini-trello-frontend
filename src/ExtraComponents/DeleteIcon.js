@@ -3,7 +3,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import s from "./DeleteIcon.module.css";
 
-const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
+const DeleteIcon = ({ size = "s", handleDelete, styleParams, id, idDisabled }) => {
   let styleIcon;
   switch (size) {
     case "s": {
@@ -40,6 +40,8 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
         width: "26px",
       };
   }
+  let disabled = false;
+  if (id === idDisabled) disabled = true;
 
   return (
     <button
@@ -47,6 +49,7 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
       type="button"
       onClick={handleDelete}
       style={styleParams}
+      disabled={disabled}
     >
       <FontAwesomeIcon icon={faTimes} style={styleIcon} />
     </button>
