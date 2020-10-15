@@ -10,16 +10,13 @@ const LogOut = ({ visible, setVisible }) => {
   };
 
   return (
-    <>
-      {visible && (
-        <ConfirmDelete
-          onConfirm={() => handleLogOut()}
-          setToggle={setVisible}
-          phrase="log out"
-          phraseButton="Log out"
-        />
-      )}
-    </>
+    <ConfirmDelete
+      onConfirm={() => handleLogOut()}
+      setVisible={setVisible}
+      visible={visible}
+      phrase="log out"
+      phraseButton="Log out"
+    />
   );
 };
 

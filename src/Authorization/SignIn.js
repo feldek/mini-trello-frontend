@@ -6,7 +6,6 @@ import "./SignIn.css";
 import { useDispatch } from "react-redux";
 import { signIn } from "../Data/UserReducer";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { reqGetBoards } from "../Data/BoardReducer";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -14,9 +13,8 @@ const SignIn = () => {
 
   const handleAuthorization = async (values) => {
     setLoading(true);
-    await dispatch(signIn({ email: values.email, password: values.password }))
-      .then(() => setLoading(false))
-      .then(() => dispatch(reqGetBoards({ email: values.email })));
+    await dispatch(signIn({ email: values.email, password: values.password }));
+    setLoading(false);
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reqCreateBoard } from "../Data/BoardReducer";
+import { createBoard } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
@@ -12,10 +12,8 @@ let NewBoard = () => {
 
   const [toggle, setToggle] = useState(false);
   const newState = useSelector((state) => state.boards);
-  const dataUser = useSelector((state) => state.dataUser);
-
   const handleCreate = (elem) => {
-    dispatch(reqCreateBoard(newState, { email: dataUser.email, name: elem.nameBoard }));
+    dispatch(createBoard(newState, { name: elem.nameBoard }));
     onReset();
     setToggle(false);
   };

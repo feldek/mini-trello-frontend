@@ -1,16 +1,22 @@
 import { notification } from "antd";
-import { api } from "./Api";
+import { api, serverHost } from "./Api";
 
 export const user = {
-  reqAutorization(url, { email, password }) {
-    return api.postRequest(url, { email, password }).then((result) => {
-      this.notification(result);
-      return result;
+  async reqSignIn(url, { email, password }) {
+    url = serverHost + url;
+    let tokens = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
     });
+    console.log("reqSignIn tokens:", tokens);
+    localStorage.setItem("token", tokens.token);
+    localStorage.setItem("refreshToken", tokens.refreshToken);
+    this.notification(tokens);
+    return tokens;
   },
 
   notification(result) {
-    result.error = result.error === undefined ? true : result.error;
+    if (result.error === undefined) result.error = true;
     console.log("Notification result:", result);
     if (!result.error) {
       result.message = result.message || "The operation was successful";
@@ -32,23 +38,15 @@ export const user = {
     }
   },
 
-  reqRecoveryPassword({ email }) {
-    return api.postRequest("users/recoveryPassword", { email }).then((result) => {
-      this.notification(result);
-      return result;
-    });
+  async reqRecoveryPassword(url, { email }) {
+    let result = await api.postRequest(url, { email });
+    this.notification(result);
+    return result;
   },
 
-  reqChangePassword({ email, oldPassword, newPassword }) {
-    return api
-      .postRequest("users/changePassword", {
-        email,
-        oldPassword,
-        newPassword,
-      })
-      .then((result) => {
-        this.notification(result);
-        return result;
-      });
+  async reqChangePassword(url, { oldPassword, newPassword }) {
+    let result = await api.postRequest(url, { oldPassword, newPassword });
+    this.notification(result);
+    return result;
   },
 };

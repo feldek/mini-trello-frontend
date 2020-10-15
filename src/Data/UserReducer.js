@@ -1,24 +1,16 @@
 import { user } from "../Api/UserApi";
-
 const SET_USER = "SET_USER";
 const CLEAR_DATA = "CLEAR_DATA";
 
-let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
-let initialState = localStorage
-  ? localStorage.dataUser
-  : {
-      email: "",
-      password: "",
-      authorization: false,
-      error: false,
-    };
+let initialState = {
+  authorization: false,
+  error: false,
+};
 
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER: {
       return {
-        email: action.email,
-        password: action.password,
         authorization: action.authorization,
         error: action.error,
       };
@@ -38,17 +30,17 @@ export const clearData = (state) => {
     state,
   };
 };
-export const setUser = (email, password, authorization = false, error) => {
-  return { type: SET_USER, email, password, authorization, error };
+export const setUser = ({ authorization = false, error }) => {
+  return { type: SET_USER, authorization, error };
 };
 
 export const signIn = ({ email, password }) => (dispatch) => {
-  return user.reqAutorization("users/signIn", { email, password }).then(
+  return user.reqSignIn("auth/signIn", { email, password }).then(
     (result) => {
       if (!result.error && result.authorization) {
-        dispatch(setUser(email, password, true, result.error));
+        dispatch(setUser({ authorization: result.authorization, error: result.error }));
       } else {
-        dispatch(setUser(email, password, false, result.error));
+        dispatch(setUser({ authorization: result.authorization, error: result.error }));
       }
     },
     (error) => {
@@ -56,13 +48,14 @@ export const signIn = ({ email, password }) => (dispatch) => {
     }
   );
 };
+
 export const signUp = ({ email, password }) => (dispatch) => {
-  return user.reqAutorization("users/signUp", { email, password }).then(
+  return user.reqSignIn("auth/signUp", { email, password }).then(
     (result) => {
       if (!result.error && result.authorization) {
-        dispatch(setUser(email, password, true, result.error));
+        dispatch(setUser({ authorization: result.authorization, error: result.error }));
       } else {
-        dispatch(setUser(email, password, false, result.error));
+        dispatch(setUser({ authorization: result.authorization, error: result.error }));
       }
     },
     (error) => {
@@ -72,10 +65,10 @@ export const signUp = ({ email, password }) => (dispatch) => {
 };
 
 export const recoveryPassword = ({ email }) => (dispatch) => {
-  return user.reqRecoveryPassword({ email });
+  return user.reqRecoveryPassword("auth/recoveryPassword", { email });
 };
-export const changePassword = ({ email, oldPassword, newPassword }) => (dispatch) => {
-  return user.reqChangePassword({ email, oldPassword, newPassword });
+export const changePassword = ({ oldPassword, newPassword }) => (dispatch) => {
+  return user.reqChangePassword("auth/changePassword", { oldPassword, newPassword });
 };
 
 export default UserReducer;

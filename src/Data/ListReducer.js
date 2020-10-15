@@ -4,6 +4,7 @@ const DELETE_LIST = "DELETE_LIST";
 const DELETE_BOARD = "DELETE_BOARD";
 const SET_LISTS = "SET_LISTS";
 const CLEAR_DATA = "CLEAR_DATA";
+// let api={}
 
 const ListReduser = (state = [], action) => {
   switch (action.type) {
@@ -21,12 +22,14 @@ const ListReduser = (state = [], action) => {
       return newState;
     }
     case SET_LISTS: {
-      let newState = [...action.state];
+      let newState = [];
       if (action.response.length > 0) {
-        if (!newState.find((el) => el.boardId === action.response[0].boardId)) {
-          newState = newState.concat(action.response);
-        }
+        newState = [...action.response];
+        action.state = action.state.filter(
+          (el) => el.boardId !== action.response[0].boardId
+        );
       }
+      newState = newState.concat(action.state);
       return newState;
     }
     case CLEAR_DATA: {
@@ -42,7 +45,7 @@ const ListReduser = (state = [], action) => {
   }
 };
 
-export const createList = (state, { name, boardId, id }) => {
+export const createListLocal = (state, { name, boardId, id }) => {
   return {
     type: CREATE_LIST,
     state,
@@ -52,18 +55,18 @@ export const createList = (state, { name, boardId, id }) => {
   };
 };
 
-export const deleteList = (state, { listId, stateTask }) => {
+export const deleteListLocal = (state, { listId, stateTask }) => {
   return { type: DELETE_LIST, state, listId, stateTask };
 };
 
-export const setLists = (state, { response }) => {
+export const setListsLocal = (state, { response }) => {
   return { type: SET_LISTS, state, response };
 };
 
-export const reqGetLists = (state, { boardId }) => (dispatch) => {
+export const getLists = (state, { boardId }) => (dispatch) => {
   return api.getRequest("lists/getCurrentLists", { boardId }).then(
     (result) => {
-      dispatch(setLists(state, { response: result }));
+      dispatch(setListsLocal(state, { response: result }));
       return result;
     },
     (error) => {
@@ -72,11 +75,11 @@ export const reqGetLists = (state, { boardId }) => (dispatch) => {
   );
 };
 
-export const reqCreateList = (state, { boardId, name }) => (dispatch) => {
+export const createList = (state, { boardId, name }) => (dispatch) => {
   return api.postRequest("lists/createList", { boardId, name }).then(
     async (result) => {
       if (result.createdList === true) {
-        await dispatch(createList(state, { name, id: result.id, boardId }));
+        await dispatch(createListLocal(state, { name, id: result.id, boardId }));
       }
     },
     (error) => {
@@ -85,11 +88,11 @@ export const reqCreateList = (state, { boardId, name }) => (dispatch) => {
   );
 };
 
-export const reqDeleteList = (state, { listId, stateTask }) => (dispatch) => {
+export const deleteList = (state, { listId, stateTask }) => (dispatch) => {
   return api.deleteRequest("lists/deleteList", { id: listId }).then(
     async (result) => {
       if (result.deletedList === true) {
-        await dispatch(deleteList(state, { listId, stateTask }));
+        await dispatch(deleteListLocal(state, { listId, stateTask }));
       }
     },
     (error) => {

@@ -1,54 +1,95 @@
-const serverHost = "https://server-to-do-list.herokuapp.com/";
+// const serverHost = "https://server-to-do-list.herokuapp.com/";
+export const serverHost = "http://localhost:3004/";
+export const toDoListHost = "http://localhost:3000/";
+const getOutUrl = toDoListHost + "authorization/getOut";
+const fetchWrap = require("fetch-wrap");
+const simpleFetch = fetchWrap(fetch, []);
 
 export const api = {
-  getRequest(url, data) {
+  async getRequest(url, data) {
+    url = serverHost + url;
+    let query;
     if (!data) {
-      return fetch(serverHost + url).then((result) => result.json());
+      query = "";
+      data = {};
     } else {
-      let query = "?";
+      query = "?";
       for (let key in data) {
         query += `&${key}=${data[key]}`;
       }
-      return fetch(serverHost + url + query)
-        .then((result) => result.json())
-        .then((result) => {
-          console.log("getRequest result:", result);
-          return result;
-        });
     }
+    data.method = "GET";
+    url = url + query;
+    return fetch(url);
   },
-  postRequest(url, data) {
-    return fetch(serverHost + url, {
+
+  async postRequest(url, data) {
+    url = serverHost + url;
+    return fetch(url, {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
-        console.log("postRequest result:", result);
-        return result;
-      });
+    });
   },
-  deleteRequest(url, data) {
-    return fetch(serverHost + url, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+  async putRequest(url, data) {
+    url = serverHost + url;
+    return fetch(url, {
+      method: "PUT",
       body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
-        console.log("deleteRequest result:", result);
-        return result;
-      });
+    });
+  },
+  async deleteRequest(url, data) {
+    url = serverHost + url;
+    return fetch(url, {
+      method: "DELETE",
+      body: JSON.stringify(data),
+    });
   },
 };
+
+
+
+fetch = fetchWrap(fetch, [
+  async function middleware1(url, options, innerFetch) {
+    try {
+      if (!options) options = {};      
+      let token = localStorage.getItem("token") ? localStorage.getItem("token") : null; 
+      console.log("token:", token);
+      if (!token) return window.location.replace(getOutUrl); 
+      if (!options.headers) {
+        options.headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        };
+      }
+      options.headers.Authorization = `Bearer ${token}`;
+
+      let response = await innerFetch(url, options);
+      if (!response.ok) await Promise.reject(response);
+      if (!options.method) options.method = "GET";
+      let data = await response.json();
+      console.log(options.method, ":", data);
+      return data;
+    } catch (err) {
+      if (err.status === 403) {
+        return await refreshToken(url, options);
+      }
+      if (err.status === 401) window.location.replace(getOutUrl);
+    }
+  },
+]);
+
+async function refreshToken(url, options) {
+  let refreshToken = localStorage.getItem("refreshToken");
+  let response = await simpleFetch(serverHost + "auth/refreshToken", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${refreshToken}` },
+  });
+  let data = await response.json();
+  console.log("in refresh Token");
+  console.log("New token:", data.token);
+  console.log("New refreshToken:", data.refreshToken);
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("refreshToken", data.refreshToken);
+  let restarsReq = await fetch(url, options);
+  return restarsReq;
+}

@@ -9,7 +9,7 @@ const NewTask = ({ uuid, listId }) => {
   const dispatch = useDispatch();
   const stateTask = useSelector((state) => state.tasks);
   const handleCreate = (elem) => {
-    dispatch(createTask(stateTask, elem[uuid], listId));
+    dispatch(createTask(stateTask, { name: elem[uuid], listId }));
     onReset();
   };
 

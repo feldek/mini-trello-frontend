@@ -2,13 +2,11 @@ import { SettingOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import LogOut from "../Authorization/LogOut";
 import ChangePassword from "../Authorization/СhangePassword";
 import s from "./Header.module.css";
 
-const Header = () => {
-  let login = useSelector((state) => state.dataUser.email);
+const Header = () => {  
   let [visiblePass, setVisiblePass] = useState(false);
   let [visibleLogOut, setVisibleLogOut] = useState(false);
 
@@ -51,8 +49,7 @@ const Header = () => {
           </Menu>
         </div>
       </div>
-      <div className={s.boxLogin}>
-        <div className={s.login}>{login}</div>
+      <div className={s.boxLogin}>        
       </div>
     </div>
   );

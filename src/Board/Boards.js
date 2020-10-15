@@ -1,26 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import NewBoard from "./NewBoard";
-import { reqDeleteBoard } from "../Data/BoardReducer";
+import { deleteBoard, getBoards } from "../Data/BoardReducer";
 import { Card } from "antd";
 import s from "./Boards.module.css";
 import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import { reqGetLists } from "../Data/ListReducer";
 
 const Boards = () => {
   const dispatch = useDispatch();
-  const [toggleDelete, setToggleDelete] = useState(false);
+  const [visibleDelete, setVisibleDelete] = useState(false);
   const [param, setParam] = useState(false);
   let [idDisabled, setIdDisabled] = useState();
-  const stateList = useSelector((state) => state.lists);
   const stateBoard = useSelector((state) => state.boards);
+  const stateList = useSelector((state) => state.lists);
   const stateTask = useSelector((state) => state.tasks);
   const classNames = require("classnames");
+
+  useEffect(() => {
+    async function fetchData() {
+      await dispatch(getBoards());
+    }
+    fetchData();
+  }, []);
 
   const handleDelete = async (item) => {
     setIdDisabled(item.id);
@@ -28,7 +34,7 @@ const Boards = () => {
       .filter((el) => el.boardId === item.id)
       .map((el) => el.id);
     await dispatch(
-      reqDeleteBoard(stateBoard, {
+      deleteBoard(stateBoard, {
         boardId: item.id,
         filterStateList,
         stateList,
@@ -38,12 +44,8 @@ const Boards = () => {
     setIdDisabled();
   };
 
-  const handleGetLists = async (boardId) => {
-    await dispatch(reqGetLists(stateList, { boardId }));
-  };
-
   const callConfirmDelete = (el) => {
-    setToggleDelete(true);
+    setVisibleDelete(true);
     setParam(el);
   };
 
@@ -64,7 +66,6 @@ const Boards = () => {
                 to={`/board/${elem.id}`}
                 key={`board${elem.id}`}
                 className={s.boardLink}
-                onClick={() => handleGetLists(elem.id)}
               >
                 {elem.name}
               </Link>
@@ -72,12 +73,11 @@ const Boards = () => {
           ))}
         </div>
       </Card>
-      {toggleDelete && (
-        <ConfirmDelete
-          onConfirm={() => handleDelete(param)}
-          setToggle={setToggleDelete}
-        />
-      )}
+      <ConfirmDelete
+        onConfirm={() => handleDelete(param)}
+        setVisible={setVisibleDelete}
+        visible={visibleDelete}
+      />
     </div>
   );
 };

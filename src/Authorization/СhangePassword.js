@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Input } from "antd";
 import { LockOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changePassword } from "../Data/UserReducer";
 
 const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
@@ -89,22 +89,19 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
 };
 
 const СhangePassword = ({ visible, setVisible }) => {
-  const userData = useSelector((s) => s.dataUser);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const handleRequest = (values) => {
+  const handleRequest = async (values) => {
     setLoading(true);
-    dispatch(
+    let result = await dispatch(
       changePassword({
-        email: userData.email,
         oldPassword: values.oldPassword,
         newPassword: values.password,
       })
-    ).then((result) => {
-      if (!result.error) setVisible(false);
-      setLoading(false);
-    });
+    );
+    if (!result.error) setVisible(false);
+    setLoading(false);
   };
 
   return (

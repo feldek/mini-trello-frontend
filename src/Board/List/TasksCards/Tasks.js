@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import s from "./TasksCard.module.css";
-import { deleteTask } from "../../../Data/TaskReducer";
+import { deleteTask, deleteTaskLocal } from "../../../Data/TaskReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
@@ -11,7 +11,7 @@ const Drag = ({ currentTask }) => {
   const dispatch = useDispatch();
   const [toggleDelete, setToggleDelete] = useState(false);
   const [taskId, setTaskId] = useState(false);
-  const stateTask = useSelector((state) => state.tasks);
+  const tasks = useSelector((state) => state.tasks);
   const match = useRouteMatch();
   const grid = 7;
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -21,9 +21,13 @@ const Drag = ({ currentTask }) => {
     ...draggableStyle,
   });
 
-  const handleDelete = (el) => {
+  const handleConfirmDelete = (el) => {
     setToggleDelete(true);
     setTaskId(el);
+  };
+
+  const handleDelete = async () => {
+    await dispatch(deleteTask(tasks, { id: taskId }));
   };
 
   return (
@@ -37,20 +41,14 @@ const Drag = ({ currentTask }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  style={getItemStyle(
-                    snapshot.isDragging,
-                    provided.draggableProps.style
-                  )}
+                  style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                   className={s.taskContainer}
                 >
                   <DeleteIcon
                     size={"s"}
-                    handleDelete={() => handleDelete(item.id)}
+                    handleDelete={() => handleConfirmDelete(item.id)}
                   />
-                  <Link
-                    to={`${match.url}/description/${item.id}`}
-                    className={s.taskText}
-                  >
+                  <Link to={`${match.url}/description/${item.id}`} className={s.taskText}>
                     {item.name}
                   </Link>
                 </div>
@@ -59,12 +57,11 @@ const Drag = ({ currentTask }) => {
           </div>
         </div>
       ))}
-      {toggleDelete && (
-        <ConfirmDelete
-          onConfirm={() => dispatch(deleteTask(stateTask, taskId))}
-          setToggle={setToggleDelete}
-        />
-      )}
+      <ConfirmDelete
+        onConfirm={handleDelete}
+        setVisible={setToggleDelete}
+        visible={toggleDelete}
+      />
     </>
   );
 };

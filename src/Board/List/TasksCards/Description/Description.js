@@ -118,14 +118,12 @@ export let Description = ({ task, id }) => {
           </div>
         </Card>
       </div>
-
-      {toggleDelete && (
-        <ConfirmDelete
-          onConfirm={() => dispatch(deleteDescription(stateTask, id))}
-          setToggle={setToggleDelete}
-          linkToBack={`/board/${boardId}`}
-        />
-      )}
+      <ConfirmDelete
+        onConfirm={() => dispatch(deleteDescription(stateTask, id))}
+        setVisible={setToggleDelete}
+        visible={toggleDelete}
+        linkToBack={`/board/${boardId}`}
+      />
     </div>
   );
 };

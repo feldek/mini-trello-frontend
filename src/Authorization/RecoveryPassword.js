@@ -11,12 +11,11 @@ const RecoveryPassword = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  const handleAuthorization = (values) => {
+  const handleAuthorization = async (values) => {
     setLoading(true);
-    dispatch(recoveryPassword({ email: values.email })).then((result) => {
-      if (!result.error) history.push("/");
-      setLoading(false);
-    });
+    let result = await dispatch(recoveryPassword({ email: values.email }));
+    if (!result.error) history.push("/");
+    setLoading(false);
   };
 
   return (

@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function AuthorizedRoute({ component: Component, ...rest }) {
-  let authorization = useSelector((state) => state.dataUser.authorization);
+  let authorization = useSelector((state) => state.user.authorization);
   return (
     <Route
       {...rest}
