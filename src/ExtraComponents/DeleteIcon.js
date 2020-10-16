@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import s from "./DeleteIcon.module.css";
+import { useSelector } from "react-redux";
 
-const DeleteIcon = ({ size = "s", handleDelete, styleParams, id = false, idDisabled = "5" }) => {
+const DeleteIcon = ({
+  size = "s",
+  handleDelete,
+  styleParams,
+  id = false,
+  idDisabled = "5",
+}) => {
   let styleIcon;
   switch (size) {
     case "s": {
@@ -28,7 +35,6 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams, id = false, idDisab
         fontSize: "26px",
         width: "26px",
       };
-
       break;
     }
     case "xl": {
@@ -40,6 +46,10 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams, id = false, idDisab
         width: "26px",
       };
   }
+
+  // let [arr, setArr] = useState([]);
+  // useEffect(()=>setArr([...arr, idDisabled]), [])
+  // let disabled = !!arr.find((el) => el === id);
   let disabled = false;
   if (id === idDisabled) disabled = true;
 

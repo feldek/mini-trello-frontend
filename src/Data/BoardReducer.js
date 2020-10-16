@@ -1,5 +1,5 @@
 import { api } from "../Api/Api";
-const CREATE_BOARD = "CREATE_BOARD";
+const CREATED_BOARD = "CREATED_BOARD";
 const DELETE_BOARD = "DELETE_BOARD";
 const SET_BOARDS = "SET_BOARDS";
 const CLEAR_DATA = "CLEAR_DATA";
@@ -8,8 +8,8 @@ const CLEAR_DATA = "CLEAR_DATA";
 // let initialState = [];
 const BoardReduser = (state = [], action) => {
   switch (action.type) {
-    case CREATE_BOARD: {
-      let newState = [...action.state];
+    case CREATED_BOARD: {
+      let newState = [...state];
       newState.push({ id: action.id, name: action.name });
       return newState;
     }
@@ -22,9 +22,8 @@ const BoardReduser = (state = [], action) => {
       return newState;
     }
     case DELETE_BOARD: {
-      let newState = [...action.state];
+      let newState = [...state];
       newState = newState.filter((item) => action.boardId !== item.id);
-      console.log(newState);
       return newState;
     }
     default:
@@ -32,61 +31,45 @@ const BoardReduser = (state = [], action) => {
   }
 };
 
-export const createBoardLocal = (state, { id, name }) => {
-  return { type: CREATE_BOARD, state, id, name };
+export const createdBoard = ({ id, name }) => {
+  return { type: CREATED_BOARD, id, name };
 };
-export const setBoardsLocal = (state) => {
+export const settedBoards = (state) => {
   return { type: SET_BOARDS, state };
 };
 
-export const deleteBoardLocal = (state, { boardId, listsId, stateList, stateTask }) => {
-  return {
-    type: DELETE_BOARD,
-    state,
-    boardId,
-    listsId,
-    stateList,
-    stateTask,
-  };
+export const deletedBoard = ({ boardId, listsId }) => {
+  return { type: DELETE_BOARD, boardId, listsId };
 };
 
 export const getBoards = () => (dispatch) => {
   return api.getRequest("boards/getBoards").then(
     (result) => {
-      dispatch(setBoardsLocal(result));
+      dispatch(settedBoards(result.payload));
     },
     (error) => {
       console.log(error);
     }
   );
 };
-export const createBoard = (state, { name }) => (dispatch) => {
-  return api.postRequest("boards/createBoard", { name }).then(
-    async (result) => {
-      if (result.createdBoard === true) {
-        await dispatch(createBoardLocal(state, { name, id: result.id }));
-      }
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+export const createBoard = ({ name, id, listsId }) => async (dispatch) => {
+  dispatch(createdBoard({ name, id }));
+  let result = await api.postRequest("boards/createBoard", { name, id });
+  if (!result.status) dispatch(deletedBoard({ boardId: id, listsId }));
 };
-export const deleteBoard = (state, { boardId, listsId, stateList, stateTask }) => (
-  dispatch
-) => {
-  return api.deleteRequest("boards/deleteBoard", { id: boardId }).then(
-    async (result) => {
-      if (result.deletedBoard === true) {
-        await dispatch(
-          deleteBoardLocal(state, { boardId, listsId, stateList, stateTask })
-        );
-      }
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+export const deleteBoard = (state, { boardId, stateList, stateTask }) => (dispatch) => {
+  return api.deleteRequest("boards/deleteBoard", { id: boardId });
+  // .then(async (result) => {
+  //     if (result.deletedBoard === true) {
+  //       await dispatch(
+  //         deleteBoardLocal(state, { boardId,  stateList, stateTask })
+  //       );
+  //     }
+  //   },
+  //   (error) => {
+  //     console.log(error);
+  //   }
+  // );
 };
 
 export default BoardReduser;

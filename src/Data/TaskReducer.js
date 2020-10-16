@@ -43,9 +43,8 @@ const TaskReducer = (state = initialState, action) => {
       return newState;
     }
     case DELETE_BOARD: {
-      // debugger
-      if(!action.listsId) return [...action.state]
-      let newState = action.stateTask.filter(
+      if(!action.listsId) return [...state]
+      let newState = state.filter(
         (item) => !action.listsId.includes(item.listId)
       );
       return newState;

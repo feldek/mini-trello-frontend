@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBoard } from "../Data/BoardReducer";
+import {
+  createBoard,
+  createdBoard,
+  deleteBoard,
+  deletedBoard,
+} from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
+import { uuid } from "uuidv4";
 
-let NewBoard = () => {
+let NewBoard = ({ boards }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
   const [toggle, setToggle] = useState(false);
-  const newState = useSelector((state) => state.boards);
-  const handleCreate = (elem) => {
-    dispatch(createBoard(newState, { name: elem.nameBoard }));
+  const lists = useSelector((state) => state.lists);
+  const handleCreate = async (elem) => {
+    let id = uuid();
+    let listsId = lists.filter((el) => el.boardId === elem.id).map((el) => el.id);
     onReset();
-    setToggle(false);
+    dispatch(createBoard({ name: elem.nameBoard, id, listsId }));
   };
 
   const onFinishFailed = (errorInfo) => {
