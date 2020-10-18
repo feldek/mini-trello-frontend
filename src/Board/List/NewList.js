@@ -13,7 +13,7 @@ let NewList = () => {
   const [form] = Form.useForm();
 
   const handleCreate = async (elem) => {
-    await dispatch(createList(stateList, {name: elem.nameList, boardId}))
+    await dispatch(createList({name: elem.nameList, boardId}))
     setToggle(false);
     onReset();
   };

@@ -1,29 +1,43 @@
 import { api } from "../Api/Api";
-const CREATED_BOARD = "CREATED_BOARD";
+const CREATE_BOARD = "CREATE_BOARD";
 const DELETE_BOARD = "DELETE_BOARD";
 const SET_BOARDS = "SET_BOARDS";
+const SET_VISIBILITY_BOARD = "SET_VISIBILITY_BOARD";
 const CLEAR_DATA = "CLEAR_DATA";
-// let api={}
 
-// let initialState = [];
 const BoardReduser = (state = [], action) => {
   switch (action.type) {
-    case CREATED_BOARD: {
+    case CREATE_BOARD: {
       let newState = [...state];
-      newState.push({ id: action.id, name: action.name });
+      newState.push({ id: action.id, name: action.name, visibility: true });
       return newState;
     }
     case SET_BOARDS: {
-      let newState = [...action.state];
+      if (!action.state) {
+        return state;
+      }
+      let newState = action.state.map((el) => {
+        el.visibility = true;
+        return el;
+      });
       return newState;
     }
     case CLEAR_DATA: {
-      let newState = [...action.state];
+      let newState = [];
       return newState;
     }
     case DELETE_BOARD: {
       let newState = [...state];
-      newState = newState.filter((item) => action.boardId !== item.id);
+      newState = newState.filter((el) => action.boardId !== el.id);
+      return newState;
+    }
+    case SET_VISIBILITY_BOARD: {
+      let newState = state.map((el) => {
+        if (action.boardId === el.id) {
+          el.visibility = action.visibility;
+        }
+        return el;
+      });
       return newState;
     }
     default:
@@ -31,45 +45,63 @@ const BoardReduser = (state = [], action) => {
   }
 };
 
-export const createdBoard = ({ id, name }) => {
-  return { type: CREATED_BOARD, id, name };
+export const onCreatedBoard = ({ id, name }) => {
+  return { type: CREATE_BOARD, id, name };
 };
-export const settedBoards = (state) => {
+export const onSettedBoards = (state) => {
   return { type: SET_BOARDS, state };
 };
 
-export const deletedBoard = ({ boardId, listsId }) => {
+export const onDeletedBoard = ({ boardId, listsId }) => {
   return { type: DELETE_BOARD, boardId, listsId };
 };
+export const onSettedVisibilityBoard = ({ boardId, visibility }) => {
+  return { type: SET_VISIBILITY_BOARD, boardId, visibility };
+};
 
-export const getBoards = () => (dispatch) => {
-  return api.getRequest("boards/getBoards").then(
-    (result) => {
-      dispatch(settedBoards(result.payload));
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+export const getBoards = () => async (dispatch) => {
+  let boards = await api.getRequestAuth("boards/getBoards");
+  dispatch(onSettedBoards(boards.payload));
 };
-export const createBoard = ({ name, id, listsId }) => async (dispatch) => {
-  dispatch(createdBoard({ name, id }));
-  let result = await api.postRequest("boards/createBoard", { name, id });
-  if (!result.status) dispatch(deletedBoard({ boardId: id, listsId }));
+
+export const createBoard = ({ name, id }) => async (dispatch, getState) => {
+  dispatch(onCreatedBoard({ name, id }));
+  let result = await api.postRequestAuth("boards/createBoard", { name, id });
+  if (!result.status) {
+    let listsId = getState()
+      .lists.filter((el) => el.boardId === id)
+      .map((el) => el.id);
+    dispatch(onDeletedBoard({ boardId: id, listsId }));
+  }
 };
-export const deleteBoard = (state, { boardId, stateList, stateTask }) => (dispatch) => {
-  return api.deleteRequest("boards/deleteBoard", { id: boardId });
-  // .then(async (result) => {
-  //     if (result.deletedBoard === true) {
-  //       await dispatch(
-  //         deleteBoardLocal(state, { boardId,  stateList, stateTask })
-  //       );
-  //     }
-  //   },
-  //   (error) => {
-  //     console.log(error);
-  //   }
-  // );
+// const deletePreparing = () => {};
+// const deleteSucsess = () => {};
+// const deleteError = () => {};
+
+// export const deleteBoard1 = ({ boardId }) => async (dispatch, getState) => {
+//   dispatch(deletePreparing({ boardId }));
+//   let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
+//   if (result.status) {
+//     let listsId = getState()
+//     .lists.filter((el) => el.boardId === boardId)
+//     .map((el) => el.id);
+//     dispatch(deleteSucsess({ boardId , listsId}));
+//   } else {
+//     dispatch(deleteError({ boardId }));
+//   }
+// };
+
+export const deleteBoard = ({ boardId }) => async (dispatch, getState) => {
+  dispatch(onSettedVisibilityBoard({ boardId, visibility: false }));
+  let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
+  if (!result.status) {
+    dispatch(onSettedVisibilityBoard({ boardId, visibility: true }));
+  } else {
+    let listsId = getState()
+      .lists.filter((el) => el.boardId === boardId)
+      .map((el) => el.id);
+    onDeletedBoard({ boardId, listsId });
+  }
 };
 
 export default BoardReduser;

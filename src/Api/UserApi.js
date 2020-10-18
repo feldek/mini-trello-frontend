@@ -1,17 +1,13 @@
 import { notification } from "antd";
-import { api, serverHost } from "./Api";
+import { api, postRequest } from "./Api";
 
 export const user = {
-  async reqSignIn(url, { email, password }) {
-    url = serverHost + url;
-    let tokens = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    console.log("reqSignIn tokens:", tokens);
-    localStorage.setItem("token", tokens.token);
-    localStorage.setItem("refreshToken", tokens.refreshToken);
-    this.notification(tokens);
+  async signIn(url, { email, password }) {
+    let tokens = await postRequest(url, { email, password });
+    console.log("SignIn tokens:", tokens.payload);
+    localStorage.setItem("token", tokens.payload.token);
+    localStorage.setItem("refreshToken", tokens.payload.refreshToken);
+    this.notification(tokens.payload);
     return tokens;
   },
 
@@ -27,6 +23,9 @@ export const user = {
         placement: "bottomLeft",
       });
     } else {
+      if (result.message === "Failed to fetch") {
+        result.message = "Server is currently unavailable";
+      }
       result.message = result.message || "Error";
       result.description = result.description || "";
       notification.error({
@@ -38,15 +37,15 @@ export const user = {
     }
   },
 
-  async reqRecoveryPassword(url, { email }) {
-    let result = await api.postRequest(url, { email });
-    this.notification(result);
+  async recoveryPassword(url, { email }) {
+    let result = await postRequest(url, { email });
+    this.notification(result.payload);
     return result;
   },
 
-  async reqChangePassword(url, { oldPassword, newPassword }) {
-    let result = await api.postRequest(url, { oldPassword, newPassword });
-    this.notification(result);
+  async changePassword(url, { oldPassword, newPassword }) {
+    let result = await api.postRequestAuth(url, { oldPassword, newPassword });
+    this.notification(result.payload);
     return result;
   },
 };

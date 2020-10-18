@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createBoard,
-  createdBoard,
+  onCreatedBoard,
   deleteBoard,
-  deletedBoard,
+  onDeletedBoard,
 } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
@@ -19,9 +19,9 @@ let NewBoard = ({ boards }) => {
   const lists = useSelector((state) => state.lists);
   const handleCreate = async (elem) => {
     let id = uuid();
-    let listsId = lists.filter((el) => el.boardId === elem.id).map((el) => el.id);
+    setToggle(false);
     onReset();
-    dispatch(createBoard({ name: elem.nameBoard, id, listsId }));
+    dispatch(createBoard({ name: elem.nameBoard, id }));
   };
 
   const onFinishFailed = (errorInfo) => {

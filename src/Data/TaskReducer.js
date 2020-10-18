@@ -1,123 +1,117 @@
+import { uuid } from "uuidv4";
 import { api } from "../Api/Api";
 export const stepOrder = 100000;
 const CREATE_TASK = "CREATE_TASK";
-const UPDATE_TASKS = "UPDATE_TASKS";
-const INIT_TASKS = "INIT_TASKS";
-const UPDATE_ORDER = "UPDATE_ORDER";
+const UPDATE_TASK = "UPDATE_TASK";
+const SET_TASKS = "SET_TASKS";
 const DELETE_TASK = "DELETE_TASK";
 const DELETE_LIST = "DELETE_LIST";
 const DELETE_BOARD = "DELETE_BOARD";
 const CREATE_DESCRIPTION = "CREATE_DESCRIPTION";
 const DELETE_DESCRIPTION = "DELETE_DESCRIPTION";
+const SET_VISIBILITY_TASK = "SET_VISIBILITY_TASK";
 
 let localStorage = JSON.parse(window.localStorage.getItem("persist:root"));
 let initialState = localStorage ? localStorage.tasks : [];
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_TASK: {
-      let newState = [...action.state];
-
+      let newState = [...state];
       newState.push({
         name: action.name,
         description: "",
         id: action.id,
         order: action.order,
         listId: action.listId,
+        visibility: true,
       });
       return newState;
     }
-    case UPDATE_TASKS: {
-      if (action.oldListId === "oneList") return [...action.state];
-      let listsId = action.state.map((task) => task.listId);
-      listsId = listsId.filter((item, index) => listsId.indexOf(item) === index);
-      listsId.push(action.oldListId);
-      let newState = state.filter((task) => !listsId.includes(task.listId));
-      return [...newState, ...action.state];
+    case UPDATE_TASK: {
+      let newState = state.filter((el) => {
+        if (el.id === action.id) {
+          el.listId = action.listId;
+          el.order = action.order;
+        }
+        return el;
+      });
+      newState = newState.sort((a, b) => a.order - b.order);
+      return newState;
     }
     case DELETE_TASK: {
-      let newState = action.state.filter((item) => item.id !== action.id);
+      let newState = state.filter((item) => item.id !== action.id);
+      return newState;
+    }
+    case SET_VISIBILITY_TASK: {
+      let newState = state.map((item) => {
+        if (item.id === action.id) {
+          item.visibility = action.visibility;
+        }
+        return item;
+      });
       return newState;
     }
     case DELETE_LIST: {
-      let newState = action.stateTask.filter((item) => item.listId !== action.listId);
+      let newState = state.filter((item) => item.listId !== action.listId);
       return newState;
     }
     case DELETE_BOARD: {
-      if(!action.listsId) return [...state]
-      let newState = state.filter(
-        (item) => !action.listsId.includes(item.listId)
-      );
+      if (!action.listsId) {
+        return [...state];
+      }
+      let newState = state.filter((item) => !action.listsId.includes(item.listId));
       return newState;
     }
-    case INIT_TASKS: {
-      // let newState = [...action.state];
-      let newState = action.state.sort((a, b) => a.order - b.order);
-      // debugger
-      return newState;
-    }
-    case UPDATE_ORDER: {
-      // let newState = [...action.state];
-      let newState = action.state.map(
-        (el) =>
-          (el =
-            el.id === action.id
-              ? {
-                  name: el.name,
-                  // description: el.description,
-                  id: el.id,
-                  order: action.order,
-                  listId: action.listId,
-                }
-              : el)
-      );
+    case SET_TASKS: {
+      if (!action.state) {
+        return state;
+      }
+      let newState = action.state.map((el) => {
+        el.visibility = true;
+        return el;
+      });
+      newState.sort((a, b) => a.order - b.order);
       return newState;
     }
     case CREATE_DESCRIPTION: {
-      let newState = action.state.map((item) =>
-        item.id !== action.id
-          ? item
-          : {
-              id: item.id,
-              name: item.name,
-              listId: item.listId,
-              description: action.description,
-            }
-      );
+      let newState = action.state.map((item) => {
+        if (item.id !== action.id) {
+          item.description = action.description;
+        }
+        return item;
+      });
       return newState;
     }
     case DELETE_DESCRIPTION: {
-      let newState = action.state.map((item) =>
-        action.id !== item.id
-          ? item
-          : {
-              id: item.id,
-              name: item.name,
-              listId: item.listId,
-              description: "",
-            }
-      );
+      let newState = action.state.map((item) => {
+        if (action.id !== item.id) {
+          item.description = "";
+        }
+        return item;
+      });
       return newState;
     }
     default:
       return state;
   }
 };
-export const initTasksLocal = (state) => {
-  return { type: INIT_TASKS, state };
+export const onSettedTasks = (state) => {
+  return { type: SET_TASKS, state };
+};
+export const onSettedVisibilityTask = ({ id, visibility }) => {
+  return { type: SET_VISIBILITY_TASK, id, visibility };
 };
 
-export const updateTasksLocal = (state, { oldListId }) => {
-  return { type: UPDATE_TASKS, state, oldListId };
+export const onUpdatedTasks = ({ id, order, listId }) => {
+  return { type: UPDATE_TASK, id, order, listId };
 };
 
-export const createTaskLocal = (state, { name, listId, order, id }) => {
-  return { type: CREATE_TASK, state, name, listId, order, id };
+export const onCreatedTask = ({ name, listId, order, id }) => {
+  return { type: CREATE_TASK, name, listId, order, id };
 };
-export const updateOrderLocal = (state, { order, id, listId }) => {
-  return { type: UPDATE_ORDER, state, order, id, listId };
-};
-export const deleteTaskLocal = (state, { id }) => {
-  return { type: DELETE_TASK, state, id };
+
+export const onDeletedTask = ({ id }) => {
+  return { type: DELETE_TASK, id };
 };
 export const createDescription = (state, description, id) => {
   return {
@@ -135,58 +129,42 @@ export const deleteDescription = (state, id) => {
   };
 };
 
-export const getInitTasks = ({ boardId }) => (dispatch) => {
-  return api.getRequest("tasks/getCurrentTasks", { boardId }).then(
-    (result) => {
-      dispatch(initTasksLocal(result));
-      return result;
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+export const getTasks = ({ boardId }) => async (dispatch) => {
+  const tasks = await api.getRequestAuth("tasks/getCurrentTasks", { boardId });
+  dispatch(onSettedTasks(tasks.payload));
 };
 
-export const createTask = (state, { listId, name }) => (dispatch) => {
-  let currentTasks = state.filter((item) => item.listId === listId);
+export const createTask = ({ name, listId }) => async (dispatch, getState) => {
+  let id = uuid();
+  let currentTasks = getState().tasks.filter((item) => item.listId === listId);
   let lastCurrentTask = currentTasks.reverse().find((item) => item.listId);
   let order = lastCurrentTask ? lastCurrentTask.order + stepOrder : 0;
-  return api.postRequest("tasks/createTask", { listId, name, order }).then(
-    async (result) => {
-      if (result.createdTask === true) {
-        await dispatch(createTaskLocal(state, { name, id: result.id, listId, order }));
-      }
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  dispatch(onCreatedTask({ name, listId, order, id }));
+  const result = await api.postRequestAuth("tasks/createTask", { listId, name, order });
+  if (!result.status) {
+    dispatch(onDeletedTask({ id }));
+  }
 };
 
-export const deleteTask = (state, { id }) => (dispatch) => {
-  return api.deleteRequest("tasks/deleteTask", { id }).then(
-    async (result) => {
-      if (result.deletedTask === true) {
-        await dispatch(deleteTaskLocal(state, { id }));
-      }
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+export const deleteTask = ({ id }) => async (dispatch) => {
+  dispatch(onSettedVisibilityTask({ id, visibility: false }));
+  const result = await api.deleteRequestAuth("tasks/deleteTask", { id });
+  if (!result.status) {
+    dispatch(onSettedVisibilityTask({ id, visibility: true }));
+  } else {
+    dispatch(onDeletedTask({ id }));
+  }
 };
-export const updateOrder = (state, { id, order, listId }) => (dispatch) => {
-  return api.putRequest("tasks/updateTask", { id, order, listId })
-  .then(  
-    // async (result) => {
-    //   if (result.updatedTask === true) {
-    //     await dispatch(updateOrderLocal(state, { id, order, listId }));
-    //   }
-    // },
-    (error) => {
-      console.log(error);
-    }
-  );
+
+export const updateTasks = ({ id, order, listId }) => async (dispatch, getState) => {
+  let task = getState().tasks.find((el) => el.id === id);
+  let oldListId = task.listId;
+  let oldOrder = task.order;
+  dispatch(onUpdatedTasks({ id, order, listId }));
+  const result = await api.putRequestAuth("tasks/updateTask", { id, order, listId });
+  if (!result.status) {
+    dispatch(onUpdatedTasks({ id, order: oldOrder, listId: oldListId }));
+  }
 };
 
 export default TaskReducer;

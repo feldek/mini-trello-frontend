@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toDoListHost } from "../Api/Api";
-import { setUser } from "../Data/UserReducer";
+import { onSetedUser } from "../Data/UserReducer";
 import s from "./SignIn.module.css";
 const GetOut = () => {
   const dispatch = useDispatch();
   let [timer, setTimer] = useState(9);
   useEffect(() => {
-    dispatch(setUser({ authorization: false, error: "wrong autentificate token" }));
+    dispatch(onSetedUser({ authorization: false, error: "wrong autentificate token" }));
   }, []);
   useEffect(() => {
     if (timer > 0) {

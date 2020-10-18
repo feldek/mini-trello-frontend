@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import NewList from "../NewList";
 import List from "../List";
 import {
-  getInitTasks,
-  updateTasksLocal,
+  getTasks,
   stepOrder,
-  updateOrder,
+  updateTasks,
 } from "../../../Data/TaskReducer";
 import { useParams, Link } from "react-router-dom";
 import NewTask from "./NewTask";
@@ -26,7 +25,6 @@ import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 
 const reorder = (list, startIndex, endIndex) => {
-  // debugger;
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -59,15 +57,14 @@ let TasksCard = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(getLists(lists, { boardId: params.boardId }));
-      await dispatch(getInitTasks({ boardId: params.boardId }));
+      await dispatch(getLists({ boardId: params.boardId }));
+      await dispatch(getTasks({ boardId: params.boardId }));
     }
     fetchData();
   }, []);
 
   let [toggleDelete, setToggleDelete] = useState(false);
   let [listId, setListId] = useState(false);
-  let [idDisabled, setIdDisabled] = useState();
 
   const lists = useSelector((state) => state.lists);
 
@@ -76,7 +73,7 @@ let TasksCard = () => {
   let listsId = currentLists.map((el) => el.id);
 
   const tasks = useSelector((state) => state.tasks);
-  // debugger
+
 
   let currentTasks = tasks.filter((item) => listsId.includes(item.listId));
   let dragState = [];
@@ -90,10 +87,8 @@ let TasksCard = () => {
     setListId(el);
   };
 
-  const handleDeleteList = async (lists, { listId, stateTask: tasks }) => {
-    setIdDisabled(listId);
-    await dispatch(deleteList(lists, { listId, stateTask: tasks }));
-    setIdDisabled();
+  const handleDeleteList = async ({ listId }) => {
+    await dispatch(deleteList({ listId }));
   };
 
   if (!useSelector((state) => state.boards).find((elem) => elem.id === boardId)) {
@@ -106,16 +101,13 @@ let TasksCard = () => {
     }
     const sInd = +source.droppableId;
     const dInd = +destination.droppableId;
-
-    // console.log("old sState:",currentTasks[sInd])
-    // console.log("old dState:",currentTasks[dInd])
-
+    let order;
+    let dListId;
     if (sInd === dInd) {
       const items = reorder(currentTasks[sInd], source.index, destination.index);
       const newState = [...currentTasks];
       newState[sInd] = items;
 
-      let order;
       if (destination.index === 0) {
         order =
           newState[dInd].length === 1
@@ -130,35 +122,8 @@ let TasksCard = () => {
             newState[dInd][destination.index - 1].order) /
             2;
       }
-      newState[sInd] = newState[sInd].map((elem, ind) => {
-        return (elem =
-          ind === destination.index
-            ? {
-                name: elem.name,
-                description: elem.description,
-                id: elem.id,
-                order: order,
-                listId: elem.listId,
-              }
-            : elem);
-      });
-
-      console.log("new dState:", newState[dInd]);
+      dListId = newState[sInd][0].listId;
       console.log(order);
-      let reducerState = [];
-      reducerState = newState.flat();
-
-      dispatch(updateTasksLocal(reducerState, "oneList"));
-      // debugger
-      // dispatch(
-      //   updateOrder(tasks, {
-      //     id: result.draggableId,
-      //     order,
-      //     listId: currentLists[sInd].id,
-      //   })
-      // )
-      // .then((res) =>
-      // );
     } else {
       const affectState = move(
         currentTasks[sInd],
@@ -168,9 +133,8 @@ let TasksCard = () => {
       );
       const newState = [...currentTasks];
       newState[sInd] = affectState[sInd];
-      let dListId = currentLists[dInd].id;
+      dListId = currentLists[dInd].id;
 
-      let order;
       if (destination.index === 0) {
         order =
           newState[dInd].length === 0
@@ -185,30 +149,9 @@ let TasksCard = () => {
             newState[dInd][destination.index - 1].order) /
             2;
       }
-
-      newState[dInd] = affectState[dInd].map((elem, ind) => {
-        return (elem =
-          ind === destination.index
-            ? {
-                name: elem.name,
-                description: elem.description,
-                id: elem.id,
-                order: order,
-                listId: dListId,
-              }
-            : elem);
-      });
-
-      let reducerState = [];
-      reducerState = newState.flat();
-      dispatch(
-        updateTasksLocal(reducerState, { oldListId: currentTasks[sInd][0].listId })
-      );
-      // dispatch(
-      //   updateOrder(tasks, { id: result.draggableId, order, listId: dListId }))
-      // .then((res) =>
-      //    );
+      console.log(order);
     }
+    dispatch(updateTasks({ id: result.draggableId, order, listId: dListId }));
   }
   const classNames = require("classnames");
   return (
@@ -227,51 +170,53 @@ let TasksCard = () => {
       </Link>
       <Card className={classNames(`${s.totalCard}`, "totalCard")}>
         <DragDropContext onDragEnd={onDragEnd}>
-          {currentLists.map((el, ind) => (
-            <Card.Grid key={`boxList${el.id}`} className={s.card}>
+          {currentLists.map(
+            (el, ind) =>
+              el.visibility && (
+                <Card.Grid key={`boxList${el.id}`} className={s.card}>
+                  <Card
+                    className={classNames(`${s.tasksHeader}`, "tasksHeader")}
+                    key={`listone${el.id}`}
+                    title={
+                      // <div key={`headerCard${el.id}`}>
+                      <div >
+                        <List listId={el.id} />
+                        <NewTask listId={el.id} uuid={uuid()} />
+                      </div>
+                    }
+                  >
+                    <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          style={
+                            (getListStyle(snapshot.isDraggingOver), { width: "100%" })
+                          }
+                          {...provided.droppableProps}
+                        >
+                          {<Tasks currentTask={currentTasks[ind]} />}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </Card>
 
+                  <DeleteIcon
+                    size={"l"}
+                    handleDelete={() => handleDelete(el.id)}
+                    styleParams={{ margin: "8px" }}
+                  />
+                </Card.Grid>
+              )
+          )}
 
-              <Card
-                className={classNames(`${s.tasksHeader}`, "tasksHeader")}
-                key={`listone${el.id}`}
-                title={
-                  <div key={`headerCard${el.id}`}>
-                    <List listId={el.id} />
-                    <NewTask listId={el.id} uuid={uuid()} />
-                  </div>
-                }
-              >
-                <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      style={(getListStyle(snapshot.isDraggingOver), { width: "100%" })}
-                      {...provided.droppableProps}
-                    >
-                      {<Tasks currentTask={currentTasks[ind]} />}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </Card>
-
-              <DeleteIcon
-                size={"l"}
-                handleDelete={() => handleDelete(el.id)}
-                styleParams={{ margin: "8px" }}
-                id={el.id}
-                idDisabled={idDisabled}
-              />
-
-            </Card.Grid>
-          ))}
           <Card.Grid className={`${s.card} ${s.cardNewList}`}>
             <NewList />
           </Card.Grid>
         </DragDropContext>
       </Card>
       <ConfirmDelete
-        onConfirm={() => handleDeleteList(lists, { listId, stateTask: tasks })}
+        onConfirm={() => handleDeleteList({ listId })}
         setVisible={setToggleDelete}
         visible={toggleDelete}
       />

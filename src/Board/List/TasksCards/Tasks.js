@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import s from "./TasksCard.module.css";
-import { deleteTask, deleteTaskLocal } from "../../../Data/TaskReducer";
+import { deleteTask, onDeletedTask } from "../../../Data/TaskReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
@@ -27,36 +27,45 @@ const Drag = ({ currentTask }) => {
   };
 
   const handleDelete = async () => {
-    await dispatch(deleteTask(tasks, { id: taskId }));
+    await dispatch(deleteTask({ id: taskId }));
   };
-
+// debugger
   return (
     <>
-      {currentTask.map((item, index) => (
-        <div key={`task${item.id}`}>
-          <div>
-            <Draggable key={item.id} draggableId={item.id} index={index}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                  className={s.taskContainer}
-                >
-                  <DeleteIcon
-                    size={"s"}
-                    handleDelete={() => handleConfirmDelete(item.id)}
-                  />
-                  <Link to={`${match.url}/description/${item.id}`} className={s.taskText}>
-                    {item.name}
-                  </Link>
-                </div>
-              )}
-            </Draggable>
-          </div>
-        </div>
-      ))}
+      {currentTask.map(        
+        (item, index) =>
+          item.visibility && (
+            <div key={`task${item.id}`}>
+              {/* <div> */}
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                      className={s.taskContainer}
+                    >
+                      <DeleteIcon
+                        size={"s"}
+                        handleDelete={() => handleConfirmDelete(item.id)}
+                      />
+                      <Link
+                        to={`${match.url}/description/${item.id}`}
+                        className={s.taskText}
+                      >
+                        {item.name}
+                      </Link>
+                    </div>
+                  )}
+                </Draggable>
+              {/* </div> */}
+            </div>
+          )
+      )}
       <ConfirmDelete
         onConfirm={handleDelete}
         setVisible={setToggleDelete}
