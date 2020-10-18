@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createTask } from "../../../Data/TaskReducer";
 import { Form, Input, Button } from "antd";
 import s from "./NewTask.module.css";
@@ -7,7 +7,6 @@ import s from "./NewTask.module.css";
 const NewTask = ({ uuid, listId }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const stateTask = useSelector((state) => state.tasks);
   const handleCreate = (elem) => {
     dispatch(createTask({ name: elem[uuid], listId }));
     onReset();

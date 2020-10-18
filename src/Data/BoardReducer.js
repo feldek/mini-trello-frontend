@@ -4,52 +4,64 @@ const DELETE_BOARD = "DELETE_BOARD";
 const SET_BOARDS = "SET_BOARDS";
 const SET_VISIBILITY_BOARD = "SET_VISIBILITY_BOARD";
 const CLEAR_DATA = "CLEAR_DATA";
+const SET_IS_FETCHING_BOARDS = "SET_IS_FETCHING_BOARDS";
 
-const BoardReduser = (state = [], action) => {
+const initState = {
+  data: [],
+  isFetching: false,
+};
+
+const BoardReduser = (state = initState, action) => {
   switch (action.type) {
     case CREATE_BOARD: {
-      let newState = [...state];
-      newState.push({ id: action.id, name: action.name, visibility: true });
-      return newState;
+      let newData = [...state.data];
+      newData.push({ id: action.id, name: action.name, visibility: true });
+      return { ...state, data: newData };
     }
     case SET_BOARDS: {
-      if (!action.state) {
+      if (!action.data) {
         return state;
       }
-      let newState = action.state.map((el) => {
+      let newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });
-      return newState;
+      return { ...state, data: newData };
     }
     case CLEAR_DATA: {
-      let newState = [];
-      return newState;
+      let newData = [];
+      return { ...state, data: newData };
+    }
+    case SET_IS_FETCHING_BOARDS: {
+      return { ...state, isFetching: action.isFetching };
     }
     case DELETE_BOARD: {
-      let newState = [...state];
-      newState = newState.filter((el) => action.boardId !== el.id);
-      return newState;
+      let newData = [...state.data];
+      newData = newData.filter((el) => action.boardId !== el.id);
+      return { ...state, data: newData };
     }
     case SET_VISIBILITY_BOARD: {
-      let newState = state.map((el) => {
+      let newData = state.data.map((el) => {
         if (action.boardId === el.id) {
           el.visibility = action.visibility;
         }
         return el;
       });
-      return newState;
+      return { ...state, data: newData };
     }
     default:
       return state;
   }
 };
 
+export const settedIsFenchingBoards = (isFetching) => {
+  return { type: SET_IS_FETCHING_BOARDS, isFetching };
+};
 export const onCreatedBoard = ({ id, name }) => {
   return { type: CREATE_BOARD, id, name };
 };
-export const onSettedBoards = (state) => {
-  return { type: SET_BOARDS, state };
+export const onSettedBoards = (data) => {
+  return { type: SET_BOARDS, data };
 };
 
 export const onDeletedBoard = ({ boardId, listsId }) => {

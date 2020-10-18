@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  createBoard,
-  onCreatedBoard,
-  deleteBoard,
-  onDeletedBoard,
-} from "../Data/BoardReducer";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBoard } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
@@ -16,7 +11,6 @@ let NewBoard = ({ boards }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [toggle, setToggle] = useState(false);
-  const lists = useSelector((state) => state.lists);
   const handleCreate = async (elem) => {
     let id = uuid();
     setToggle(false);

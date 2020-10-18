@@ -39,4 +39,4 @@ export let persistor = persistStore(store);
 export let test = persistStore(store);
 
  
- window.store = store.getState().tasks
+ window.store = store.getState().boards

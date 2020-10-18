@@ -6,58 +6,56 @@ const DELETE_BOARD = "DELETE_BOARD";
 const SET_LISTS = "SET_LISTS";
 const CLEAR_DATA = "CLEAR_DATA";
 const SET_VISIBILITY_LIST = "SET_VISIBILITY_LIST";
+const SET_IS_FETCHING_LISTS = "SET_IS_FETCHING_LISTS";
 
-const ListReduser = (state = [], action) => {
+const initState = {
+  data: [],
+  isFetching: false,
+};
+
+const ListReduser = (state = initState, action) => {
   switch (action.type) {
     case CREATE_LIST: {
-      let newState = [...state];
-      newState.push({
+      let newData = [...state.data];
+      newData.push({
         id: action.id,
         name: action.name,
         boardId: action.boardId,
         visibility: true,
       });
-      return newState;
+      return { ...state, data: newData };
     }
     case DELETE_LIST: {
-      let newState = state.filter((el) => action.listId !== el.id);
-      return newState;
+      let newData = state.data.filter((el) => action.listId !== el.id);
+      return { ...state, data: newData };
     }
     case SET_LISTS: {
-      if (!action.state) return state;
-      let newState = action.state.map((el) => {
+      if (!action.data) return state;
+      let newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });
-      return newState;
+      return { ...state, data: newData };
     }
-    // case ON_SET_LISTS: {
-    //   let newState = [];
-    //   if (action.response.length > 0) {
-    //     newState = [...action.response];
-    //     action.state = action.state.filter(
-    //       (el) => el.boardId !== action.response[0].boardId
-    //     );
-    //   }
-    //   newState = newState.concat(action.state);
-    //   return newState;
-    // }
+    case SET_IS_FETCHING_LISTS: {
+      return { ...state, isFetching: action.isFetching };
+    }
     case SET_VISIBILITY_LIST: {
-      let newState = state.map((el) => {
+      let newData = state.data.map((el) => {
         if (action.listId === el.id) {
           el.visibility = action.visibility;
         }
         return el;
       });
-      return newState;
+      return { ...state, data: newData };
     }
     case CLEAR_DATA: {
-      let newState = [];
-      return newState;
+      let newData = [];
+      return { ...state, data: newData };
     }
     case DELETE_BOARD: {
-      let newState = state.filter((item) => action.boardId !== item.boardId);
-      return newState;
+      let newData = state.data.filter((item) => action.boardId !== item.boardId);
+      return { ...state, data: newData };
     }
     default:
       return state;
@@ -77,17 +75,23 @@ export const onDeletedList = ({ listId }) => {
   return { type: DELETE_LIST, listId };
 };
 
-export const onSetLists = ({ state }) => {
-  return { type: SET_LISTS, state };
+export const onSetLists = ({ data }) => {
+  return { type: SET_LISTS, data };
 };
 
 export const onSettedVisibilityList = ({ listId, visibility }) => {
   return { type: SET_VISIBILITY_LIST, listId, visibility };
 };
 
+export const settedIsFenchingLists = (isFetching) => {
+  return { type: SET_IS_FETCHING_LISTS, isFetching };
+};
+
 export const getLists = ({ boardId }) => async (dispatch) => {
+  dispatch(settedIsFenchingLists(true));
   let lists = await api.getRequestAuth("lists/getCurrentLists", { boardId });
-  dispatch(onSetLists({ state: lists.payload }));
+  dispatch(settedIsFenchingLists(false));
+  dispatch(onSetLists({ data: lists.payload }));
 };
 
 export const createList = ({ boardId, name }) => async (dispatch) => {

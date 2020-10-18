@@ -5,8 +5,8 @@ import s from "./List.module.css";
 
 let List = ({ listId }) => {
   let boardId = useRouteMatch().params.boardId;
-  let stateList = useSelector((state) => state.lists);
-  let list = stateList
+  let lists = useSelector((state) => state.lists.data);
+  let list = lists
     .filter((elem) => elem.boardId === boardId)
     .find((elem) => elem.id === listId);
 
