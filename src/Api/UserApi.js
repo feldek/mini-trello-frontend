@@ -4,7 +4,6 @@ import { api, postRequest } from "./Api";
 export const user = {
   async signIn(url, { email, password }) {
     let tokens = await postRequest(url, { email, password });
-    console.log("SignIn tokens:", tokens.payload);
     localStorage.setItem("token", tokens.payload.token);
     localStorage.setItem("refreshToken", tokens.payload.refreshToken);
     this.notification(tokens.payload);
@@ -13,7 +12,6 @@ export const user = {
 
   notification(result) {
     if (result.error === undefined) result.error = true;
-    console.log("Notification result:", result);
     if (!result.error) {
       result.message = result.message || "The operation was successful";
       result.description = result.description || "";
@@ -39,13 +37,16 @@ export const user = {
 
   async recoveryPassword(url, { email }) {
     let result = await postRequest(url, { email });
-    this.notification(result.payload);
     return result;
   },
 
   async changePassword(url, { oldPassword, newPassword }) {
     let result = await api.postRequestAuth(url, { oldPassword, newPassword });
-    this.notification(result.payload);
+    if (result instanceof TypeError) {
+      this.notification({ message: "Server is currently unavailable", error: true });
+    } else {
+      this.notification(result.payload);
+    }
     return result;
   },
 };

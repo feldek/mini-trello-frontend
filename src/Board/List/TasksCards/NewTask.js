@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { createTask } from "../../../Data/TaskReducer";
 import { Form, Input, Button } from "antd";
 import s from "./NewTask.module.css";
+import { createTask } from "../../../Data/Actions/TaskActions";
 
 const NewTask = ({ uuid, listId }) => {
   const [form] = Form.useForm();

@@ -1,7 +1,6 @@
 // const serverHost = "https://server-to-do-list.herokuapp.com/";
 export const serverHost = "http://localhost:3004/";
-export const toDoListHost = "http://localhost:3000/";
-const getOutUrl = toDoListHost + "authorization/getOut";
+export const getOutUrl = "authorization/getOut";
 const fetchWrap = require("fetch-wrap");
 export const simpleFetch = fetchWrap(fetch, []);
 
@@ -81,8 +80,12 @@ fetch = fetchWrap(fetch, [
         return await refreshToken(url, options);
       }
       if (err.status === 401) window.location.replace(getOutUrl);
-      console.log({ err, status: false });
-      return { err, status: false };
+      if (err instanceof TypeError) {
+        return err;
+      }
+      let payload = await err.json();
+      console.log("ERR", { payload, status: false });
+      return { payload, status: false };
     }
   },
 ]);
@@ -94,9 +97,6 @@ async function refreshToken(url, options) {
     headers: { Authorization: `Bearer ${refreshToken}` },
   });
   let data = await response.json();
-  console.log("in refresh Token");
-  console.log("New token:", data.token);
-  console.log("New refreshToken:", data.refreshToken);
   localStorage.setItem("token", data.token);
   localStorage.setItem("refreshToken", data.refreshToken);
   let restarsReq = await fetch(url, options);

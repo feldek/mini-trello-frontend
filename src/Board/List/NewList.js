@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createList } from "../../Data/ListReducer";
 import { useLocation } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import s from "./NewList.module.css";
+import { createList } from "../../Data/Actions/ListActions";
 
 let NewList = () => {
   let [toggle, setToggle] = useState(false);

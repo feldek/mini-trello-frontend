@@ -57,10 +57,26 @@
   align-items: center;
   padding: 4px 10px 4px 4px;
 }
-.cardNewList{
+.cardNewList {
   max-height: 186px;
 }
-
+.containerSpin {
+  height: 80%;
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  height: 100%;
+  
+}
+.background{
+  background-color: #ebedee ;
+  display:  flex;
+  justify-content: center;  
+  width: 100%;
+}
 @media (min-width: 1000px) {
   .totalCard {
     margin-bottom: 50px;

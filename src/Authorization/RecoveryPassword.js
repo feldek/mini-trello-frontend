@@ -3,18 +3,15 @@ import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
 import { UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { recoveryPassword } from "../Data/UserReducer";
-import { useHistory } from "react-router-dom";
+import { recoveryPassword } from "../Data/Actions/UserAction";
 
 const RecoveryPassword = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
 
   const handleAuthorization = async (values) => {
     setLoading(true);
-    let result = await dispatch(recoveryPassword({ email: values.email }));
-    if (!result.error) history.push("/");
+    await dispatch(recoveryPassword({ email: values.email }));
     setLoading(false);
   };
 

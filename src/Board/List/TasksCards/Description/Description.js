@@ -3,14 +3,14 @@ import { useParams, Link, useHistory } from "react-router-dom";
 import { Card } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Input, Button } from "antd";
-import { createDescription, deleteDescription } from "../../../../Data/TaskReducer";
 import s from "./Description.module.css";
 import PageNotFound from "../../../../ExtraComponents/PageNotFound";
 import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
+import { createDescription, deleteDescription } from "../../../../Data/Actions/TaskActions";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
-  let task = useSelector((state) => state.tasks).find((item) => item.id === id);
+  let task = useSelector((state) => state.tasks.data).find((item) => item.id === id);
   let content = !task ? <PageNotFound /> : <Description task={task} id={id} />;
   return content;
 };
@@ -18,7 +18,7 @@ export let Description = ({ task, id }) => {
   let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const stateTask = useSelector((state) => state.tasks);
+  const stateTask = useSelector((state) => state.tasks.data);
 
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");

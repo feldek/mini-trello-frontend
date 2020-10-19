@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createBoard } from "../Data/BoardReducer";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
+import { createBoard } from "../Data/Actions/BoardActions";
 
 let NewBoard = ({ boards }) => {
   const dispatch = useDispatch();

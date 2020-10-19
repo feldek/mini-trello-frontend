@@ -1,10 +1,11 @@
-import { api } from "../Api/Api";
-const CREATE_BOARD = "CREATE_BOARD";
-const DELETE_BOARD = "DELETE_BOARD";
-const SET_BOARDS = "SET_BOARDS";
-const SET_VISIBILITY_BOARD = "SET_VISIBILITY_BOARD";
-const CLEAR_DATA = "CLEAR_DATA";
-const SET_IS_FETCHING_BOARDS = "SET_IS_FETCHING_BOARDS";
+import {
+  ON_CLEARED_DATA,
+  ON_CREATED_BOARD,
+  ON_DELETED_BOARD,
+  ON_SETTED_BOARDS,
+  ON_SETTED_IS_FETCHING_BOARDS,
+  ON_SETTED_VISIBILITY_BOARD,
+} from "./Actions/BoardActions";
 
 const initState = {
   data: [],
@@ -13,12 +14,12 @@ const initState = {
 
 const BoardReduser = (state = initState, action) => {
   switch (action.type) {
-    case CREATE_BOARD: {
+    case ON_CREATED_BOARD: {
       let newData = [...state.data];
       newData.push({ id: action.id, name: action.name, visibility: true });
       return { ...state, data: newData };
     }
-    case SET_BOARDS: {
+    case ON_SETTED_BOARDS: {
       if (!action.data) {
         return state;
       }
@@ -28,19 +29,19 @@ const BoardReduser = (state = initState, action) => {
       });
       return { ...state, data: newData };
     }
-    case CLEAR_DATA: {
+    case ON_CLEARED_DATA: {
       let newData = [];
       return { ...state, data: newData };
     }
-    case SET_IS_FETCHING_BOARDS: {
+    case ON_SETTED_IS_FETCHING_BOARDS: {
       return { ...state, isFetching: action.isFetching };
     }
-    case DELETE_BOARD: {
+    case ON_DELETED_BOARD: {
       let newData = [...state.data];
       newData = newData.filter((el) => action.boardId !== el.id);
       return { ...state, data: newData };
     }
-    case SET_VISIBILITY_BOARD: {
+    case ON_SETTED_VISIBILITY_BOARD: {
       let newData = state.data.map((el) => {
         if (action.boardId === el.id) {
           el.visibility = action.visibility;
@@ -51,68 +52,6 @@ const BoardReduser = (state = initState, action) => {
     }
     default:
       return state;
-  }
-};
-
-export const settedIsFenchingBoards = (isFetching) => {
-  return { type: SET_IS_FETCHING_BOARDS, isFetching };
-};
-export const onCreatedBoard = ({ id, name }) => {
-  return { type: CREATE_BOARD, id, name };
-};
-export const onSettedBoards = (data) => {
-  return { type: SET_BOARDS, data };
-};
-
-export const onDeletedBoard = ({ boardId, listsId }) => {
-  return { type: DELETE_BOARD, boardId, listsId };
-};
-export const onSettedVisibilityBoard = ({ boardId, visibility }) => {
-  return { type: SET_VISIBILITY_BOARD, boardId, visibility };
-};
-
-export const getBoards = () => async (dispatch) => {
-  let boards = await api.getRequestAuth("boards/getBoards");
-  dispatch(onSettedBoards(boards.payload));
-};
-
-export const createBoard = ({ name, id }) => async (dispatch, getState) => {
-  dispatch(onCreatedBoard({ name, id }));
-  let result = await api.postRequestAuth("boards/createBoard", { name, id });
-  if (!result.status) {
-    let listsId = getState()
-      .lists.filter((el) => el.boardId === id)
-      .map((el) => el.id);
-    dispatch(onDeletedBoard({ boardId: id, listsId }));
-  }
-};
-// const deletePreparing = () => {};
-// const deleteSucsess = () => {};
-// const deleteError = () => {};
-
-// export const deleteBoard1 = ({ boardId }) => async (dispatch, getState) => {
-//   dispatch(deletePreparing({ boardId }));
-//   let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
-//   if (result.status) {
-//     let listsId = getState()
-//     .lists.filter((el) => el.boardId === boardId)
-//     .map((el) => el.id);
-//     dispatch(deleteSucsess({ boardId , listsId}));
-//   } else {
-//     dispatch(deleteError({ boardId }));
-//   }
-// };
-
-export const deleteBoard = ({ boardId }) => async (dispatch, getState) => {
-  dispatch(onSettedVisibilityBoard({ boardId, visibility: false }));
-  let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
-  if (!result.status) {
-    dispatch(onSettedVisibilityBoard({ boardId, visibility: true }));
-  } else {
-    let listsId = getState()
-      .lists.filter((el) => el.boardId === boardId)
-      .map((el) => el.id);
-    onDeletedBoard({ boardId, listsId });
   }
 };
 

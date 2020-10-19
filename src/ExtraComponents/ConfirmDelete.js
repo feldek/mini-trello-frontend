@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import s from "./ConfirmDelete.module.css";
 import "./ConfirmDelete.css";
 import { Form, Button } from "antd";
