@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 import { deleteList, getLists } from "../../../Data/Actions/ListActions";
-import { getTasks, stepOrder, updateTasks } from "../../../Data/Actions/TaskActions";
+import { getTasks, stepOrder, updateTask } from "../../../Data/Actions/TaskActions";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -141,7 +141,7 @@ const TasksCard = () => {
             2;
       }
     }
-    dispatch(updateTasks({ id: result.draggableId, order, listId: dListId }));
+    dispatch(updateTask({ id: result.draggableId, order, listId: dListId }));
   }
   const classNames = require("classnames");
   return (

@@ -1,10 +1,11 @@
-import { ON_CLEARED_DATA, ON_DELETED_BOARD } from "./Actions/BoardActions";
+import {  ON_CLEAR_DATA, ON_DELETE_BOARD } from "./Actions/BoardActions";
+
 import {
-  ON_CREATED_LIST,
-  ON_DELETED_LIST,
-  ON_SETTED_IS_FETCHING_LISTS,
-  ON_SETTED_LISTS,
-  ON_SETTED_VISIBILITY_LIST,
+  ON_CREATE_LIST,
+  ON_DELETE_LIST,
+  ON_SET_IS_FETCHING_LISTS,
+  ON_SET_LISTS,
+  ON_SET_VISIBILITY_LIST,
 } from "./Actions/ListActions";
 
 const initialState = {
@@ -14,7 +15,7 @@ const initialState = {
 
 const ListReduser = (state = initialState, action) => {
   switch (action.type) {
-    case ON_CREATED_LIST: {
+    case ON_CREATE_LIST: {
       let newData = [...state.data];
       newData.push({
         id: action.id,
@@ -24,11 +25,11 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_DELETED_LIST: {
+    case ON_DELETE_LIST: {
       let newData = state.data.filter((el) => action.listId !== el.id);
       return { ...state, data: newData };
     }
-    case ON_SETTED_LISTS: {
+    case ON_SET_LISTS: {
       if (!action.data) return state;
       let newData = action.data.map((el) => {
         el.visibility = true;
@@ -36,10 +37,10 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_SETTED_IS_FETCHING_LISTS: {
+    case ON_SET_IS_FETCHING_LISTS: {
       return { ...state, isFetching: action.isFetching };
     }
-    case ON_SETTED_VISIBILITY_LIST: {
+    case ON_SET_VISIBILITY_LIST: {
       let newData = state.data.map((el) => {
         if (action.listId === el.id) {
           el.visibility = action.visibility;
@@ -48,11 +49,11 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CLEARED_DATA: {
+    case ON_CLEAR_DATA: {
       let newData = [];
       return { ...state, data: newData };
     }
-    case ON_DELETED_BOARD: {
+    case ON_DELETE_BOARD: {
       let newData = state.data.filter((item) => action.boardId !== item.boardId);
       return { ...state, data: newData };
     }

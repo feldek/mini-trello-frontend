@@ -1,12 +1,12 @@
-import { ON_DELETED_BOARD, ON_DELETED_LIST } from "./Actions/ListActions";
+import { ON_DELETE_BOARD, ON_DELETE_LIST } from "./Actions/ListActions";
 import {
-  ON_CREATED_DESCRIPTION,
-  ON_CREATED_TASK,
-  ON_DELETED_DESCRIPTION,
-  ON_DELETED_TASK,
-  ON_SETTED_TASKS,
-  ON_SETTED_VISIBILITY_TASK,
-  ON_UPDATED_TASK,
+  ON_CREATE_DESCRIPTION,
+  ON_CREATE_TASK,
+  ON_DELETE_DESCRIPTION,
+  ON_DELETE_TASK,
+  ON_SET_TASKS,
+  ON_SET_VISIBILITY_TASK,
+  ON_UPDATE_TASK,
 } from "./Actions/TaskActions";
 
 let initialState = {
@@ -15,7 +15,7 @@ let initialState = {
 };
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ON_CREATED_TASK: {
+    case ON_CREATE_TASK: {
       let newData = [...state.data];
       newData.push({
         name: action.name,
@@ -27,7 +27,7 @@ const TaskReducer = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_UPDATED_TASK: {
+    case ON_UPDATE_TASK: {
       let newData = state.data.filter((el) => {
         if (el.id === action.id) {
           el.listId = action.listId;
@@ -38,11 +38,11 @@ const TaskReducer = (state = initialState, action) => {
       newData.sort((a, b) => a.order - b.order);
       return { ...state, data: newData };
     }
-    case ON_DELETED_TASK: {
+    case ON_DELETE_TASK: {
       let newData = state.data.filter((item) => item.id !== action.id);
       return { ...state, data: newData };
     }
-    case ON_SETTED_VISIBILITY_TASK: {
+    case ON_SET_VISIBILITY_TASK: {
       let newData = state.data.map((item) => {
         if (item.id === action.id) {
           item.visibility = action.visibility;
@@ -51,18 +51,18 @@ const TaskReducer = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_DELETED_LIST: {
+    case ON_DELETE_LIST: {
       let newData = state.data.filter((item) => item.listId !== action.listId);
       return { ...state, data: newData };
     }
-    case ON_DELETED_BOARD: {
+    case ON_DELETE_BOARD: {
       if (!action.listsId) {
         return state;
       }
       let newData = state.data.filter((item) => !action.listsId.includes(item.listId));
       return { ...state, data: newData };
     }
-    case ON_SETTED_TASKS: {
+    case ON_SET_TASKS: {
       if (!action.data) {
         return state;
       }
@@ -73,7 +73,7 @@ const TaskReducer = (state = initialState, action) => {
       newData.sort((a, b) => a.order - b.order);
       return { ...state, data: newData };
     }
-    case ON_CREATED_DESCRIPTION: {
+    case ON_CREATE_DESCRIPTION: {
       let newData = state.data.map((item) => {
         if (item.id !== action.id) {
           item.description = action.description;
@@ -82,7 +82,7 @@ const TaskReducer = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_DELETED_DESCRIPTION: {
+    case ON_DELETE_DESCRIPTION: {
       let newData = state.data.map((item) => {
         if (action.id !== item.id) {
           item.description = "";

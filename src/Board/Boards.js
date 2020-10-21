@@ -12,7 +12,7 @@ import Header from "./Header";
 import {
   deleteBoard,
   getBoards,
-  settedIsFenchingBoards,
+  onSetIsFenchingBoards,
 } from "../Data/Actions/BoardActions";
 
 const Boards = () => {
@@ -25,9 +25,7 @@ const Boards = () => {
 
   useEffect(() => {
     async function fetchData() {
-      dispatch(settedIsFenchingBoards(true));
       await dispatch(getBoards());
-      dispatch(settedIsFenchingBoards(false));
     }
     fetchData();
   }, []);

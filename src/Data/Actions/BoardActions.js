@@ -1,53 +1,61 @@
 import { api } from "../../Api/Api";
 
-export const ON_SETTED_BOARDS = "SET_BOARDS";
-export const ON_CREATED_BOARD = "CREATE_BOARD";
-export const ON_DELETED_BOARD = "DELETE_BOARD";
-export const ON_SETTED_VISIBILITY_BOARD = "SET_VISIBILITY_BOARD";
-export const ON_CLEARED_DATA = "CLEAR_DATA";
-export const ON_SETTED_IS_FETCHING_BOARDS = "SET_IS_FETCHING_BOARDS";
+export const ON_SET_BOARDS = "ON_SET_BOARDS";
+export const ON_CREATE_BOARD = "ON_CREATE_BOARD";
+export const ON_DELETE_BOARD = "ON_DELETE_BOARD";
+export const ON_SET_VISIBILITY_BOARD = "ON_SET_VISIBILITY_BOARD";
+export const ON_CLEAR_DATA = "ON_CLEAR_DATA";
+export const ON_SET_IS_FETCHING_BOARDS = "ON_SET_IS_FETCHING_BOARDS";
 
-export const onSettedBoards = (data) => {
-  return { type: ON_SETTED_BOARDS, data };
+export const onSetBoards = (data) => {
+  return { type: ON_SET_BOARDS, data };
 };
 export const getBoards = () => async (dispatch) => {
+  dispatch(onSetIsFenchingBoards(true));
   let boards = await api.getRequestAuth("boards/getBoards");
-  dispatch(onSettedBoards(boards.payload));
+  dispatch(onSetBoards(boards.payload));
+  dispatch(onSetIsFenchingBoards(false));
 };
 
-export const onCreatedBoard = ({ id, name }) => {
-  return { type: ON_CREATED_BOARD, id, name };
+export const onCreateBoardStart = ({ id, name }) => {
+  return { type: ON_CREATE_BOARD, id, name };
+};
+export const onCreateBoardError = ({ boardId, listsId }) => {
+  return { type: ON_DELETE_BOARD, boardId, listsId };
 };
 export const createBoard = ({ name, id }) => async (dispatch, getState) => {
-  dispatch(onCreatedBoard({ name, id }));
+  dispatch(onCreateBoardStart({ name, id }));
   let result = await api.postRequestAuth("boards/createBoard", { name, id });
   if (!result.status) {
     let listsId = getState()
       .lists.data.filter((el) => el.boardId === id)
       .map((el) => el.id);
-    dispatch(onDeletedBoard({ boardId: id, listsId }));
+    dispatch(onCreateBoardError({ boardId: id, listsId }));
   }
 };
 
-export const onDeletedBoard = ({ boardId, listsId }) => {
-  return { type: ON_DELETED_BOARD, boardId, listsId };
+export const onDeleteBoardSuccess = ({ boardId, listsId }) => {
+  return { type: ON_DELETE_BOARD, boardId, listsId };
 };
-export const onSettedVisibilityBoard = ({ boardId, visibility }) => {
-  return { type: ON_SETTED_VISIBILITY_BOARD, boardId, visibility };
+export const onDeleteBoardStart = ({ boardId }) => {
+  return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: false };
+};
+export const onDeleteBoardError = ({ boardId }) => {
+  return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
 };
 export const deleteBoard = ({ boardId }) => async (dispatch, getState) => {
-  dispatch(onSettedVisibilityBoard({ boardId, visibility: false }));
+  dispatch(onDeleteBoardStart({ boardId }));
   let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
   if (!result.status) {
-    dispatch(onSettedVisibilityBoard({ boardId, visibility: true }));
+    dispatch(onDeleteBoardError({ boardId }));
   } else {
     let listsId = getState()
       .lists.data.filter((el) => el.boardId === boardId)
       .map((el) => el.id);
-    onDeletedBoard({ boardId, listsId });
+    onDeleteBoardSuccess({ boardId, listsId });
   }
 };
 
-export const settedIsFenchingBoards = (isFetching) => {
-  return { type: ON_SETTED_IS_FETCHING_BOARDS, isFetching };
+export const onSetIsFenchingBoards = (isFetching) => {
+  return { type: ON_SET_IS_FETCHING_BOARDS, isFetching };
 };

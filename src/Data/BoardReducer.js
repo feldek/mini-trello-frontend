@@ -1,10 +1,10 @@
 import {
-  ON_CLEARED_DATA,
-  ON_CREATED_BOARD,
-  ON_DELETED_BOARD,
-  ON_SETTED_BOARDS,
-  ON_SETTED_IS_FETCHING_BOARDS,
-  ON_SETTED_VISIBILITY_BOARD,
+  ON_CLEAR_DATA,
+  ON_CREATE_BOARD,
+  ON_DELETE_BOARD,
+  ON_SET_BOARDS,
+  ON_SET_IS_FETCHING_BOARDS,
+  ON_SET_VISIBILITY_BOARD,
 } from "./Actions/BoardActions";
 
 const initState = {
@@ -14,12 +14,12 @@ const initState = {
 
 const BoardReduser = (state = initState, action) => {
   switch (action.type) {
-    case ON_CREATED_BOARD: {
+    case ON_CREATE_BOARD: {
       let newData = [...state.data];
       newData.push({ id: action.id, name: action.name, visibility: true });
       return { ...state, data: newData };
     }
-    case ON_SETTED_BOARDS: {
+    case ON_SET_BOARDS: {
       if (!action.data) {
         return state;
       }
@@ -29,19 +29,19 @@ const BoardReduser = (state = initState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CLEARED_DATA: {
+    case ON_CLEAR_DATA: {
       let newData = [];
       return { ...state, data: newData };
     }
-    case ON_SETTED_IS_FETCHING_BOARDS: {
+    case ON_SET_IS_FETCHING_BOARDS: {
       return { ...state, isFetching: action.isFetching };
     }
-    case ON_DELETED_BOARD: {
+    case ON_DELETE_BOARD: {
       let newData = [...state.data];
       newData = newData.filter((el) => action.boardId !== el.id);
       return { ...state, data: newData };
     }
-    case ON_SETTED_VISIBILITY_BOARD: {
+    case ON_SET_VISIBILITY_BOARD: {
       let newData = state.data.map((el) => {
         if (action.boardId === el.id) {
           el.visibility = action.visibility;
