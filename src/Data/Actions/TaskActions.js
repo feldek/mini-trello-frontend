@@ -5,17 +5,28 @@ export const ON_CREATE_TASK = "ON_CREATE_TASK";
 export const ON_UPDATE_TASK = "ON_UPDATE_TASK";
 export const ON_SET_TASKS = "ON_SET_TASKS";
 export const ON_DELETE_TASK = "ON_DELETE_TASK";
-export const ON_CREATE_DESCRIPTION = "ON_CREATE_DESCRIPTION";
-export const ON_DELETE_DESCRIPTION = "ON_DELETE_DESCRIPTION";
+export const ON_UPDATE_DESCRIPTION = "ON_UPDATE_DESCRIPTION";
+// export const ON_DELETE_DESCRIPTION = "ON_DELETE_DESCRIPTION";
 export const ON_SET_VISIBILITY_TASK = "ON_SET_VISIBILITY_TASK";
 export const stepOrder = 100000;
 
-export const createDescription = (state, description, id) => {
-  return { type: ON_CREATE_DESCRIPTION, state, description, id };
+export const onUpdateDescriptionStart = ({ description, id }) => {
+  return { type: ON_UPDATE_DESCRIPTION, description, id };
 };
-export const deleteDescription = (state, id) => {
-  return { type: ON_DELETE_DESCRIPTION, state, id };
+export const onUpdateDescriptionError = ({ description, id }) => {
+  return { type: ON_UPDATE_DESCRIPTION, description, id };
 };
+export const updateDescription = ({ id, description }) => async (dispatch, getState) => {
+  let oldDescription = getState().tasks.data.find((el) => (el.id = id));
+  dispatch(onUpdateDescriptionStart({ description: oldDescription, id }));
+  const task = await api.postRequestAuth("tasks/updateDescription", { id, description });
+  if (!task.status) {
+    onUpdateDescriptionError({ id, description: oldDescription });
+  }  
+};
+// export const deleteDescription = (state, id) => {
+//   return { type: ON_DELETE_DESCRIPTION, state, id };
+// };
 
 export const onSetTasks = (data) => {
   return { type: ON_SET_TASKS, data };

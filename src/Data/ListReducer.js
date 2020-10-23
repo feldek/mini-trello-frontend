@@ -49,9 +49,8 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CLEAR_DATA: {
-      let newData = [];
-      return { ...state, data: newData };
+    case ON_CLEAR_DATA: {      
+      return { ...state, data: action.payload.newData };
     }
     case ON_DELETE_BOARD: {
       let newData = state.data.filter((item) => action.boardId !== item.boardId);

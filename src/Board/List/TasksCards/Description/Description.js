@@ -39,7 +39,7 @@ export let Description = ({ task, id }) => {
     console.log("Failed:", errorInfo);
   };
 
-  let textArea = (
+  let changeDescription = (
     <div key={`textArea${id}`}>
       <Form.Item name="description">
         <Input.TextArea
@@ -67,7 +67,7 @@ export let Description = ({ task, id }) => {
     </div>
   );
 
-  let descriptionText = (
+  let description = (
     <div key={`descriptionText${id}`}>
       <Form.Item onClick={() => setToggle(false)} className={s.textDescription}>
         {task.description}
@@ -113,7 +113,7 @@ export let Description = ({ task, id }) => {
                 },
               ]}
             >
-              <div>{toggle ? descriptionText : textArea}</div>
+              <div>{toggle ? description : changeDescription}</div>
             </Form>
           </div>
         </Card>

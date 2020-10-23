@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { onClearedData } from "../Data/UserReducer";
+import { clearedData } from "../Data/Actions/UserAction";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 
 const LogOut = ({ visible, setVisible }) => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
-    dispatch(onClearedData([]));
+    dispatch(clearedData([]));
   };
 
   return (

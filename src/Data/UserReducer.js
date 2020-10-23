@@ -9,16 +9,16 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    onSettedUser: (state, action) => {
+    onSetUser: (state, action) => {
       return { authorization: action.payload.authorization, error: action.payload.error };
     },
-    onClearedData: (state, action) => {
+    onClearData: (state, action) => {      
       return { state: action.payload.state };
     },
   },
 });
 
 const { actions, reducer } = userSlice;
-export const { onSettedUser, onClearedData } = actions;
+export const { onSetUser, onClearData } = actions;
 export default reducer;
 

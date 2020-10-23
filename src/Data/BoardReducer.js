@@ -29,16 +29,14 @@ const BoardReduser = (state = initState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CLEAR_DATA: {
-      let newData = [];
-      return { ...state, data: newData };
+    case ON_CLEAR_DATA: {  
+      return { ...state, data: action.payload.newData };
     }
     case ON_SET_IS_FETCHING_BOARDS: {
       return { ...state, isFetching: action.isFetching };
     }
     case ON_DELETE_BOARD: {
-      let newData = [...state.data];
-      newData = newData.filter((el) => action.boardId !== el.id);
+      let newData = state.data.filter((el) => action.boardId !== el.id);
       return { ...state, data: newData };
     }
     case ON_SET_VISIBILITY_BOARD: {

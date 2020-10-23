@@ -1,8 +1,9 @@
+import { ON_CLEAR_DATA } from "./Actions/BoardActions";
 import { ON_DELETE_BOARD, ON_DELETE_LIST } from "./Actions/ListActions";
 import {
-  ON_CREATE_DESCRIPTION,
+  ON_UPDATE_DESCRIPTION,
   ON_CREATE_TASK,
-  ON_DELETE_DESCRIPTION,
+  // ON_DELETE_DESCRIPTION,
   ON_DELETE_TASK,
   ON_SET_TASKS,
   ON_SET_VISIBILITY_TASK,
@@ -73,23 +74,35 @@ const TaskReducer = (state = initialState, action) => {
       newData.sort((a, b) => a.order - b.order);
       return { ...state, data: newData };
     }
-    case ON_CREATE_DESCRIPTION: {
+    case ON_UPDATE_DESCRIPTION: {
       let newData = state.data.map((item) => {
-        if (item.id !== action.id) {
+        if (item.id === action.id) {
           item.description = action.description;
         }
         return item;
       });
       return { ...state, data: newData };
     }
-    case ON_DELETE_DESCRIPTION: {
-      let newData = state.data.map((item) => {
-        if (action.id !== item.id) {
-          item.description = "";
-        }
-        return item;
-      });
-      return { ...state, data: newData };
+    // case ON_CREATE_DESCRIPTION: {
+    //   let newData = state.data.map((item) => {
+    //     if (item.id !== action.id) {
+    //       item.description = action.description;
+    //     }
+    //     return item;
+    //   });
+    //   return { ...state, data: newData };
+    // }
+    // case ON_DELETE_DESCRIPTION: {
+    //   let newData = state.data.map((item) => {
+    //     if (action.id !== item.id) {
+    //       item.description = "";
+    //     }
+    //     return item;
+    //   });
+    //   return { ...state, data: newData };
+    // }
+    case ON_CLEAR_DATA: {      
+      return { ...state, data: action.payload.newData };
     }
     default:
       return state;
