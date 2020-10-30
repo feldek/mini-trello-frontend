@@ -34,8 +34,8 @@ export const user = {
     }
   },
 
-  async recoveryPassword(url, { email }) {
-    let result = await postRequest(url, { email });
+  async recoveryPassword(url, { email , password }) {
+    let result = await postRequest(url, { email, password });
     return result;
   },
 

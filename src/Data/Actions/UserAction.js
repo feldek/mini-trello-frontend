@@ -19,8 +19,8 @@ export const signUp = ({ email, password }) => async (dispatch) => {
   }
 };
 
-export const recoveryPassword = ({ email }) => async (dispatch) => {
-  const result = await user.recoveryPassword("auth/recoveryPassword", { email });
+export const recoveryPassword = ({ email, password }) => async (dispatch) => {
+  const result = await user.recoveryPassword("auth/recoveryPassword", { email , password});
   user.notification(result);
   return result;
 };
