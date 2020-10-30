@@ -16,7 +16,7 @@ export const onSetIsFenchingLists = (isFetching) => {
 };
 export const getLists = ({ boardId }) => async (dispatch) => {
   dispatch(onSetIsFenchingLists(true));
-  let lists = await api.getRequestAuth("lists/getCurrentLists", { boardId });
+  let lists = await api.getRequestAuth("lists", { boardId });
   dispatch(onSetLists({ data: lists.payload }));
   dispatch(onSetIsFenchingLists(false));
 };
@@ -30,7 +30,7 @@ export const onCreateListError = ({ listId }) => {
 export const createList = ({ boardId, name }) => async (dispatch) => {
   let id = uuid();
   dispatch(onCreateListStart({ name, id, boardId }));
-  let result = await api.postRequestAuth("lists/createList", { boardId, name, id });
+  let result = await api.postRequestAuth("list", { boardId, name, id });
   if (!result.status) {
     dispatch(onCreateListError({ listId: id }));
   }
@@ -47,7 +47,7 @@ export const onDeleteListError = ({ listId }) => {
 };
 export const deleteList = ({ listId }) => async (dispatch) => {
   dispatch(onDeleteListStart({ listId }));
-  const result = await api.deleteRequestAuth("lists/deleteList", { id: listId });
+  const result = await api.deleteRequestAuth("list", { id: listId });
   if (!result.status) {
     dispatch(onDeleteListError({ listId }));
   } else {

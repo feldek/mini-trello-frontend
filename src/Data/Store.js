@@ -29,6 +29,5 @@ export let store = createStore(
   composeWithDevTools(applyMiddleware(thunkMiddleware))
 );
 export let persistor = persistStore(store);
-export let test = persistStore(store);
 
-window.store = store.getState()
+

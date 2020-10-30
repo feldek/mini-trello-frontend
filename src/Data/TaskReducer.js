@@ -3,7 +3,6 @@ import { ON_DELETE_BOARD, ON_DELETE_LIST } from "./Actions/ListActions";
 import {
   ON_UPDATE_DESCRIPTION,
   ON_CREATE_TASK,
-  // ON_DELETE_DESCRIPTION,
   ON_DELETE_TASK,
   ON_SET_TASKS,
   ON_SET_VISIBILITY_TASK,
@@ -15,6 +14,8 @@ let initialState = {
   isFetching: false,
 };
 const TaskReducer = (state = initialState, action) => {
+  // console.log(action.type)
+  // console.log(state.data)
   switch (action.type) {
     case ON_CREATE_TASK: {
       let newData = [...state.data];
@@ -83,25 +84,7 @@ const TaskReducer = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    // case ON_CREATE_DESCRIPTION: {
-    //   let newData = state.data.map((item) => {
-    //     if (item.id !== action.id) {
-    //       item.description = action.description;
-    //     }
-    //     return item;
-    //   });
-    //   return { ...state, data: newData };
-    // }
-    // case ON_DELETE_DESCRIPTION: {
-    //   let newData = state.data.map((item) => {
-    //     if (action.id !== item.id) {
-    //       item.description = "";
-    //     }
-    //     return item;
-    //   });
-    //   return { ...state, data: newData };
-    // }
-    case ON_CLEAR_DATA: {      
+    case ON_CLEAR_DATA: {
       return { ...state, data: action.payload.newData };
     }
     default:

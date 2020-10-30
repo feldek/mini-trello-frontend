@@ -6,7 +6,9 @@ import { Form, Input, Button } from "antd";
 import s from "./Description.module.css";
 import PageNotFound from "../../../../ExtraComponents/PageNotFound";
 import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
-import { createDescription, deleteDescription } from "../../../../Data/Actions/TaskActions";
+import {
+  updateDescription,
+} from "../../../../Data/Actions/TaskActions";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
@@ -18,13 +20,12 @@ export let Description = ({ task, id }) => {
   let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const stateTask = useSelector((state) => state.tasks.data);
 
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
 
-  const handleCreate = (elem) => {
-    !toggle && dispatch(createDescription(stateTask, elem.description, id));
+  const handleUpdate = (elem) => {
+    !toggle && dispatch(updateDescription({ description: elem.description, id }));    
     !toggle && history.push(`/board/${boardId}`);
     toggle && setToggle(!toggle);
   };
@@ -103,7 +104,7 @@ export let Description = ({ task, id }) => {
               form={form}
               name="control-hooks"
               layout="vertical"
-              onFinish={handleCreate}
+              onFinish={handleUpdate}
               onFinishFailed={onFinishFailed}
               className={s.form}
               fields={[
@@ -119,7 +120,7 @@ export let Description = ({ task, id }) => {
         </Card>
       </div>
       <ConfirmDelete
-        onConfirm={() => dispatch(deleteDescription(stateTask, id))}
+        onConfirm={() => dispatch(updateDescription({ description: "", id }))}
         setVisible={setToggleDelete}
         visible={toggleDelete}
         linkToBack={`/board/${boardId}`}

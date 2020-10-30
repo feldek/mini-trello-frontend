@@ -6,7 +6,7 @@ import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 const LogOut = ({ visible, setVisible }) => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
-    dispatch(clearedData([]));
+    dispatch(clearedData());
   };
 
   return (

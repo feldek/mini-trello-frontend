@@ -12,7 +12,7 @@ export const onSetBoards = (data) => {
 };
 export const getBoards = () => async (dispatch) => {
   dispatch(onSetIsFenchingBoards(true));
-  let boards = await api.getRequestAuth("boards/getBoards");
+  let boards = await api.getRequestAuth("boards");
   dispatch(onSetBoards(boards.payload));
   dispatch(onSetIsFenchingBoards(false));
 };
@@ -25,7 +25,7 @@ export const onCreateBoardError = ({ boardId, listsId }) => {
 };
 export const createBoard = ({ name, id }) => async (dispatch, getState) => {
   dispatch(onCreateBoardStart({ name, id }));
-  let result = await api.postRequestAuth("boards/createBoard", { name, id });
+  let result = await api.postRequestAuth("board", { name, id });
   if (!result.status) {
     let listsId = getState()
       .lists.data.filter((el) => el.boardId === id)
@@ -45,7 +45,7 @@ export const onDeleteBoardError = ({ boardId }) => {
 };
 export const deleteBoard = ({ boardId }) => async (dispatch, getState) => {
   dispatch(onDeleteBoardStart({ boardId }));
-  let result = await api.deleteRequestAuth("boards/deleteBoard", { id: boardId });
+  let result = await api.deleteRequestAuth("board", { id: boardId });
   if (!result.status) {
     dispatch(onDeleteBoardError({ boardId }));
   } else {

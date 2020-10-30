@@ -37,7 +37,7 @@ const Drag = ({ currentTask }) => {
             <div key={`task${item.id}`}>
               <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided, snapshot) => (
-                  <div
+                  <div key={`task123${item.id}`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

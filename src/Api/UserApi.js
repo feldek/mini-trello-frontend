@@ -6,29 +6,28 @@ export const user = {
     let tokens = await postRequest(url, { email, password });
     localStorage.setItem("token", tokens.payload.token);
     localStorage.setItem("refreshToken", tokens.payload.refreshToken);
-    this.notification(tokens.payload);
+    this.notification(tokens);
     return tokens;
   },
 
-  notification(result) {
-    if (result.error === undefined) result.error = true;
-    if (!result.error) {
-      result.message = result.message || "The operation was successful";
-      result.description = result.description || "";
+  notification({ payload, status }) {
+    if (status) {
+      payload.message = payload.message || "The operation was successful";
+      payload.description = payload.description || "";
       notification.success({
-        message: result.message,
-        description: result.description,
+        message: payload.message,
+        description: payload.description,
         placement: "bottomLeft",
       });
     } else {
-      if (result.message === "Failed to fetch") {
-        result.message = "Server is currently unavailable";
+      if (payload instanceof TypeError) {
+        payload.message = "Server is currently unavailable";
       }
-      result.message = result.message || "Error";
-      result.description = result.description || "";
+      payload.message = payload.message || "Error";
+      payload.description = payload.description || "";
       notification.error({
-        message: result.message,
-        description: result.description,
+        message: payload.message,
+        description: payload.description,
         placement: "bottomLeft",
         duration: 10,
       });
@@ -42,11 +41,7 @@ export const user = {
 
   async changePassword(url, { oldPassword, newPassword }) {
     let result = await api.postRequestAuth(url, { oldPassword, newPassword });
-    if (result instanceof TypeError) {
-      this.notification({ message: "Server is currently unavailable", error: true });
-    } else {
-      this.notification(result.payload);
-    }
+    this.notification(result);    
     return result;
   },
 };

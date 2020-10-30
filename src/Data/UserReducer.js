@@ -10,10 +10,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     onSetUser: (state, action) => {
-      return { authorization: action.payload.authorization, error: action.payload.error };
+      // return { authorization: action.payload.authorization, error: action.payload.error };
+      return { ...state, authorization: action.payload.authorization };
     },
-    onClearData: (state, action) => {      
-      return { state: action.payload.state };
+    onClearData: (state, action) => {
+      // return { state: action.payload.state };
+      return action.payload.newData;
     },
   },
 });
@@ -21,4 +23,3 @@ const userSlice = createSlice({
 const { actions, reducer } = userSlice;
 export const { onSetUser, onClearData } = actions;
 export default reducer;
-

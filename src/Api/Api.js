@@ -18,9 +18,9 @@ export const api = {
       body: JSON.stringify(data),
     });
   },
-  async putRequestAuth(url, data) {
+  async patchRequestAuth(url, data) {
     return fetch(serverHost + url, {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   },
@@ -43,7 +43,11 @@ export const postRequest = fetchWrap(fetch, [
       };
       options.body = JSON.stringify(data);
       let response = await innerFetch(serverHost + url, options);
-      let payload = await response.json();
+      let payload;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        payload = await response.json();
+      } 
       if (!response.ok) await Promise.reject(payload);
       console.log("postRequest:", { payload, status: true });
       return { payload, status: true };
@@ -72,33 +76,43 @@ fetch = fetchWrap(fetch, [
 
       if (!response.ok) await Promise.reject(response);
       if (!options.method) options.method = "GET";
-      let payload = await response.json();
+      
+      let payload;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        payload = await response.json();
+      } 
       console.log(options.method, ":", payload);
       return { payload, status: true };
     } catch (err) {
       if (err.status === 403) {
-        return await refreshToken(url, options);
+        return await refreshTokens(url, options);
       }
       if (err.status === 401) window.location.replace(getOutUrl);
       if (err instanceof TypeError) {
         return err;
       }
-      let payload = await err.json();
+      const contentType = err.headers.get("content-type");
+      let payload;
+      console.log(contentType);
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        payload = await err.json();
+      } 
       console.log("ERR", { payload, status: false });
       return { payload, status: false };
     }
   },
 ]);
 
-async function refreshToken(url, options) {
+async function refreshTokens(url, options) {
   let refreshToken = localStorage.getItem("refreshToken");
-  let response = await simpleFetch(serverHost + "auth/refreshToken", {
+  let response = await simpleFetch(serverHost + "auth/refreshTokensAuth", {
     method: "POST",
     headers: { Authorization: `Bearer ${refreshToken}` },
   });
   let data = await response.json();
   localStorage.setItem("token", data.token);
   localStorage.setItem("refreshToken", data.refreshToken);
-  let restarsReq = await fetch(url, options);
-  return restarsReq;
+  let restartReq = await fetch(url, options);
+  return restartReq;
 }
