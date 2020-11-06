@@ -12,7 +12,6 @@ import Header from "./Header";
 import {
   deleteBoard,
   getBoards,
-  onSetIsFenchingBoards,
 } from "../Data/Actions/BoardActions";
 
 const Boards = () => {

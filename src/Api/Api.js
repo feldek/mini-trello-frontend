@@ -1,5 +1,4 @@
-// const serverHost = "https://server-to-do-list.herokuapp.com/";
-export const serverHost = "http://localhost:3004/";
+export const serverHost = "https://server-to-do-list.herokuapp.com/";
 export const getOutUrl = "authorization/getOut";
 const fetchWrap = require("fetch-wrap");
 export const simpleFetch = fetchWrap(fetch, []);
@@ -47,7 +46,7 @@ export const postRequest = fetchWrap(fetch, [
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
         payload = await response.json();
-      } 
+      }
       if (!response.ok) await Promise.reject(payload);
       console.log("postRequest:", { payload, status: true });
       return { payload, status: true };
@@ -76,12 +75,12 @@ fetch = fetchWrap(fetch, [
 
       if (!response.ok) await Promise.reject(response);
       if (!options.method) options.method = "GET";
-      
+
       let payload;
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
         payload = await response.json();
-      } 
+      }
       console.log(options.method, ":", payload);
       return { payload, status: true };
     } catch (err) {
@@ -90,14 +89,14 @@ fetch = fetchWrap(fetch, [
       }
       if (err.status === 401) window.location.replace(getOutUrl);
       if (err instanceof TypeError) {
-        return err;
+        return { payload: err, status: false };
       }
       const contentType = err.headers.get("content-type");
       let payload;
       console.log(contentType);
       if (contentType && contentType.indexOf("application/json") !== -1) {
         payload = await err.json();
-      } 
+      }
       console.log("ERR", { payload, status: false });
       return { payload, status: false };
     }

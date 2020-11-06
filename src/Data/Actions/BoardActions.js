@@ -1,4 +1,5 @@
 import { api } from "../../Api/Api";
+import { user } from "../../Api/UserApi";
 
 export const ON_SET_BOARDS = "ON_SET_BOARDS";
 export const ON_CREATE_BOARD = "ON_CREATE_BOARD";
@@ -13,12 +14,14 @@ export const onSetBoards = (data) => {
 export const getBoards = () => async (dispatch) => {
   dispatch(onSetIsFenchingBoards(true));
   let boards = await api.getRequestAuth("boards");
-  dispatch(onSetBoards(boards.payload));
+  if (boards.status) {
+    dispatch(onSetBoards(boards.payload));
+  }
   dispatch(onSetIsFenchingBoards(false));
 };
 
-export const onCreateBoardStart = ({ id, name }) => {
-  return { type: ON_CREATE_BOARD, id, name };
+export const onCreateBoardStart = ({ id, name, visibility = true }) => {
+  return { type: ON_CREATE_BOARD, id, name, visibility };
 };
 export const onCreateBoardError = ({ boardId, listsId }) => {
   return { type: ON_DELETE_BOARD, boardId, listsId };
@@ -26,12 +29,15 @@ export const onCreateBoardError = ({ boardId, listsId }) => {
 export const createBoard = ({ name, id }) => async (dispatch, getState) => {
   dispatch(onCreateBoardStart({ name, id }));
   let result = await api.postRequestAuth("board", { name, id });
+  debugger;
   if (!result.status) {
+    user.notification(result);
     let listsId = getState()
       .lists.data.filter((el) => el.boardId === id)
       .map((el) => el.id);
     dispatch(onCreateBoardError({ boardId: id, listsId }));
   }
+  return result;
 };
 
 export const onDeleteBoardSuccess = ({ boardId, listsId }) => {

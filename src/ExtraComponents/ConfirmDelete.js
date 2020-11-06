@@ -12,7 +12,6 @@ const ConfirmDelete = ({
   phrase = "deletion",
   phraseButton = "Delete",
 }) => {
-  const [form] = Form.useForm();
   const handleConfirm = () => {
     onConfirm();
     setVisible(false);
@@ -23,8 +22,8 @@ const ConfirmDelete = ({
       {visible && (
         <div className={s.background}>
           <div className={`${s.box} ConfirmDeleteBox`}>
-            Сonfirm {phrase}?
-            <Form form={form} name="control-hooks" layout="vertical">
+            Сonfirm {phrase}?            
+            <div className={s.contentBox}>
               <Form.Item className={`${s.content} ConfirmDeleteContent`}>
                 <Link to={linkToBack}>
                   <Button
@@ -47,7 +46,7 @@ const ConfirmDelete = ({
                   Back
                 </Button>
               </Form.Item>
-            </Form>
+            </div>
           </div>
         </div>
       )}

@@ -22,5 +22,9 @@
   outline: 1px solid #ebedee;
   outline-offset: -10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  border-radius: 2px;      
+  border-radius: 2px;
+}
+.contentBox {
+  margin-top: 20px;
+  width: 75%;
 }

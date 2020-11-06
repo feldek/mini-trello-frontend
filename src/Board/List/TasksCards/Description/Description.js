@@ -97,7 +97,7 @@ export let Description = ({ task, id }) => {
   return (
     <div className={s.background} key={`container${id}`}>
       <Link to={`/board/${boardId}`} className={s.linkToBoard}></Link>
-      <div className={s.container}>
+      <div className={s.boxModal}>
         <Card title={<div>{task.name}</div>} className={s.card}>
           <div>
             <Form

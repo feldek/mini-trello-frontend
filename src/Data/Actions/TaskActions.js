@@ -2,6 +2,7 @@ import { uuid } from "uuidv4";
 import { api } from "../../Api/Api";
 
 export const ON_CREATE_TASK = "ON_CREATE_TASK";
+export const ON_CREATE_TASKS = "ON_CREATE_TASKS";
 export const ON_UPDATE_TASK = "ON_UPDATE_TASK";
 export const ON_SET_TASKS = "ON_SET_TASKS";
 export const ON_DELETE_TASK = "ON_DELETE_TASK";
@@ -16,12 +17,12 @@ export const onUpdateDescriptionError = ({ description, id }) => {
   return { type: ON_UPDATE_DESCRIPTION, description, id };
 };
 export const updateDescription = ({ id, description }) => async (dispatch, getState) => {
-  let oldDescription = getState().tasks.data.find((el) => (el.id === id));
+  let oldDescription = getState().tasks.data.find((el) => el.id === id);
   dispatch(onUpdateDescriptionStart({ description, id }));
   const task = await api.patchRequestAuth("task/description", { id, description });
   if (!task.status) {
     onUpdateDescriptionError({ id, description: oldDescription });
-  }  
+  }
 };
 
 export const onSetTasks = (data) => {
@@ -29,9 +30,22 @@ export const onSetTasks = (data) => {
 };
 export const getTasks = ({ boardId }) => async (dispatch) => {
   const tasks = await api.getRequestAuth("tasks", { boardId });
-  dispatch(onSetTasks(tasks.payload));
+  if (tasks.status) {
+    dispatch(onSetTasks(tasks.payload));
+  }
 };
 
+export const onCreateTasks = (data = []) => {
+  return { type: ON_CREATE_TASKS, data };
+};
+
+export const createTasks = (data = []) => async (dispatch, getState) => {
+  const result = await api.postRequestAuth("tasks", { tasks: data });
+  if (result.status) {
+    dispatch(onCreateTasks(data));
+  }
+  return result;
+};
 export const onCreateTaskStart = ({ name, listId, order, id }) => {
   return { type: ON_CREATE_TASK, name, listId, order, id };
 };
@@ -44,7 +58,7 @@ export const createTask = ({ name, listId }) => async (dispatch, getState) => {
   let lastCurrentTask = currentTasks.reverse().find((item) => item.listId);
   let order = lastCurrentTask ? lastCurrentTask.order + stepOrder : 0;
   dispatch(onCreateTaskStart({ name, listId, order, id }));
-  const result = await api.postRequestAuth("task", { listId, name, order });
+  const result = await api.postRequestAuth("task", { listId, name, order, id });
   if (!result.status) {
     dispatch(onCreateTaskError({ id }));
   }
@@ -80,7 +94,7 @@ export const updateTask = ({ id, order, listId }) => async (dispatch, getState) 
   let oldListId = task.listId;
   let oldOrder = task.order;
   dispatch(onUpdateTaskStart({ id, order, listId }));
-  const result = await api.patchRequestAuth("task", { id, order, listId });  
+  const result = await api.patchRequestAuth("task", { id, order, listId });
   if (!result.status) {
     dispatch(onUpdateTaskError({ id, order: oldOrder, listId: oldListId }));
   }

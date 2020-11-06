@@ -16,7 +16,7 @@ const BoardReduser = (state = initState, action) => {
   switch (action.type) {
     case ON_CREATE_BOARD: {
       let newData = [...state.data];
-      newData.push({ id: action.id, name: action.name, visibility: true });
+      newData.push({ id: action.id, name: action.name, visibility: action.visibility });
       return { ...state, data: newData };
     }
     case ON_SET_BOARDS: {
@@ -29,7 +29,7 @@ const BoardReduser = (state = initState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CLEAR_DATA: {  
+    case ON_CLEAR_DATA: {
       return { ...state, data: action.payload.newData };
     }
     case ON_SET_IS_FETCHING_BOARDS: {

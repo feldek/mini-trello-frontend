@@ -10,7 +10,6 @@ import SignUp from "../Authorization/SignUp";
 import AuthorizedRoute from "../Authorization/AuthorizedRoute";
 import RecoveryPassword from "../Authorization/RecoveryPassword";
 import GetOut from "../Authorization/GetOut";
-import FormToDoList from "../ExtraComponents/Form/FormToDoList";
 
 let Router = () => {
   return (
@@ -19,7 +18,6 @@ let Router = () => {
         <ProtectedRoute exact path="/" component={() => <Boards />} />
         <Route exact path="/authorization/getOut" component={() => <GetOut />} />
         <ProtectedRoute path="/board/:boardId" component={() => <TasksCard />} />
-        <Route path="/form" component={() => <FormToDoList />} />
         <AuthorizedRoute exact path="/authorization/login" component={SignIn} />
         <AuthorizedRoute exact path="/authorization/signup" component={SignUp} />
         <AuthorizedRoute

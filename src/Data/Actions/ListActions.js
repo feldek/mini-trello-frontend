@@ -2,6 +2,7 @@ import { uuid } from "uuidv4";
 import { api } from "../../Api/Api";
 
 export const ON_CREATE_LIST = "ON_CREATE_LIST";
+export const ON_CREATE_LISTS = "ON_CREATE_LISTS";
 export const ON_DELETE_LIST = "ON_DELETE_LIST";
 export const ON_DELETE_BOARD = "ON_DELETE_BOARD";
 export const ON_SET_LISTS = "ON_SET_LISTS";
@@ -17,7 +18,10 @@ export const onSetIsFenchingLists = (isFetching) => {
 export const getLists = ({ boardId }) => async (dispatch) => {
   dispatch(onSetIsFenchingLists(true));
   let lists = await api.getRequestAuth("lists", { boardId });
-  dispatch(onSetLists({ data: lists.payload }));
+
+  if (lists.status) {
+    dispatch(onSetLists({ data: lists.payload }));
+  }
   dispatch(onSetIsFenchingLists(false));
 };
 
@@ -34,6 +38,18 @@ export const createList = ({ boardId, name }) => async (dispatch) => {
   if (!result.status) {
     dispatch(onCreateListError({ listId: id }));
   }
+};
+
+export const onCreateListsStart = (data = []) => {
+  return { type: ON_CREATE_LISTS, data };
+};
+
+export const createLists = (data = []) => async (dispatch) => {
+  let result = await api.postRequestAuth("lists", { lists: data });
+  if (result.status) {
+    dispatch(onCreateListsStart(data));
+  }
+  return result;
 };
 
 export const onDeleteListSuccess = ({ listId }) => {

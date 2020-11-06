@@ -7,6 +7,7 @@ import {
   ON_SET_TASKS,
   ON_SET_VISIBILITY_TASK,
   ON_UPDATE_TASK,
+  ON_CREATE_TASKS,
 } from "./Actions/TaskActions";
 
 let initialState = {
@@ -14,8 +15,6 @@ let initialState = {
   isFetching: false,
 };
 const TaskReducer = (state = initialState, action) => {
-  // console.log(action.type)
-  // console.log(state.data)
   switch (action.type) {
     case ON_CREATE_TASK: {
       let newData = [...state.data];
@@ -27,6 +26,15 @@ const TaskReducer = (state = initialState, action) => {
         listId: action.listId,
         visibility: true,
       });
+      return { ...state, data: newData };
+    }
+    case ON_CREATE_TASKS: {
+      let newData = [...state.data];
+      action.data = action.data.map((el) => {
+        el.visibility = true;
+        return el;
+      });
+      newData.push(...action.data);
       return { ...state, data: newData };
     }
     case ON_UPDATE_TASK: {
