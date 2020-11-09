@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import s from "./ConfirmDelete.module.css";
 import "./ConfirmDelete.css";
 import { Form, Button } from "antd";
@@ -12,19 +12,33 @@ const ConfirmDelete = ({
   phrase = "deletion",
   phraseButton = "Delete",
 }) => {
+  const [removeClass, setRemoveClass] = useState(null);
+  const classNames = require("classnames");
   const handleConfirm = () => {
-    onConfirm();
-    setVisible(false);
+    setRemoveClass(s.remove);
+    setTimeout(() => {
+      setRemoveClass(null);
+      onConfirm();
+      setVisible(false);
+    }, 300);
+  };
+  const handleBack = (e) => {
+    e.stopPropagation();
+    setRemoveClass(s.remove);
+    setTimeout(() => {
+      setRemoveClass(null);
+      setVisible(false);
+    }, 300);
   };
 
   return (
     <>
       {visible && (
         <div className={s.background}>
-          <div className={`${s.box} ConfirmDeleteBox`}>
-            Сonfirm {phrase}?            
+          <div className={classNames(s.box, "ConfirmDeleteBox", removeClass)}>
+            Сonfirm {phrase}?
             <div className={s.contentBox}>
-              <Form.Item className={`${s.content} ConfirmDeleteContent`}>
+              <Form.Item className={classNames(s.content, "ConfirmDeleteContent")}>
                 <Link to={linkToBack}>
                   <Button
                     htmlType="submit"
@@ -35,14 +49,7 @@ const ConfirmDelete = ({
                     {phraseButton}
                   </Button>
                 </Link>
-                <Button
-                  htmlType="submit"
-                  className={s.button}
-                  onClick={(e) => {
-                    setVisible(false);
-                    e.stopPropagation();
-                  }}
-                >
+                <Button htmlType="submit" className={s.button} onClick={handleBack}>
                   Back
                 </Button>
               </Form.Item>

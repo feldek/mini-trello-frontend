@@ -27,6 +27,15 @@ const ArrayForm = ({ visible, setVisible }) => {
   let [indDelete, setIndDelete] = useState();
   let [toggleDelete, setToggleDelete] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [removeClass, setRemoveClass] = useState(null);
+  const classNames = require("classnames");
+  const handleDelayRemove = () => {
+    setRemoveClass(s.remove)
+    setTimeout(() => {
+      setRemoveClass(null)
+      setVisible(false);
+    }, 2000);
+  };
   let handleSend = async (data) => {
     data.board = { name: data.board, id: uuid() };
     if (!data.lists) {
@@ -67,7 +76,7 @@ const ArrayForm = ({ visible, setVisible }) => {
       }
     }
     setLoading(false);
-    setVisible(false);
+    handleDelayRemove()
     console.log(data);
   };
   const handleDelete = (index) => {
@@ -77,9 +86,9 @@ const ArrayForm = ({ visible, setVisible }) => {
 
   return (
     visible && (
-      <div className={s.background} onClick={() => setVisible(false)}>
+      <div className={s.background} onClick={handleDelayRemove}>
         <div onClick={(e) => e.stopPropagation()} className={s.stopPropagation}>
-          <div className={s.boxModal}>
+          <div className={classNames(s.boxModal, removeClass)}>
             <form onSubmit={handleSubmit(handleSend)} className={s.form}>
               <div className={s.boardBox}>
                 <div className={s.descriptionThis}>
@@ -176,7 +185,7 @@ const ArrayForm = ({ visible, setVisible }) => {
 
           <DeleteIcon
             size={"l"}
-            handleDelete={() => setVisible(false)}
+            handleDelete={handleDelayRemove}
             styleParams={{ top: "10px", right: "10px" }}
           />
         </div>

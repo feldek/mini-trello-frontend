@@ -40,7 +40,7 @@ const Boards = () => {
 
   return (
     <div className={s.background}>
-      <div className={classNames(`${s.content}`, "boardsContent")}>
+      <div className={classNames(s.content, "boardsContent")}>
         <Header />
         <Card title={<NewBoard boards={boards} />}>
           {isFetching ? (

@@ -1,4 +1,4 @@
-.content {  
+.content {
   display: flex;
   flex-direction: column;
 }
@@ -17,6 +17,18 @@
   padding: 0;
   background: white;
 }
+
+.board :global {
+  animation-name: visibility;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+.board.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+
 .boardLink {
   flex: 1;
   padding: 24px;
@@ -44,13 +56,13 @@
   left: -20%;
   content: attr(data-title);
 }
-.output:hover{
+.output:hover {
   color: red;
 }
-.background{
-  background-color: #ebedee ;
-  display:  flex;
-  justify-content: center;  
+.background {
+  background-color: #ebedee;
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 @media (min-width: 1000px) {

@@ -6,9 +6,7 @@ import { Form, Input, Button } from "antd";
 import s from "./Description.module.css";
 import PageNotFound from "../../../../ExtraComponents/PageNotFound";
 import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
-import {
-  updateDescription,
-} from "../../../../Data/Actions/TaskActions";
+import { updateDescription } from "../../../../Data/Actions/TaskActions";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
@@ -20,13 +18,21 @@ export let Description = ({ task, id }) => {
   let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [removeClass, setRemoveClass] = useState(null);
+  const classNames = require("classnames");
 
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
-
+  const handleDelayRemove = () => {
+    setRemoveClass(s.remove);
+    setTimeout(() => {
+      setRemoveClass(null);
+      history.push(`/board/${boardId}`);
+    }, 200);
+  };
   const handleUpdate = (elem) => {
-    !toggle && dispatch(updateDescription({ description: elem.description, id }));    
-    !toggle && history.push(`/board/${boardId}`);
+    !toggle && dispatch(updateDescription({ description: elem.description, id }));
+    !toggle && handleDelayRemove();
     toggle && setToggle(!toggle);
   };
 
@@ -85,9 +91,9 @@ export let Description = ({ task, id }) => {
               Delete
             </Button>
 
-            <Link to={`/board/${boardId}`}>
-              <Button className={s.button}>Back</Button>
-            </Link>
+            <Button className={s.button} onClick={handleDelayRemove}>
+              Back
+            </Button>
           </div>
         </div>
       </Form.Item>
@@ -95,36 +101,37 @@ export let Description = ({ task, id }) => {
   );
 
   return (
-    <div className={s.background} key={`container${id}`}>
-      <Link to={`/board/${boardId}`} className={s.linkToBoard}></Link>
-      <div className={s.boxModal}>
-        <Card title={<div>{task.name}</div>} className={s.card}>
-          <div>
-            <Form
-              form={form}
-              name="control-hooks"
-              layout="vertical"
-              onFinish={handleUpdate}
-              onFinishFailed={onFinishFailed}
-              className={s.form}
-              fields={[
-                {
-                  name: ["description"],
-                  value: task.description,
-                },
-              ]}
-            >
-              <div>{toggle ? description : changeDescription}</div>
-            </Form>
-          </div>
-        </Card>
+    <div className={s.background} key={`container${id}`} onClick={handleDelayRemove}>      
+      <div onClick={(e) => e.stopPropagation()} className={s.stopPropagation}>
+        <div className={classNames(s.boxModal, removeClass)}>
+          <Card title={<div>{task.name}</div>} className={s.card}>
+            <div>
+              <Form
+                form={form}
+                name="control-hooks"
+                layout="vertical"
+                onFinish={handleUpdate}
+                onFinishFailed={onFinishFailed}
+                className={s.form}
+                fields={[
+                  {
+                    name: ["description"],
+                    value: task.description,
+                  },
+                ]}
+              >
+                <div>{toggle ? description : changeDescription}</div>
+              </Form>
+            </div>
+          </Card>
+        </div>
+        <ConfirmDelete
+          onConfirm={() => dispatch(updateDescription({ description: "", id }))}
+          setVisible={setToggleDelete}
+          visible={toggleDelete}
+          linkToBack={`/board/${boardId}`}
+        />
       </div>
-      <ConfirmDelete
-        onConfirm={() => dispatch(updateDescription({ description: "", id }))}
-        setVisible={setToggleDelete}
-        visible={toggleDelete}
-        linkToBack={`/board/${boardId}`}
-      />
     </div>
   );
 };

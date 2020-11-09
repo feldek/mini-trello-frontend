@@ -18,6 +18,17 @@
   outline: 1px solid #ebedee;
   outline-offset: -10px;
 }
+.boxModal :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+.boxModal.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 0.2s;
+  animation-fill-mode: both;
+}
+
 .stopPropagation {
   margin-top: 100px;
   margin-bottom: 50px;

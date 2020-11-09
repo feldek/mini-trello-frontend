@@ -6,12 +6,13 @@ import LogOut from "../Authorization/LogOut";
 import ChangePassword from "../Authorization/СhangePassword";
 import ArrayForm from "../ExtraComponents/Form/ArrayForm";
 import s from "./Header.module.css";
+import "./Header.css";
 
 const Header = () => {
   let [visiblePass, setVisiblePass] = useState(false);
   let [visibleLogOut, setVisibleLogOut] = useState(false);
   let [visibleArrayForm, setVisibleArrayForm] = useState(false);
-
+  const classNames = require("classnames");
   return (
     <>
       <div className={s.header}>
@@ -19,11 +20,13 @@ const Header = () => {
           <div className={s.menu}>
             <Menu
               style={{ width: 150 }}
+              className = {classNames("headerMenuIcon")}
               mode="horizontal"
               triggerSubMenuAction="click"
               inlineIndent="10"
             >
               <SubMenu
+              
                 style={{ zIndex: "0", display: "block" }}
                 title={
                   <span>

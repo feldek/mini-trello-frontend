@@ -29,9 +29,9 @@ let NewBoard = ({ boards }) => {
   return (
     <>
       {!toggle && (
-        <Button value="large" className={s.createAntd} onClick={() => setToggle(true)}>
+        <button className={s.createAntd} onClick={() => setToggle(true)}>
           Create new board
-        </Button>
+        </button>
       )}
       {toggle && (
         <Form

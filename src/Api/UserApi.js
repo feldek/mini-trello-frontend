@@ -23,6 +23,7 @@ export const user = {
       if (payload instanceof TypeError) {
         payload.message = "Server is currently unavailable";
       }
+      if(!payload) payload.message = "Error"
       payload.message = payload.message || "Error";
       payload.description = payload.description || "";
       notification.error({

@@ -24,6 +24,17 @@
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   border-radius: 2px;
 }
+.box :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+.box.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 0.2s;
+  animation-fill-mode: both;
+}
+
 .contentBox {
   margin-top: 20px;
   width: 75%;

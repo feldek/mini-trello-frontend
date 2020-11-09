@@ -29,7 +29,6 @@ export const onCreateBoardError = ({ boardId, listsId }) => {
 export const createBoard = ({ name, id }) => async (dispatch, getState) => {
   dispatch(onCreateBoardStart({ name, id }));
   let result = await api.postRequestAuth("board", { name, id });
-  debugger;
   if (!result.status) {
     user.notification(result);
     let listsId = getState()

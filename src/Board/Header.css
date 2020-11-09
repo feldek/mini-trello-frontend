@@ -1,0 +1,7 @@
+.headerMenuIcon .ant-menu-submenu:hover {
+  border-bottom: none;
+}
+.headerMenuIcon .ant-menu-submenu {
+  border-bottom: none;
+}
+
