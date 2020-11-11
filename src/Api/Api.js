@@ -1,30 +1,31 @@
-export const serverHost = "https://server-to-do-list.herokuapp.com/";
+import config from "../Constants"
+export const apiUrl = config.apiUrl;
 export const getOutUrl = "authorization/getOut";
 const fetchWrap = require("fetch-wrap");
 export const simpleFetch = fetchWrap(fetch, []);
 
-export const api = {
+export const api = {    
   async getRequestAuth(url, data) {
-    let getUrl = new URL(serverHost + url),
+    let getUrl = new URL(apiUrl + url),
       params = data;
     getUrl.search = new URLSearchParams(params).toString();
     return fetch(getUrl);
   },
 
   async postRequestAuth(url, data) {
-    return fetch(serverHost + url, {
+    return fetch(apiUrl + url, {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
   async patchRequestAuth(url, data) {
-    return fetch(serverHost + url, {
+    return fetch(apiUrl + url, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
   },
   async deleteRequestAuth(url, data) {
-    return fetch((url = serverHost + url), {
+    return fetch((url = apiUrl + url), {
       method: "DELETE",
       body: JSON.stringify(data),
     });
@@ -41,7 +42,7 @@ export const postRequest = fetchWrap(fetch, [
         "Content-Type": "application/json",
       };
       options.body = JSON.stringify(data);
-      let response = await innerFetch(serverHost + url, options);
+      let response = await innerFetch(apiUrl + url, options);
       let payload;
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -105,7 +106,7 @@ fetch = fetchWrap(fetch, [
 
 async function refreshTokens(url, options) {
   let refreshToken = localStorage.getItem("refreshToken");
-  let response = await simpleFetch(serverHost + "auth/refreshTokensAuth", {
+  let response = await simpleFetch(apiUrl + "auth/refreshTokensAuth", {
     method: "POST",
     headers: { Authorization: `Bearer ${refreshToken}` },
   });

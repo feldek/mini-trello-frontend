@@ -34,7 +34,7 @@ const ArrayForm = ({ visible, setVisible }) => {
     setTimeout(() => {
       setRemoveClass(null)
       setVisible(false);
-    }, 2000);
+    }, 300);
   };
   let handleSend = async (data) => {
     data.board = { name: data.board, id: uuid() };
@@ -87,8 +87,12 @@ const ArrayForm = ({ visible, setVisible }) => {
   return (
     visible && (
       <div className={s.background} onClick={handleDelayRemove}>
-        <div onClick={(e) => e.stopPropagation()} className={s.stopPropagation}>
-          <div className={classNames(s.boxModal, removeClass)}>
+        <div onClick={(e) => e.stopPropagation()}
+        className={classNames(s.stopPropagation, removeClass)}
+        
+        // className={s.stopPropagation}
+        >
+          <div className={s.boxModal}>
             <form onSubmit={handleSubmit(handleSend)} className={s.form}>
               <div className={s.boardBox}>
                 <div className={s.descriptionThis}>

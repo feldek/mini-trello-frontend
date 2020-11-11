@@ -12,3 +12,8 @@
 .background .login-form-button {
   width: 100%;
 }
+@media (max-width: 600px) {
+  .background .login-form {
+    width: 100%;
+  }
+}
