@@ -1,5 +1,5 @@
 import { api } from "../../Api/Api";
-import { user } from "../../Api/UserApi";
+import { notificationAntd } from "./UserAction";
 
 export const ON_SET_BOARDS = "ON_SET_BOARDS";
 export const ON_CREATE_BOARD = "ON_CREATE_BOARD";
@@ -30,7 +30,7 @@ export const createBoard = ({ name, id }) => async (dispatch, getState) => {
   dispatch(onCreateBoardStart({ name, id }));
   let result = await api.postRequestAuth("board", { name, id });
   if (!result.status) {
-    user.notification(result);
+    notificationAntd(result);
     let listsId = getState()
       .lists.data.filter((el) => el.boardId === id)
       .map((el) => el.id);

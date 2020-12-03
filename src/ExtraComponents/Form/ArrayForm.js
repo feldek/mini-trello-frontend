@@ -5,12 +5,13 @@ import TasksForm from "./TasksForm";
 import { Button } from "antd";
 import s from "./ArrayForm.module.css";
 import "./ArrayForm.css";
-import { createTasks, stepOrder } from "../../Data/Actions/TaskActions";
+import { createTasks, stepOrder } from "../../Reducers/Actions/TaskActions";
 import ConfirmDelete from "../ConfirmDelete";
 import { useDispatch } from "react-redux";
-import { createLists } from "../../Data/Actions/ListActions";
-import { createBoard } from "../../Data/Actions/BoardActions";
+import { createLists } from "../../Reducers/Actions/ListActions";
+import { createBoard } from "../../Reducers/Actions/BoardActions";
 import DeleteIcon from "../DeleteIcon";
+import classNames from "classnames";
 
 const ArrayForm = ({ visible, setVisible }) => {
   const dispatch = useDispatch();
@@ -27,14 +28,13 @@ const ArrayForm = ({ visible, setVisible }) => {
   let [indDelete, setIndDelete] = useState();
   let [toggleDelete, setToggleDelete] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [removeClass, setRemoveClass] = useState(null);
-  const classNames = require("classnames");
+  const [removeClass, setRemoveClass] = useState(false);
   const handleDelayRemove = () => {
-    setRemoveClass(s.remove)
+    setRemoveClass(true);
     setTimeout(() => {
-      setRemoveClass(null)
+      setRemoveClass(false);
       setVisible(false);
-    }, 300);
+    }, 200);
   };
   let handleSend = async (data) => {
     data.board = { name: data.board, id: uuid() };
@@ -76,7 +76,7 @@ const ArrayForm = ({ visible, setVisible }) => {
       }
     }
     setLoading(false);
-    handleDelayRemove()
+    handleDelayRemove();
     console.log(data);
   };
   const handleDelete = (index) => {
@@ -87,10 +87,9 @@ const ArrayForm = ({ visible, setVisible }) => {
   return (
     visible && (
       <div className={s.background} onClick={handleDelayRemove}>
-        <div onClick={(e) => e.stopPropagation()}
-        className={classNames(s.stopPropagation, removeClass)}
-        
-        // className={s.stopPropagation}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={classNames(s.stopPropagation, { [s.remove]: removeClass })}
         >
           <div className={s.boxModal}>
             <form onSubmit={handleSubmit(handleSend)} className={s.form}>

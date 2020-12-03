@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import s from "./ConfirmDelete.module.css";
 import "./ConfirmDelete.css";
 import { Form, Button } from "antd";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 const ConfirmDelete = ({
   onConfirm,
@@ -12,30 +13,40 @@ const ConfirmDelete = ({
   phrase = "deletion",
   phraseButton = "Delete",
 }) => {
-  const [removeClass, setRemoveClass] = useState(null);
-  const classNames = require("classnames");
+  const [removeClass, setRemoveClass] = useState(false);
+  const isMounted = useRef(true);
   const handleConfirm = () => {
-    setRemoveClass(s.remove);
+    setRemoveClass(true);
     setTimeout(() => {
-      setRemoveClass(null);
+      setRemoveClass(false);
       onConfirm();
-      setVisible(false);
-    }, 300);
+      if (isMounted.current) {
+        setVisible(false);
+      }
+    }, 200);
   };
-  const handleBack = (e) => {
-    e.stopPropagation();
-    setRemoveClass(s.remove);
+  const handleBack = () => {
+    setRemoveClass(true);
     setTimeout(() => {
-      setRemoveClass(null);
-      setVisible(false);
-    }, 300);
+      setRemoveClass(false);
+      if (isMounted.current) {
+        setVisible(false);
+      }
+    }, 200);
   };
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <>
       {visible && (
         <div className={s.background}>
-          <div className={classNames(s.box, "ConfirmDeleteBox", removeClass)}>
+          <div
+            className={classNames(s.box, "ConfirmDeleteBox", { [s.remove]: removeClass })}
+          >
             Сonfirm {phrase}?
             <div className={s.contentBox}>
               <Form.Item className={classNames(s.content, "ConfirmDeleteContent")}>

@@ -34,12 +34,11 @@ export const onCreateListError = ({ listId }) => {
 export const createList = ({ boardId, name }) => async (dispatch) => {
   let id = uuid();
   dispatch(onCreateListStart({ name, id, boardId }));
-  let result = await api.postRequestAuth("list", { boardId, name, id });
+  let result = await api.postRequestAuth("lists", { lists: [{ boardId, name, id }] });
   if (!result.status) {
     dispatch(onCreateListError({ listId: id }));
   }
 };
-
 export const onCreateListsStart = (data = []) => {
   return { type: ON_CREATE_LISTS, data };
 };

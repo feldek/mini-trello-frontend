@@ -39,6 +39,7 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams }) => {
         width: "26px",
       };
   }
+  styleIcon.color = "rgba(0, 0, 0, 0.65)";
 
   return (
     <button className={s.button} type="button" onClick={handleDelete} style={styleParams}>

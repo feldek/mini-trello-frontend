@@ -2,10 +2,10 @@ import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getOutUrl } from "../Api/Api";
-import { onSetUser } from "../Data/UserReducer";
+import { forcedLogOut } from "../Api/Api";
+import { onSetUser } from "../Reducers/UserReducer";
 import s from "./SignIn.module.css";
-const GetOut = () => {
+const ForcedLogOut = () => {
   const dispatch = useDispatch();
   let [timer, setTimer] = useState(9);
   useEffect(() => {
@@ -20,7 +20,7 @@ const GetOut = () => {
         clearTimeout(time);
       };
     } else {
-      window.location.replace(getOutUrl);
+      window.location.replace(forcedLogOut);
     }
   }, [timer]);
 
@@ -37,4 +37,4 @@ const GetOut = () => {
   );
 };
 
-export default GetOut;
+export default ForcedLogOut;

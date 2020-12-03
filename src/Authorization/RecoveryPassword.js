@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { recoveryPassword } from "../Data/Actions/UserAction";
+import { recoveryPassword } from "../Reducers/Actions/UserAction";
 import { useHistory } from "react-router-dom";
 
 const RecoveryPassword = () => {

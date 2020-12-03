@@ -18,8 +18,8 @@ export const onUpdateDescriptionError = ({ description, id }) => {
 };
 export const updateDescription = ({ id, description }) => async (dispatch, getState) => {
   let oldDescription = getState().tasks.data.find((el) => el.id === id);
-  dispatch(onUpdateDescriptionStart({ description, id }));
-  const task = await api.patchRequestAuth("task/description", { id, description });
+  dispatch(onUpdateDescriptionStart({ description, id }));  
+  const task = await api.patchRequestAuth("task", { id, description });
   if (!task.status) {
     onUpdateDescriptionError({ id, description: oldDescription });
   }
@@ -58,7 +58,9 @@ export const createTask = ({ name, listId }) => async (dispatch, getState) => {
   let lastCurrentTask = currentTasks.reverse().find((item) => item.listId);
   let order = lastCurrentTask ? lastCurrentTask.order + stepOrder : 0;
   dispatch(onCreateTaskStart({ name, listId, order, id }));
-  const result = await api.postRequestAuth("task", { listId, name, order, id });
+  const result = await api.postRequestAuth("tasks", {
+    tasks: [{ listId, name, order, id }],
+  });
   if (!result.status) {
     dispatch(onCreateTaskError({ id }));
   }

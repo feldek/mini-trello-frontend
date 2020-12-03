@@ -9,10 +9,8 @@ import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import {
-  deleteBoard,
-  getBoards,
-} from "../Data/Actions/BoardActions";
+import { deleteBoard, getBoards } from "../Reducers/Actions/BoardActions";
+import classNames from "classnames";
 
 const Boards = () => {
   const dispatch = useDispatch();
@@ -20,7 +18,6 @@ const Boards = () => {
   const [param, setParam] = useState(false);
   const boards = useSelector((state) => state.boards.data);
   const isFetching = useSelector((state) => state.boards.isFetching);
-  const classNames = require("classnames");
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +30,7 @@ const Boards = () => {
     await dispatch(deleteBoard({ boardId: item.id }));
   };
 
-  const callConfirmDelete = (el) => {
+  const onConfirmDelete = (el) => {
     setVisibleDelete(true);
     setParam(el);
   };
@@ -53,7 +50,7 @@ const Boards = () => {
                     <Card.Grid key={`board${elem.id}`} className={s.board}>
                       <DeleteIcon
                         size={"m"}
-                        handleDelete={() => callConfirmDelete(elem)}
+                        handleDelete={() => onConfirmDelete(elem)}
                       />
                       <Link
                         to={`/board/${elem.id}`}

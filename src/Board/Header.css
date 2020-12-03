@@ -3,5 +3,8 @@
 }
 .headerMenuIcon .ant-menu-submenu {
   border-bottom: none;
+  margin: 0;
 }
-
+.ant-menu-submenu-title{
+  margin-left: 10px;
+}

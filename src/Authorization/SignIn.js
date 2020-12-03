@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
 import "./SignIn.css";
 import { useDispatch } from "react-redux";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { signIn } from "../Data/Actions/UserAction";
+import { signIn } from "../Reducers/Actions/UserAction";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const isMounted = useRef(true);
 
   const handleAuthorization = async (values) => {
     setLoading(true);
-    await dispatch(signIn({ email: values.email, password: values.password }));    
-    setLoading(false);
+    await dispatch(signIn({ email: values.email, password: values.password }));
+    if (isMounted.current) {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <div className={`${s.background} background`}>

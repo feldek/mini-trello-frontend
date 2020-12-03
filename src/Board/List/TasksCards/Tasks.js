@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
-import { deleteTask } from "../../../Data/Actions/TaskActions";
+import { deleteTask } from "../../../Reducers/Actions/TaskActions";
 
 const Drag = ({ currentTask }) => {
   const dispatch = useDispatch();
@@ -37,7 +37,8 @@ const Drag = ({ currentTask }) => {
             <div key={`task${item.id}`}>
               <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided, snapshot) => (
-                  <div key={`task123${item.id}`}
+                  <div
+                    key={`task123${item.id}`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

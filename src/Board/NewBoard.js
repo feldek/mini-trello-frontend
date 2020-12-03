@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
-import { createBoard } from "../Data/Actions/BoardActions";
+import { createBoard } from "../Reducers/Actions/BoardActions";
 
 let NewBoard = ({ boards }) => {
   const dispatch = useDispatch();

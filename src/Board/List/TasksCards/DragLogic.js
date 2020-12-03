@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { uuid } from "uuidv4";
 import { useSelector, useDispatch } from "react-redux";
-import NewList from "../NewList";
-import List from "../List";
 import { useParams, Link } from "react-router-dom";
-import NewTask from "./NewTask";
 import PageNotFound from "../../../ExtraComponents/PageNotFound";
 import { Card, Button, Spin } from "antd";
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
-import Tasks from "./Tasks";
 import s from "./TasksCard.module.css";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
-import { deleteList, getLists } from "../../../Data/Actions/ListActions";
-import { getTasks, stepOrder, updateTask } from "../../../Data/Actions/TaskActions";
+import { deleteList, getLists } from "../../../Reducers/Actions/ListActions";
+import { getTasks, stepOrder, updateTask } from "../../../Reducers/Actions/TaskActions";
+import classNames from "classnames";
+import Lists from "./Lists";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -143,7 +138,6 @@ const TasksCard = () => {
     }
     dispatch(updateTask({ id: result.draggableId, order, listId: dListId }));
   }
-  const classNames = require("classnames");
   return (
     <div className={s.background}>
       <div className={s.content}>
@@ -165,50 +159,13 @@ const TasksCard = () => {
           </div>
         ) : (
           <Card className={classNames(`${s.totalCard}`, "totalCard")}>
-            <DragDropContext onDragEnd={onDragEnd}>
-              {currentLists.map(
-                (el, ind) =>
-                  el.visibility && (
-                    <Card.Grid key={`boxList${el.id}`} className={s.card}>
-                      <Card
-                        className={classNames(`${s.tasksHeader}`, "tasksHeader")}
-                        key={`listone${el.id}`}
-                        title={
-                          <div>
-                            <List listId={el.id} />
-                            <NewTask listId={el.id} uuid={uuid()} />
-                          </div>
-                        }
-                      >
-                        <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              style={
-                                (getListStyle(snapshot.isDraggingOver), { width: "100%" })
-                              }
-                              {...provided.droppableProps}
-                            >
-                              {<Tasks currentTask={currentTasks[ind]} />}
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
-                      </Card>
-
-                      <DeleteIcon
-                        size={"l"}
-                        handleDelete={() => handleDelete(el.id)}
-                        styleParams={{ margin: "8px" }}
-                      />
-                    </Card.Grid>
-                  )
-              )}
-
-              <Card.Grid className={`${s.card} ${s.cardNewList}`}>
-                <NewList />
-              </Card.Grid>
-            </DragDropContext>
+            <Lists
+              onDragEnd={onDragEnd}
+              currentLists={currentLists}
+              currentTasks={currentTasks}
+              getListStyle={getListStyle}
+              handleDelete={handleDelete}
+            />
           </Card>
         )}
 

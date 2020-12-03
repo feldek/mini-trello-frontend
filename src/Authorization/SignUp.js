@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, Input, Button } from "antd";
 import s from "./SignUp.module.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { signUp } from "../Data/Actions/UserAction";
+import { signUp } from "../Reducers/Actions/UserAction";
 
 const SignUp = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
+  const isMounted = useRef(true);
 
   const handleRequest = async (values) => {
     setDisabled(true);
     await dispatch(signUp({ email: values.email, password: values.password }));
-    setDisabled(false);
+    if (isMounted.current) {
+      setDisabled(false);
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   return (
     <div className={s.background}>

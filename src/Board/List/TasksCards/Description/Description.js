@@ -6,7 +6,8 @@ import { Form, Input, Button } from "antd";
 import s from "./Description.module.css";
 import PageNotFound from "../../../../ExtraComponents/PageNotFound";
 import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
-import { updateDescription } from "../../../../Data/Actions/TaskActions";
+import { updateDescription } from "../../../../Reducers/Actions/TaskActions";
+import classNames from "classnames";
 
 let ContainerDescription = () => {
   let id = useParams().descriptionId;
@@ -18,15 +19,14 @@ export let Description = ({ task, id }) => {
   let history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const [removeClass, setRemoveClass] = useState(null);
-  const classNames = require("classnames");
+  const [removeClass, setRemoveClass] = useState(false);
 
   let boardId = useParams().boardId;
   let [toggle, setToggle] = useState(task.description !== "");
   const handleDelayRemove = () => {
-    setRemoveClass(s.remove);
+    setRemoveClass(true);
     setTimeout(() => {
-      setRemoveClass(null);
+      setRemoveClass(false);
       history.push(`/board/${boardId}`);
     }, 200);
   };
@@ -101,9 +101,9 @@ export let Description = ({ task, id }) => {
   );
 
   return (
-    <div className={s.background} key={`container${id}`} onClick={handleDelayRemove}>      
+    <div className={s.background} key={`container${id}`} onClick={handleDelayRemove}>
       <div onClick={(e) => e.stopPropagation()} className={s.stopPropagation}>
-        <div className={classNames(s.boxModal, removeClass)}>
+        <div className={classNames(s.boxModal, { [s.remove]: removeClass })}>
           <Card title={<div>{task.name}</div>} className={s.card}>
             <div>
               <Form

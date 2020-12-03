@@ -7,12 +7,12 @@ import ChangePassword from "../Authorization/СhangePassword";
 import ArrayForm from "../ExtraComponents/Form/ArrayForm";
 import s from "./Header.module.css";
 import "./Header.css";
+import classNames from "classnames";
 
 const Header = () => {
   let [visiblePass, setVisiblePass] = useState(false);
   let [visibleLogOut, setVisibleLogOut] = useState(false);
-  let [visibleArrayForm, setVisibleArrayForm] = useState(false);
-  const classNames = require("classnames");
+  let [visibleArrayForm, setVisibleArrayForm] = useState(false);  
   return (
     <>
       <div className={s.header}>
@@ -25,8 +25,7 @@ const Header = () => {
               triggerSubMenuAction="click"
               inlineIndent="10"
             >
-              <SubMenu
-              
+              <SubMenu              
                 style={{ zIndex: "0", display: "block" }}
                 title={
                   <span>

@@ -5,7 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { store, persistor } from "./Data/Store";
+import { store, persistor } from "./Reducers/Store";
 import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.render(
