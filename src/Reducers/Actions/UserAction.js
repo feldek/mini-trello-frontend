@@ -2,7 +2,7 @@ import { onSetUser, onClearData } from "../UserReducer";
 import { notification } from "antd";
 import { postRequest, api } from "../../Api/Api";
 
-export const signIn = ({ email, password }) => async (dispatch) => {  
+export const signIn = ({ email, password }) => async (dispatch) => {
   let result = await postRequest("auth/signIn", { email, password });
   localStorage.setItem("token", result.payload.token);
   localStorage.setItem("refreshToken", result.payload.refreshToken);
@@ -12,7 +12,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     dispatch(onSetUser({ authorization: false }));
   }
   notificationAntd(result);
-  return
+  return result.status;
 };
 
 export const signUp = ({ email, password }) => async (dispatch) => {
@@ -25,7 +25,7 @@ export const signUp = ({ email, password }) => async (dispatch) => {
     dispatch(onSetUser({ authorization: false }));
   }
   notificationAntd(result);
-  return
+  return result.status;
 };
 
 export const recoveryPassword = ({ email, password }) => async (dispatch) => {

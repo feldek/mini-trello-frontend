@@ -12,7 +12,7 @@ import classNames from "classnames";
 const Header = () => {
   let [visiblePass, setVisiblePass] = useState(false);
   let [visibleLogOut, setVisibleLogOut] = useState(false);
-  let [visibleArrayForm, setVisibleArrayForm] = useState(false);  
+  let [visibleArrayForm, setVisibleArrayForm] = useState(false);
   return (
     <>
       <div className={s.header}>
@@ -20,13 +20,13 @@ const Header = () => {
           <div className={s.menu}>
             <Menu
               style={{ width: 150 }}
-              className = {classNames("headerMenuIcon")}
+              className={classNames("headerMenuIcon")}
               mode="horizontal"
               triggerSubMenuAction="click"
               inlineIndent="10"
             >
-              <SubMenu              
-                style={{ zIndex: "0", display: "block" }}
+              <SubMenu
+                style={{ zIndex: "0", display: "block", margin: "0", paddingLeft: "5px" }}
                 title={
                   <span>
                     <SettingOutlined />
