@@ -1,32 +1,31 @@
-// const serverHost = "https://server-to-do-list.herokuapp.com/";
-export const serverHost = "http://localhost:3004/";
-export const toDoListHost = "http://localhost:3000/";
-const getOutUrl = toDoListHost + "authorization/getOut";
+import config from "../Constants";
+export const apiUrl = config.apiUrl;
+export const forcedLogOut = "authorization/forcedLogOut";
 const fetchWrap = require("fetch-wrap");
 export const simpleFetch = fetchWrap(fetch, []);
 
 export const api = {
   async getRequestAuth(url, data) {
-    let getUrl = new URL(serverHost + url),
+    let getUrl = new URL(apiUrl + url),
       params = data;
     getUrl.search = new URLSearchParams(params).toString();
     return fetch(getUrl);
   },
 
   async postRequestAuth(url, data) {
-    return fetch(serverHost + url, {
+    return fetch(apiUrl + url, {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
-  async putRequestAuth(url, data) {
-    return fetch(serverHost + url, {
-      method: "PUT",
+  async patchRequestAuth(url, data) {
+    return fetch(apiUrl + url, {
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   },
   async deleteRequestAuth(url, data) {
-    return fetch((url = serverHost + url), {
+    return fetch((url = apiUrl + url), {
       method: "DELETE",
       body: JSON.stringify(data),
     });
@@ -43,12 +42,16 @@ export const postRequest = fetchWrap(fetch, [
         "Content-Type": "application/json",
       };
       options.body = JSON.stringify(data);
-      let response = await innerFetch(serverHost + url, options);
+      let response = await innerFetch(apiUrl + url, options);
+      if (!response.ok) await Promise.reject(response);
       let payload = await response.json();
-      if (!response.ok) await Promise.reject(payload);
       console.log("postRequest:", { payload, status: true });
       return { payload, status: true };
-    } catch (payload) {
+    } catch (err) {
+      if (err instanceof TypeError) {
+        return { payload: err, status: false };
+      }
+      let payload = await err.json();
       console.log("ERR postRequest:", { payload, status: false });
       return { payload, status: false };
     }
@@ -60,7 +63,7 @@ fetch = fetchWrap(fetch, [
     try {
       if (!options) options = {};
       let token = localStorage.getItem("token") ? localStorage.getItem("token") : null;
-      if (!token) return window.location.replace(getOutUrl);
+      if (!token) return window.location.replace(forcedLogOut);
       if (!options.headers) {
         options.headers = {
           Accept: "application/json",
@@ -70,35 +73,39 @@ fetch = fetchWrap(fetch, [
       options.headers.Authorization = `Bearer ${token}`;
 
       let response = await innerFetch(url, options);
-
       if (!response.ok) await Promise.reject(response);
-      if (!options.method) options.method = "GET";
       let payload = await response.json();
-      console.log(options.method, ":", payload);
+      console.log(options.method || "GET", ":", payload);
       return { payload, status: true };
     } catch (err) {
       if (err.status === 403) {
-        return await refreshToken(url, options);
+        return await refreshTokens(url, options);
       }
-      if (err.status === 401) window.location.replace(getOutUrl);
-      console.log({ err, status: false });
-      return { err, status: false };
+      if (err.status === 401) {
+        window.location.replace(forcedLogOut);
+      }
+      if (err instanceof TypeError) {
+        return { payload: err, status: false };
+      }
+      let payload = await err.json();
+      console.log("ERR", { payload, status: false });
+      return { payload, status: false };
     }
   },
 ]);
 
-async function refreshToken(url, options) {
+async function refreshTokens(url, options) {
   let refreshToken = localStorage.getItem("refreshToken");
-  let response = await simpleFetch(serverHost + "auth/refreshToken", {
+  let response = await simpleFetch(apiUrl + "auth/refreshTokensAuth", {
     method: "POST",
     headers: { Authorization: `Bearer ${refreshToken}` },
   });
+  if (response.status === 401) {
+    window.location.replace(forcedLogOut);
+  }
   let data = await response.json();
-  console.log("in refresh Token");
-  console.log("New token:", data.token);
-  console.log("New refreshToken:", data.refreshToken);
   localStorage.setItem("token", data.token);
   localStorage.setItem("refreshToken", data.refreshToken);
-  let restarsReq = await fetch(url, options);
-  return restarsReq;
+  let restartReq = await fetch(url, options);
+  return restartReq;
 }

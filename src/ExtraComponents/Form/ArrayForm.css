@@ -1,0 +1,19 @@
+button.ant-btn:focus {
+  border: 1px solid #40a9ff;
+}
+button.ant-btn-dangerous:focus {
+  border: 1px solid #ff4d4f;
+}
+
+button.deleteDescription.ant-btn-dangerous {
+  transition: all 0.3s, padding 0s;
+  margin-left: 5px;
+  padding-right: 8px;
+  padding-left: 8px;
+}
+button.ant-btn {
+  transition: all 0.3s, padding 0s;
+}
+textarea.ant-input.texstArea {
+  max-height: 120px !important;
+}

@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  createBoard,
-  onCreatedBoard,
-  deleteBoard,
-  onDeletedBoard,
-} from "../Data/BoardReducer";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Form, Input, Button } from "antd";
 import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
+import { createBoard } from "../Reducers/Actions/BoardActions";
 
 let NewBoard = ({ boards }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [toggle, setToggle] = useState(false);
-  const lists = useSelector((state) => state.lists);
   const handleCreate = async (elem) => {
     let id = uuid();
     setToggle(false);
@@ -35,9 +29,9 @@ let NewBoard = ({ boards }) => {
   return (
     <>
       {!toggle && (
-        <Button value="large" className={s.createAntd} onClick={() => setToggle(true)}>
+        <button className={s.createAntd} onClick={() => setToggle(true)}>
           Create new board
-        </Button>
+        </button>
       )}
       {toggle && (
         <Form

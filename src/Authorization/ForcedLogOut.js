@@ -2,14 +2,14 @@ import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { toDoListHost } from "../Api/Api";
-import { onSetedUser } from "../Data/UserReducer";
+import { forcedLogOut } from "../Api/Api";
+import { onSetUser } from "../Reducers/UserReducer";
 import s from "./SignIn.module.css";
-const GetOut = () => {
+const ForcedLogOut = () => {
   const dispatch = useDispatch();
   let [timer, setTimer] = useState(9);
   useEffect(() => {
-    dispatch(onSetedUser({ authorization: false, error: "wrong autentificate token" }));
+    dispatch(onSetUser({ authorization: false, error: "wrong autentificate token" }));
   }, []);
   useEffect(() => {
     if (timer > 0) {
@@ -20,15 +20,16 @@ const GetOut = () => {
         clearTimeout(time);
       };
     } else {
-      window.location.replace(toDoListHost);
+      window.location.replace(forcedLogOut);
     }
   }, [timer]);
+
   return (
     <div className={`${s.background} background`}>
       <div className={s.box}>
         Logout due to incorrect authorization
         <div>You will be redirected to the login page in {timer} seconds</div>
-        <Link to={toDoListHost}>
+        <Link to={"/"}>
           <Button type="primary">or click here for redirected</Button>
         </Link>
       </div>
@@ -36,4 +37,4 @@ const GetOut = () => {
   );
 };
 
-export default GetOut;
+export default ForcedLogOut;

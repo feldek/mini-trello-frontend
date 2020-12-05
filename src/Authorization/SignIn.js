@@ -4,17 +4,25 @@ import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
 import "./SignIn.css";
 import { useDispatch } from "react-redux";
-import { signIn } from "../Data/UserReducer";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { signIn } from "../Reducers/Actions/UserAction";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const handleAuthorization = async (values) => {
-    setLoading(true);
-    await dispatch(signIn({ email: values.email, password: values.password }));
-    setLoading(false);
+    try {
+      setLoading(true);
+      let result = await dispatch(
+        signIn({ email: values.email, password: values.password })
+      );
+      if (!result) {
+        throw new Error();
+      }
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   return (

@@ -1,0 +1,46 @@
+.enybody{}
+@keyframes :global(visibility) {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes :global(visibilityRemove) {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes :global(innerZoom){
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    opacity: 0.7;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes :global(innerZoomRemove){
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    opacity: 0.7;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(0.3);
+  }
+}
+
+

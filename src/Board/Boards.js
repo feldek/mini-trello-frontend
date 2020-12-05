@@ -3,29 +3,25 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import NewBoard from "./NewBoard";
-import { getBoards, deleteBoard } from "../Data/BoardReducer";
-import { Alert, Card, Spin } from "antd";
+import { Card, Spin } from "antd";
 import s from "./Boards.module.css";
 import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import { boardsSelect } from "../Data/Selectors";
+import { deleteBoard, getBoards } from "../Reducers/Actions/BoardActions";
+import classNames from "classnames";
 
 const Boards = () => {
   const dispatch = useDispatch();
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [param, setParam] = useState(false);
-  const stateBoard = useSelector((state) => boardsSelect(state));
-  // const stateBoard = useSelector((state) => state.board);
-  const classNames = require("classnames");
-  const [isFetchingBoards, setFetchingBoards] = useState(false);
+  const boards = useSelector((state) => state.boards.data);
+  const isFetching = useSelector((state) => state.boards.isFetching);
 
   useEffect(() => {
     async function fetchData() {
-      setFetchingBoards(true);
       await dispatch(getBoards());
-      setFetchingBoards(false);
     }
     fetchData();
   }, []);
@@ -34,42 +30,47 @@ const Boards = () => {
     await dispatch(deleteBoard({ boardId: item.id }));
   };
 
-  const callConfirmDelete = (el) => {
+  const onConfirmDelete = (el) => {
     setVisibleDelete(true);
     setParam(el);
   };
 
   return (
-    <div className={classNames(`${s.content}`, "boardsContent")}>
-      <Header />
-      <Card title={<NewBoard boards={stateBoard} />}>
-        {isFetchingBoards ? (
-          <Spin tip="Loading..." style={{ width: "100%", height: "100px" }}></Spin>
-        ) : (
-          <div className={s.boards}>
-            {stateBoard.map(
-              (elem) =>
-                elem.visibility && (
-                  <Card.Grid key={`board${elem.id}`} className={s.board}>
-                    <DeleteIcon size={"m"} handleDelete={() => callConfirmDelete(elem)} />
-                    <Link
-                      to={`/board/${elem.id}`}
-                      key={`board${elem.id}`}
-                      className={s.boardLink}
-                    >
-                      {elem.name}
-                    </Link>
-                  </Card.Grid>
-                )
-            )}
-          </div>
-        )}
-      </Card>
-      <ConfirmDelete
-        onConfirm={() => handleDelete(param)}
-        setVisible={setVisibleDelete}
-        visible={visibleDelete}
-      />
+    <div className={s.background}>
+      <div className={classNames(s.content, "boardsContent")}>
+        <Header />
+        <Card title={<NewBoard boards={boards} />}>
+          {isFetching ? (
+            <Spin tip="Loading..." style={{ width: "100%", height: "100px" }}></Spin>
+          ) : (
+            <div className={s.boards}>
+              {boards.map(
+                (elem) =>
+                  elem.visibility && (
+                    <Card.Grid key={`board${elem.id}`} className={s.board}>
+                      <DeleteIcon
+                        size={"m"}
+                        handleDelete={() => onConfirmDelete(elem)}
+                      />
+                      <Link
+                        to={`/board/${elem.id}`}
+                        key={`board${elem.id}`}
+                        className={s.boardLink}
+                      >
+                        {elem.name}
+                      </Link>
+                    </Card.Grid>
+                  )
+              )}
+            </div>
+          )}
+        </Card>
+        <ConfirmDelete
+          onConfirm={() => handleDelete(param)}
+          setVisible={setVisibleDelete}
+          visible={visibleDelete}
+        />
+      </div>
     </div>
   );
 };

@@ -6,6 +6,13 @@
   flex-direction: column;
   align-items: center;
 }
+
+.form :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
 .formInput {
   border-radius: 2px;
   padding: 0px;
@@ -13,6 +20,12 @@
   display: flex;
   flex-direction: column;
 }
+.formInput :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
 .form,
 .formInput label {
   font-size: 20px;

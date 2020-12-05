@@ -9,34 +9,25 @@ import storage from "redux-persist/lib/storage";
 import UserReducer from "./UserReducer";
 
 
-
 const persistConfig = {
   key: "root",
   storage,
-  // blacklist: ['auth'],  
 };
 
-// const authPersistConfig = { //Это для токенов
-//   key: 'auth',
-//   storage,
-// };
+
 let reducers = combineReducers({
-  // auth: persistReducer(authPersistConfig, UserReducer),
-  user: UserReducer,  
+  user: UserReducer,
   boards: BoardReduser,
   lists: ListReduser,
-  tasks: TaskReducer,  
+  tasks: TaskReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export let store = createStore(
   persistedReducer,
-  composeWithDevTools(applyMiddleware(thunkMiddleware)),
-  
+  composeWithDevTools(applyMiddleware(thunkMiddleware))
 );
 export let persistor = persistStore(store);
-export let test = persistStore(store);
 
- 
- window.store = store.getState().tasks
+

@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import s from "./SignUp.module.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { signUp } from "../Data/UserReducer";
+import { signUp } from "../Reducers/Actions/UserAction";
 
 const SignUp = () => {
   const [form] = Form.useForm();
@@ -11,9 +11,17 @@ const SignUp = () => {
   const [disabled, setDisabled] = useState(false);
 
   const handleRequest = async (values) => {
-    setDisabled(true);
-    await dispatch(signUp({ email: values.email, password: values.password }));
-    setDisabled(false);
+    try {
+      setDisabled(true);
+      const result = await dispatch(
+        signUp({ email: values.email, password: values.password })
+      );
+      if (!result) {
+        throw new Error();
+      }
+    } catch (err) {
+      setDisabled(false);
+    }
   };
 
   return (

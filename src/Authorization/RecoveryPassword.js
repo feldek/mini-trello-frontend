@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
-import { UserOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { recoveryPassword } from "../Data/UserReducer";
+import { recoveryPassword } from "../Reducers/Actions/UserAction";
 import { useHistory } from "react-router-dom";
 
 const RecoveryPassword = () => {
@@ -13,9 +13,13 @@ const RecoveryPassword = () => {
 
   const handleAuthorization = async (values) => {
     setLoading(true);
-    let result = await dispatch(recoveryPassword({ email: values.email }));
-    if (!result.error) history.push("/");
+    const result = await dispatch(
+      recoveryPassword({ email: values.email, password: values.password })
+    );
     setLoading(false);
+    if (result.status) {
+      history.push("/");
+    }
   };
 
   return (
@@ -23,6 +27,7 @@ const RecoveryPassword = () => {
       <div className={s.box}>
         Input you email
         <Form
+          layout="vertical"
           name="normal_login"
           className="login-form"
           initialValues={{ remember: true }}
@@ -45,6 +50,44 @@ const RecoveryPassword = () => {
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="E-mail"
             />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="New Password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} />
+          </Form.Item>
+          <Form.Item
+            name="confirm"
+            label="Confirm New Password"
+            dependencies={["password"]}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: "Please confirm your password!",
+              },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    "The two passwords that you entered do not match!"
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} />
           </Form.Item>
           <Form.Item>
             <Button

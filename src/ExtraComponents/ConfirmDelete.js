@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import s from "./ConfirmDelete.module.css";
 import "./ConfirmDelete.css";
 import { Form, Button } from "antd";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 const ConfirmDelete = ({
   onConfirm,
@@ -12,20 +13,34 @@ const ConfirmDelete = ({
   phrase = "deletion",
   phraseButton = "Delete",
 }) => {
-  const [form] = Form.useForm();
-  const handleConfirm = () => {
-    onConfirm();
-    setVisible(false);
-  };
+  const [removeClass, setRemoveClass] = useState(false);
 
+  const handleConfirm = () => {
+    setRemoveClass(true);
+    setTimeout(() => {
+      setRemoveClass(false);
+      setVisible(false);
+      onConfirm();
+    }, 200);
+  };
+  const handleBack = () => {
+    setRemoveClass(true);
+    setTimeout(() => {
+      setRemoveClass(false);
+      setVisible(false);
+    }, 200);
+  };
+  
   return (
     <>
       {visible && (
         <div className={s.background}>
-          <div className={`${s.box} ConfirmDeleteBox`}>
+          <div
+            className={classNames(s.box, "ConfirmDeleteBox", { [s.remove]: removeClass })}
+          >
             Сonfirm {phrase}?
-            <Form form={form} name="control-hooks" layout="vertical">
-              <Form.Item className={`${s.content} ConfirmDeleteContent`}>
+            <div className={s.contentBox}>
+              <Form.Item className={classNames(s.content, "ConfirmDeleteContent")}>
                 <Link to={linkToBack}>
                   <Button
                     htmlType="submit"
@@ -36,18 +51,11 @@ const ConfirmDelete = ({
                     {phraseButton}
                   </Button>
                 </Link>
-                <Button
-                  htmlType="submit"
-                  className={s.button}
-                  onClick={(e) => {
-                    setVisible(false);
-                    e.stopPropagation();
-                  }}
-                >
+                <Button htmlType="submit" className={s.button} onClick={handleBack}>
                   Back
                 </Button>
               </Form.Item>
-            </Form>
+            </div>
           </div>
         </div>
       )}

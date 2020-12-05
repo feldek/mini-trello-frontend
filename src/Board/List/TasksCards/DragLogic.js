@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { uuid } from "uuidv4";
 import { useSelector, useDispatch } from "react-redux";
-import NewList from "../NewList";
-import List from "../List";
-import {
-  getTasks,
-  stepOrder,
-  updateTasks,
-} from "../../../Data/TaskReducer";
 import { useParams, Link } from "react-router-dom";
-import NewTask from "./NewTask";
 import PageNotFound from "../../../ExtraComponents/PageNotFound";
-import { Card, Button } from "antd";
+import { Card, Button, Spin } from "antd";
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
-import Tasks from "./Tasks";
 import s from "./TasksCard.module.css";
-import { deleteList, getLists } from "../../../Data/ListReducer";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
+import { deleteList, getLists } from "../../../Reducers/Actions/ListActions";
+import { getTasks, stepOrder, updateTask } from "../../../Reducers/Actions/TaskActions";
+import classNames from "classnames";
+import Lists from "./Lists";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -50,7 +40,7 @@ const getListStyle = (isDraggingOver) => ({
   padding: grid,
 });
 
-let TasksCard = () => {
+const TasksCard = () => {
   const params = useParams();
   const boardId = params.boardId;
   const dispatch = useDispatch();
@@ -63,19 +53,16 @@ let TasksCard = () => {
     fetchData();
   }, []);
 
-  let [toggleDelete, setToggleDelete] = useState(false);
-  let [listId, setListId] = useState(false);
-
-  const lists = useSelector((state) => state.lists);
-
-  const currentLists = lists.filter((elem) => elem.boardId === boardId);
-
+  const [toggleDelete, setToggleDelete] = useState(false);
+  const [listId, setListId] = useState(false);
+  const isFetchingLists = useSelector((state) => state.lists.isFetching);
+  const currentLists = useSelector((state) => state.lists.data).filter(
+    (elem) => elem.boardId === boardId
+  );
   let listsId = currentLists.map((el) => el.id);
-
-  const tasks = useSelector((state) => state.tasks);
-
-
+  const tasks = useSelector((state) => state.tasks.data);
   let currentTasks = tasks.filter((item) => listsId.includes(item.listId));
+
   let dragState = [];
   listsId.map((item) =>
     dragState.push(currentTasks.filter((task) => task.listId === item))
@@ -91,7 +78,7 @@ let TasksCard = () => {
     await dispatch(deleteList({ listId }));
   };
 
-  if (!useSelector((state) => state.boards).find((elem) => elem.id === boardId)) {
+  if (!useSelector((state) => state.boards.data).find((elem) => elem.id === boardId)) {
     return <PageNotFound />;
   }
   function onDragEnd(result) {
@@ -123,7 +110,6 @@ let TasksCard = () => {
             2;
       }
       dListId = newState[sInd][0].listId;
-      console.log(order);
     } else {
       const affectState = move(
         currentTasks[sInd],
@@ -149,77 +135,46 @@ let TasksCard = () => {
             newState[dInd][destination.index - 1].order) /
             2;
       }
-      console.log(order);
     }
-    dispatch(updateTasks({ id: result.draggableId, order, listId: dListId }));
+    dispatch(updateTask({ id: result.draggableId, order, listId: dListId }));
   }
-  const classNames = require("classnames");
   return (
-    <div className={s.content}>
-      <Link to="/">
-        <Button htmlType="button" className={s.backButton}>
-          <FontAwesomeIcon
-            icon={faArrowCircleLeft}
-            style={{
-              fontSize: "31px",
-              padding: "4px",
-            }}
-          />
-          Back
-        </Button>
-      </Link>
-      <Card className={classNames(`${s.totalCard}`, "totalCard")}>
-        <DragDropContext onDragEnd={onDragEnd}>
-          {currentLists.map(
-            (el, ind) =>
-              el.visibility && (
-                <Card.Grid key={`boxList${el.id}`} className={s.card}>
-                  <Card
-                    className={classNames(`${s.tasksHeader}`, "tasksHeader")}
-                    key={`listone${el.id}`}
-                    title={
-                      // <div key={`headerCard${el.id}`}>
-                      <div >
-                        <List listId={el.id} />
-                        <NewTask listId={el.id} uuid={uuid()} />
-                      </div>
-                    }
-                  >
-                    <Droppable droppableId={`${ind}`} key={`droppable${el.id}`}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          style={
-                            (getListStyle(snapshot.isDraggingOver), { width: "100%" })
-                          }
-                          {...provided.droppableProps}
-                        >
-                          {<Tasks currentTask={currentTasks[ind]} />}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </Card>
+    <div className={s.background}>
+      <div className={s.content}>
+        <Link to="/">
+          <Button htmlType="button" className={s.backButton}>
+            <FontAwesomeIcon
+              icon={faArrowCircleLeft}
+              style={{
+                fontSize: "31px",
+                padding: "4px",
+              }}
+            />
+            Back
+          </Button>
+        </Link>
+        {isFetchingLists ? (
+          <div className={s.containerSpin}>
+            <Spin tip="Loading..." style={{ width: "100%", height: "100px" }}></Spin>
+          </div>
+        ) : (
+          <Card className={classNames(`${s.totalCard}`, "totalCard")}>
+            <Lists
+              onDragEnd={onDragEnd}
+              currentLists={currentLists}
+              currentTasks={currentTasks}
+              getListStyle={getListStyle}
+              handleDelete={handleDelete}
+            />
+          </Card>
+        )}
 
-                  <DeleteIcon
-                    size={"l"}
-                    handleDelete={() => handleDelete(el.id)}
-                    styleParams={{ margin: "8px" }}
-                  />
-                </Card.Grid>
-              )
-          )}
-
-          <Card.Grid className={`${s.card} ${s.cardNewList}`}>
-            <NewList />
-          </Card.Grid>
-        </DragDropContext>
-      </Card>
-      <ConfirmDelete
-        onConfirm={() => handleDeleteList({ listId })}
-        setVisible={setToggleDelete}
-        visible={toggleDelete}
-      />
+        <ConfirmDelete
+          onConfirm={() => handleDeleteList({ listId })}
+          setVisible={setToggleDelete}
+          visible={toggleDelete}
+        />
+      </div>
     </div>
   );
 };

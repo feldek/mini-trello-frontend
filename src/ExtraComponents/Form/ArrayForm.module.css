@@ -1,0 +1,163 @@
+.background {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  background-color: rgba(241, 241, 241, 0.521);
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.boxModal {
+  width: 600px;
+  align-items: center;
+  cursor: default;
+  background-color: white;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  outline: 1px solid #ebedee;
+  outline-offset: -10px;
+}
+.stopPropagation :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+.stopPropagation.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 0.2s;
+  animation-fill-mode: both;
+}
+
+.stopPropagation {
+  margin-top: 100px;
+  margin-bottom: 50px;
+  display: block;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 30px 40px 30px;
+  outline: none;
+}
+.lists {
+  width: 100%;
+  padding: 0px 20px 10px 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+  background-color: rgb(225, 240, 255);
+}
+.inputAndError {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.inputAndError span {
+  position: absolute;
+  color: #ff4d4f;
+  padding: 0 0 0 10px;
+  top: 30px;
+}
+input {
+  height: 32px;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.65);
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  transition: all 0.3s;
+  padding: 4px 11px 4px 11px;
+  margin-bottom: 22px;
+}
+input::placeholder {
+  color: #bfbfbf;
+}
+input:focus {
+  outline: none;
+  border: 1px solid #40a9ff;
+  color: black;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+input:hover {
+  outline: none;
+  border: 1px solid #40a9ff;
+}
+.boardBox {
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.inputListBox {
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.createList {
+  margin-bottom: 30px;
+}
+.boxSubmit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.submit {
+  width: 50%;
+}
+
+.inputTask {
+  display: flex;
+  flex-direction: row;
+}
+
+.containerTask {
+  background-color: #2196f338;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #a52a2a33;
+  margin-bottom: 20px;
+}
+.descriptionInput {
+  margin-bottom: 0px;
+}
+
+.boardName {
+  padding-left: 10px;
+  font-size: 1.5rem;
+}
+.listName {
+  padding-left: 10px;
+  font-size: 1rem;
+}
+
+.descriptionThis {
+  color: #bfbfbf;
+  top: -26px;
+  position: relative;
+}
+.stopPropagation {
+  position: relative;
+}
+@media (max-width: 600px) {
+  .boxModal {
+    width: 100%;
+  }
+  .lists {
+    padding: 0px 10px 10px 10px;
+  }
+  .stopPropagation {
+    min-width: 90%;
+    position: relative;
+  }
+  .inputTask button {
+    padding: 4px 5px;
+  }
+  .form {
+    padding: 40px 15px 40px 15px;
+  }
+}
