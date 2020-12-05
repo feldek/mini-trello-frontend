@@ -24,7 +24,6 @@ const ArrayForm = ({ visible, setVisible }) => {
     control,
     name: "lists",
   });
-  useEffect(() => console.log(errors), [errors]);
   let [indDelete, setIndDelete] = useState();
   let [toggleDelete, setToggleDelete] = useState(false);
   const [loading, setLoading] = useState(false);

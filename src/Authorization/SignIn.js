@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import s from "./SignIn.module.css";
@@ -10,21 +10,20 @@ import { signIn } from "../Reducers/Actions/UserAction";
 const SignIn = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const isMounted = useRef(true);
 
   const handleAuthorization = async (values) => {
-    setLoading(true);
-    await dispatch(signIn({ email: values.email, password: values.password }));
-    if (isMounted.current) {
+    try {
+      setLoading(true);
+      let result = await dispatch(
+        signIn({ email: values.email, password: values.password })
+      );
+      if (!result) {
+        throw new Error();
+      }
+    } catch (err) {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   return (
     <div className={`${s.background} background`}>

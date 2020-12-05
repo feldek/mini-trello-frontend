@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import s from "./ConfirmDelete.module.css";
 import "./ConfirmDelete.css";
 import { Form, Button } from "antd";
@@ -14,32 +14,23 @@ const ConfirmDelete = ({
   phraseButton = "Delete",
 }) => {
   const [removeClass, setRemoveClass] = useState(false);
-  const isMounted = useRef(true);
+
   const handleConfirm = () => {
     setRemoveClass(true);
     setTimeout(() => {
       setRemoveClass(false);
+      setVisible(false);
       onConfirm();
-      if (isMounted.current) {
-        setVisible(false);
-      }
     }, 200);
   };
   const handleBack = () => {
     setRemoveClass(true);
     setTimeout(() => {
       setRemoveClass(false);
-      if (isMounted.current) {
-        setVisible(false);
-      }
+      setVisible(false);
     }, 200);
   };
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
+  
   return (
     <>
       {visible && (

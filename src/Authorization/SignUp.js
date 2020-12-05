@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import s from "./SignUp.module.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -9,21 +9,20 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
-  const isMounted = useRef(true);
 
   const handleRequest = async (values) => {
-    setDisabled(true);
-    await dispatch(signUp({ email: values.email, password: values.password }));
-    if (isMounted.current) {
+    try {
+      setDisabled(true);
+      const result = await dispatch(
+        signUp({ email: values.email, password: values.password })
+      );
+      if (!result) {
+        throw new Error();
+      }
+    } catch (err) {
       setDisabled(false);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   return (
     <div className={s.background}>
