@@ -5,17 +5,18 @@ import {
   ON_SET_BOARDS,
   ON_SET_IS_FETCHING_BOARDS,
   ON_SET_VISIBILITY_BOARD,
+  ActionsBoardType
 } from "./Actions/BoardActions";
 
 // export type dataType = { name: string; id: any; visibility?: boolean };
 // const initialState = { data: [] as Array<dataType>, isFetching: false as boolean };
 // type initialStateType = typeof initialState;
 
-export type dataType = { name: string; id: string; visibility?: boolean };
-type initialStateType = { data: dataType[]; isFetching: boolean };
-const initialState: initialStateType = { data: [], isFetching: false };
+export type DataBoardType = { name: string; id: string; visibility?: boolean };
+type InitialStateType = { data: DataBoardType[]; isFetching: boolean };
+const initialState: InitialStateType = { data: [], isFetching: false };
 
-const BoardReduser = (state = initialState, action: any): initialStateType => {
+const BoardReduser = (state = initialState, action: ActionsBoardType): InitialStateType => {
   switch (action.type) {
     case ON_CREATE_BOARD: {
       let newData = [...state.data];
@@ -26,7 +27,7 @@ const BoardReduser = (state = initialState, action: any): initialStateType => {
       if (!action.data) {
         return state;
       }
-      let newData = action.data.map((el: dataType) => {
+      let newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });

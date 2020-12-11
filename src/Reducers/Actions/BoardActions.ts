@@ -1,5 +1,8 @@
+import { Dispatch } from "react";
+import { ThunkAction } from "redux-thunk";
 import { api } from "../../Api/Api";
-import { dataType } from "../BoardReducer";
+import { DataBoardType } from "../BoardReducer";
+import { RootStateType } from "../Store";
 import { notificationAntd } from "./UserAction";
 
 export const ON_SET_BOARDS = "ON_SET_BOARDS";
@@ -9,17 +12,53 @@ export const ON_SET_VISIBILITY_BOARD = "ON_SET_VISIBILITY_BOARD";
 export const ON_CLEAR_DATA = "user/onClearData";
 export const ON_SET_IS_FETCHING_BOARDS = "ON_SET_IS_FETCHING_BOARDS";
 
-type onSetBoardsType = { type: typeof ON_SET_BOARDS; data: dataType };
-export const onSetBoards = (data: dataType): onSetBoardsType => {
+export type ActionsBoardType =
+  | onSetBoardsType
+  | onCreateBoardStartType
+  | onCreateBoardErrorType
+  | onDeleteBoardSuccessType
+  | onDeleteBoardStartType
+  | onDeleteBoardErrorType
+  | onClearData
+  | onSetIsFenchingBoardsType;
+
+export type onClearData = {
+  type: typeof ON_CLEAR_DATA;
+  payload: { newData: [] };
+};
+
+type onSetBoardsType = { type: typeof ON_SET_BOARDS; data: DataBoardType[] };
+export const onSetBoards = (data: DataBoardType[]): onSetBoardsType => {
   return { type: ON_SET_BOARDS, data };
 };
-export const getBoards = () => async (dispatch: any) => {
-  dispatch(onSetIsFenchingBoards(true));
-  let boards: any = await api.getRequestAuth("boards");
-  if (boards.status) {
-    dispatch(onSetBoards(boards.payload));
-  }
-  dispatch(onSetIsFenchingBoards(false));
+
+export const getBoards = (): ThunkType => {
+  return async (dispatch) => {
+    // export const getBoards = (): ThunkType => async (dispatch) => {
+    dispatch(onSetIsFenchingBoards(true));
+
+    const boards: any = await api.getRequestAuth("boards");
+    console.log(boards.payload);
+    if (boards.status) {
+      dispatch(onSetBoards(boards.payload));
+    }
+    dispatch(onSetIsFenchingBoards(false));
+  };
+};
+
+export const getRequestAuth = async <T>(request: RequestInfo): Promise<T> => {
+  const response = await fetch(request);
+  const body = await response.json();
+  return body;
+};
+
+export const http = async () => {
+  const boards = await getRequestAuth<{ payload: [] }>("request");
+  return boards;
+};
+
+const test = () => {
+  return new Promise(() => api.getRequestAuth("boards"));
 };
 
 type onCreateBoardStartType = {
@@ -32,7 +71,7 @@ export const onCreateBoardStart = ({
   id,
   name,
   visibility = true,
-}: dataType): onCreateBoardStartType => {
+}: DataBoardType): onCreateBoardStartType => {
   return { type: ON_CREATE_BOARD, id, name, visibility };
 };
 type onCreateBoardErrorType = {
@@ -50,9 +89,9 @@ export const onCreateBoardError = ({
   return { type: ON_DELETE_BOARD, boardId, listsId };
 };
 
-export const createBoard = ({ name, id }: dataType) => async (
-  dispatch: any,
-  getState: any
+export const createBoard = ({ name, id }: DataBoardType) => async (
+  dispatch: Dispatch<ActionsBoardType>,
+  getState: () => RootStateType
 ) => {
   dispatch(onCreateBoardStart({ name, id }));
   let result: any = await api.postRequestAuth("board", { name, id });
@@ -104,10 +143,11 @@ export const onDeleteBoardError = ({
 }): onDeleteBoardErrorType => {
   return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
 };
-
-export const deleteBoard = ({ boardId }: { boardId: string }) => async (
-  dispatch: any,
-  getState: any
+type ThunkType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsBoardType>;
+type DeleteBoardType = { boardId: string };
+export const deleteBoard = ({ boardId }: DeleteBoardType): ThunkType => async (
+  dispatch,
+  getState
 ) => {
   dispatch(onDeleteBoardStart({ boardId }));
   let result = await api.deleteRequestAuth("board", { id: boardId });

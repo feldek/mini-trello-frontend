@@ -30,4 +30,7 @@ export let store = createStore(
 );
 export let persistor = persistStore(store);
 
+export type RootStateType = ReturnType<typeof reducers>
+
+
 

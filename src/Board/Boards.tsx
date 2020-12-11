@@ -1,3 +1,4 @@
+import { RootStateType } from "../Reducers/Store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -14,10 +15,10 @@ import classNames from "classnames";
 
 const Boards = () => {
   const dispatch = useDispatch();
-  const [visibleDelete, setVisibleDelete] = useState(false);
-  const [param, setParam] = useState(false);
-  const boards = useSelector((state) => state.boards.data);
-  const isFetching = useSelector((state) => state.boards.isFetching);
+  const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
+  const [boardId, setBoardId] = useState<string>("");
+  const boards = useSelector((state: RootStateType) => state.boards.data);
+  const isFetching = useSelector((state:RootStateType) => state.boards.isFetching);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,13 +27,13 @@ const Boards = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (item) => {
-    await dispatch(deleteBoard({ boardId: item.id }));
+  const handleDelete = async (id: string ) => {
+    await dispatch(deleteBoard({ boardId: id }));
   };
 
-  const onConfirmDelete = (el) => {
+  const onConfirmDelete = (id: string) => {
     setVisibleDelete(true);
-    setParam(el);
+    setBoardId(id);
   };
 
   return (
@@ -48,10 +49,7 @@ const Boards = () => {
                 (elem) =>
                   elem.visibility && (
                     <Card.Grid key={`board${elem.id}`} className={s.board}>
-                      <DeleteIcon
-                        size={"m"}
-                        handleDelete={() => onConfirmDelete(elem)}
-                      />
+                      <DeleteIcon size={"m"} handleDelete={() => onConfirmDelete(elem.id)} />
                       <Link
                         to={`/board/${elem.id}`}
                         key={`board${elem.id}`}
@@ -66,7 +64,7 @@ const Boards = () => {
           )}
         </Card>
         <ConfirmDelete
-          onConfirm={() => handleDelete(param)}
+          onConfirm={() => handleDelete(boardId)}
           setVisible={setVisibleDelete}
           visible={visibleDelete}
         />
