@@ -48,7 +48,7 @@ export const clearedData = () => (dispatch) => {
   return dispatch(onClearData({ newData: [] }));
 };
 
-export const notificationAntd = ({ payload, status }) => {
+export const notificationAntd = ({ payload = undefined, status }) => {
   if (status) {
     payload.message = payload.message || "The operation was successful";
     payload.description = payload.description || "";

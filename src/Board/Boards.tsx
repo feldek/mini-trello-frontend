@@ -18,7 +18,7 @@ const Boards = () => {
   const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
   const [boardId, setBoardId] = useState<string>("");
   const boards = useSelector((state: RootStateType) => state.boards.data);
-  const isFetching = useSelector((state:RootStateType) => state.boards.isFetching);
+  const isFetching = useSelector((state: RootStateType) => state.boards.isFetching);
 
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +27,7 @@ const Boards = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (id: string ) => {
+  const handleDelete = async (id: string) => {
     await dispatch(deleteBoard({ boardId: id }));
   };
 
@@ -40,7 +40,7 @@ const Boards = () => {
     <div className={s.background}>
       <div className={classNames(s.content, "boardsContent")}>
         <Header />
-        <Card title={<NewBoard boards={boards} />}>
+        <Card title={<NewBoard />}>
           {isFetching ? (
             <Spin tip="Loading..." style={{ width: "100%", height: "100px" }}></Spin>
           ) : (
@@ -49,7 +49,10 @@ const Boards = () => {
                 (elem) =>
                   elem.visibility && (
                     <Card.Grid key={`board${elem.id}`} className={s.board}>
-                      <DeleteIcon size={"m"} handleDelete={() => onConfirmDelete(elem.id)} />
+                      <DeleteIcon
+                        size={"m"}
+                        handleDelete={() => onConfirmDelete(elem.id)}
+                      />
                       <Link
                         to={`/board/${elem.id}`}
                         key={`board${elem.id}`}

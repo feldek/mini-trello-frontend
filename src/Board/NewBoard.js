@@ -7,7 +7,7 @@ import "./NewBoard.css";
 import { uuid } from "uuidv4";
 import { createBoard } from "../Reducers/Actions/BoardActions";
 
-let NewBoard = ({ boards }) => {
+let NewBoard = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [toggle, setToggle] = useState(false);
