@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
-import { createBoard } from "../Reducers/Actions/BoardActions";
+import { createBoardsSaga } from "../Reducers/Sagas/BoardSaga";
 
 let NewBoard = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ let NewBoard = () => {
     let id = uuid();
     setToggle(false);
     onReset();
-    dispatch(createBoard({ name: elem.nameBoard, id }));
+    dispatch(createBoardsSaga({ name: elem.nameBoard, id }));
   };
 
   const onFinishFailed = (errorInfo) => {

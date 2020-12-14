@@ -2,7 +2,7 @@ import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { forcedLogOut } from "../Api/Api";
+import { forcedLogOut } from "../Constants";
 import { onSetUser } from "../Reducers/UserReducer";
 import s from "./SignIn.module.css";
 const ForcedLogOut = () => {

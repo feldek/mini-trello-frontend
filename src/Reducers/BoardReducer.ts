@@ -8,10 +8,6 @@ import {
   ActionsBoardType
 } from "./Actions/BoardActions";
 
-// export type dataType = { name: string; id: any; visibility?: boolean };
-// const initialState = { data: [] as Array<dataType>, isFetching: false as boolean };
-// type initialStateType = typeof initialState;
-
 export type DataBoardType = { name: string; id: string; visibility?: boolean };
 type InitialStateType = { data: DataBoardType[]; isFetching: boolean };
 const initialState: InitialStateType = { data: [], isFetching: false };
@@ -36,7 +32,7 @@ const BoardReduser = (state = initialState, action: ActionsBoardType): InitialSt
     case ON_CLEAR_DATA: {
       return { ...state, data: action.payload.newData };
     }
-    case ON_SET_IS_FETCHING_BOARDS: {
+    case ON_SET_IS_FETCHING_BOARDS: {      
       return { ...state, isFetching: action.isFetching };
     }
     case ON_DELETE_BOARD: {

@@ -1,139 +1,91 @@
-import config from "../Constants";
-export const apiUrl = config.apiUrl;
-export const forcedLogOut = "authorization/forcedLogOut";
-const fetchWrap = require("fetch-wrap");
-export const simpleFetch = fetchWrap(fetch, []);
+import config, { forcedLogOut } from "../Constants";
+import axios from "axios";
 
-export const api = {
-  getRequestAuth<T>(url: string | URL, data?: any): Promise<T> {
-    let getUrl: any = new URL(apiUrl + url),
-      params = data;
-    getUrl.search = new URLSearchParams(params).toString();
-    return new Promise<any>((resolve) => {
-      resolve(fetch(getUrl));
-    });
-  },
+const apiUrl = config.apiUrl;
 
-  postRequestAuth<T>(url: string | URL, data: any): Promise<T> {
+const instance = axios.create({ baseURL: apiUrl });
+instance.interceptors.response.use(
+  function (response) {
     return new Promise<any>((resolve) => {
-      resolve(
-        fetch(apiUrl + url, {
-          method: "POST",
-          body: JSON.stringify(data),
-        })
-      );
+      resolve({ payload: response.data, status: true });
     });
   },
-  patchRequestAuth<T>(url: string | URL, data: any): Promise<T> {
+  function (error) {
+    if (error.message === "Network Error") {
+      return Promise.resolve({ payload: error, status: false });
+    }
+    return { payload: error.response.data, status: false };
+  }
+);
+
+const instanceAuth = axios.create({ baseURL: apiUrl });
+instanceAuth.interceptors.request.use(function (config) {
+  const token = localStorage.getItem("token");
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+instanceAuth.interceptors.response.use(
+  function (response) {
+    console.log(response.data);
     return new Promise<any>((resolve) => {
-      resolve(
-        fetch(apiUrl + url, {
-          method: "PATCH",
-          body: JSON.stringify(data),
-        })
-      );
+      resolve({ payload: response.data, status: true });
     });
   },
-  deleteRequestAuth<T>(url: string | URL, data: any): Promise<T> {
-    return new Promise<any>((resolve) => {
-      resolve(
-        fetch((url = apiUrl + url), {
-          method: "DELETE",
-          body: JSON.stringify(data),
-        })
-      );
-    });
+  function (error) {
+    const originalRequest = error.config;
+    if (error.message === "Network Error") {
+      return Promise.resolve({ payload: error, status: false });
+    }
+    if (error.response.status === 403) {
+      return refreshTokensAxios(originalRequest);
+    }
+    if (error.response.status === 401) {
+      return window.location.replace(forcedLogOut);
+    }
+    return { payload: error.response.data, status: false };
+  }
+);
+
+const api = {
+  getRequestAuth<T>(url: string, data?: any): Promise<T> {
+    return instanceAuth.get(url, { params: data });
+  },
+  postRequestAuth<T>(url: string, data: any): Promise<T> {
+    return instanceAuth.post(url, data);
+  },
+  patchRequestAuth<T>(url: string, data: any): Promise<T> {
+    return instanceAuth.patch(url, data);
+  },
+  deleteRequestAuth<T>(url: string, data: any): Promise<T> {
+    return instanceAuth.delete(url, { data });
+  },
+  postRequest<T>(url: string, data?: any, extra?: any): Promise<T> {
+    return instance.post(url, data, extra);
   },
 };
 
-export const postRequest = fetchWrap(fetch, [
-  async <T>(url: string | URL, data: any, innerFetch: any): Promise<T> => {
-    try {
-      let options: any = {};
-      options.method = "POST";
-      options.headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-      options.body = JSON.stringify(data);
-      let response = await innerFetch(apiUrl + url, options);
-      if (!response.ok) await Promise.reject(response);
-      let payload = await response.json();
-      console.log("postRequest:", { payload, status: true });
-      return new Promise<any>((resolve) => {
-        resolve({ payload, status: true });
-      });
-    } catch (err) {
-      if (err instanceof TypeError) {
-        return new Promise<any>((resolve) => {
-          resolve({ payload: err, status: false });
-        });
-        // return { payload: err, status: false };
-      }
-      let payload = await err.json();
-      console.log("ERR postRequest:", { payload, status: false });
-      return new Promise<any>((resolve) => {
-        resolve({ payload, status: false });
-      });
-      // return { payload, status: false };
-    }
-  },
-]);
-
-window.fetch = fetchWrap(fetch, [
-  async (url: string | URL, options: any, innerFetch: any) => {
-    try {
-      if (!options) options = {};
-      let token = localStorage.getItem("token") ? localStorage.getItem("token") : null;
-      if (!token) {
-        return window.location.replace(forcedLogOut);
-      }
-      if (!options.headers) {
-        options.headers = {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        };
-      }
-      options.headers.Authorization = `Bearer ${token}`;
-
-      let response = await innerFetch(url, options);
-      if (!response.ok) await Promise.reject(response);
-      let payload = await response.json();
-      console.log(options.method || "GET", ":", payload);
-
-      return { payload, status: true };
-    } catch (err) {
-      if (err.status === 403) {
-        return refreshTokens(url, options);
-      }
-      if (err.status === 401) {
-        return window.location.replace(forcedLogOut);
-      }
-      if (err instanceof TypeError) {
-        return { payload: err, status: false };
-      }
-      let payload = await err.json();
-      console.log("ERR", { payload, status: false });
-      return { payload, status: false };
-    }
-  },
-]);
-
-async function refreshTokens<T>(url: any, options: any): Promise<T> {
+const refreshTokensAxios = async (config: any) => {
   let refreshToken = localStorage.getItem("refreshToken");
-  let response = await simpleFetch(apiUrl + "auth/refreshTokensAuth", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${refreshToken}` },
-  });
-  if (response.status === 401) {
-    window.location.replace(forcedLogOut);
+  let tokens = await axios.post(
+    apiUrl + "auth/refreshTokensAuth",
+    {},
+    { headers: { Authorization: `Bearer ${refreshToken}` } }
+  );
+  if (tokens.status === 401) {
+    return window.location.replace(forcedLogOut);
   }
-  let data = await response.json();
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("refreshToken", data.refreshToken);
-  // let restartReq = await fetch(url, options);
-  return new Promise<any>((resolve) => {
-    resolve(() => fetch(url, options));
+  localStorage.setItem("token", tokens.data.token);
+  localStorage.setItem("refreshToken", tokens.data.refreshToken);
+  return instanceAuth(config);
+};
+
+export const requestLocation = async () => {
+  return await axios.get("http://www.geoplugin.net/json.gp");
+};
+export const requestWeather = async ({ lat, lon, appid, units }:{lat: number, lon:number, appid:string, units:string}) => {
+  return await axios.get("http://api.openweathermap.org/data/2.5/weather", {
+    params: { lat, lon, appid, units },
   });
-  // return restartReq;
-}
+};
+
+export { api };

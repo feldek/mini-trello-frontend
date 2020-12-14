@@ -8,6 +8,7 @@ import ArrayForm from "../ExtraComponents/Form/ArrayForm";
 import s from "./Header.module.css";
 import "./Header.css";
 import classNames from "classnames";
+import WeatherPlugin from "../ExtraComponents/Weather/WeatherPlugin";
 
 const Header = () => {
   let [visiblePass, setVisiblePass] = useState(false);
@@ -48,6 +49,7 @@ const Header = () => {
           </div>
         </div>
         <div className={s.boxLogin}></div>
+        <WeatherPlugin/>
       </div>
       <ChangePassword visible={visiblePass} setVisible={setVisiblePass} />
       <ArrayForm visible={visibleArrayForm} setVisible={setVisibleArrayForm} />

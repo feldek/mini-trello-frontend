@@ -46,14 +46,13 @@ export const getBoards = (): ThunkBoardType => {
       payload: [{ id: string; name: string }];
       status: boolean;
     }>("boards");
-    console.log(boards.payload);
     if (boards.status) {
       dispatch(onSetBoards(boards.payload));
     }
     dispatch(onSetIsFenchingBoards(false));
   };
 };
-
+getBoards()
 type onCreateBoardStartType = {
   type: typeof ON_CREATE_BOARD;
   id: string;

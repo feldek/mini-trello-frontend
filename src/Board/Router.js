@@ -14,10 +14,10 @@ import ForcedLogOut from "../Authorization/ForcedLogOut";
 let Router = () => {
   return (
     <>
-      <Switch>
-        <ProtectedRoute exact path="/" component={() => <Boards />} />
-        <Route exact path="/authorization/forcedLogOut" component={() => <ForcedLogOut />} />
-        <ProtectedRoute path="/board/:boardId" component={() => <TasksCard />} />
+      <Switch>        
+        <ProtectedRoute exact path="/" component={Boards} />        
+        <Route exact path="/authorization/forcedLogOut" component={ForcedLogOut} />
+        <ProtectedRoute path="/board/:boardId" component={TasksCard} />
         <AuthorizedRoute exact path="/authorization/login" component={SignIn} />
         <AuthorizedRoute exact path="/authorization/signup" component={SignUp} />
         <AuthorizedRoute
@@ -31,7 +31,7 @@ let Router = () => {
         <ProtectedRoute
           exact
           path="/board/:boardId/description/:descriptionId"
-          component={() => <ContainerDescription />}
+          component={ContainerDescription}
         />
       </Switch>
     </>

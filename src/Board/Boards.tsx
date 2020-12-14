@@ -10,7 +10,7 @@ import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import { deleteBoard, getBoards } from "../Reducers/Actions/BoardActions";
+import { deleteBoardsSaga, getBoardsSaga } from "../Reducers/Sagas/BoardSaga";
 import classNames from "classnames";
 
 const Boards = () => {
@@ -22,16 +22,15 @@ const Boards = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(getBoards());
+      await dispatch(getBoardsSaga());
     }
     fetchData();
   }, []);
 
   const handleDelete = async (id: string) => {
-    await dispatch(deleteBoard({ boardId: id }));
+    await dispatch(deleteBoardsSaga({ boardId: id }));
   };
-
-  const onConfirmDelete = (id: string) => {
+  const onConfirmDelete = async (id: string) => {
     setVisibleDelete(true);
     setBoardId(id);
   };

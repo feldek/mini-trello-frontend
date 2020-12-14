@@ -9,10 +9,10 @@ import s from "./TasksCard.module.css";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
-import { deleteList, getLists } from "../../../Reducers/Actions/ListActions";
 import { getTasks, stepOrder, updateTask } from "../../../Reducers/Actions/TaskActions";
 import classNames from "classnames";
 import Lists from "./Lists";
+import { deleteListSaga, getListsSaga } from "../../../Reducers/Sagas/ListSaga";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -47,7 +47,7 @@ const TasksCard = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(getLists({ boardId: params.boardId }));
+      await dispatch(getListsSaga({ boardId: params.boardId }));
       await dispatch(getTasks({ boardId: params.boardId }));
     }
     fetchData();
@@ -75,7 +75,7 @@ const TasksCard = () => {
   };
 
   const handleDeleteList = async ({ listId }) => {
-    await dispatch(deleteList({ listId }));
+    await dispatch(deleteListSaga({ listId }));
   };
 
   if (!useSelector((state) => state.boards.data).find((elem) => elem.id === boardId)) {
