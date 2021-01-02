@@ -5,7 +5,7 @@ import { Form, Button } from "antd";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
-type ConfirmDeleteType = {
+type Props = {
   onConfirm: () => void;
   setVisible: (visible: boolean) => void;
   visible: boolean;
@@ -14,14 +14,14 @@ type ConfirmDeleteType = {
   phraseButton?: string;
 };
 
-const ConfirmDelete = ({
+const ConfirmDelete: React.FC<Props> = ({
   onConfirm,
   setVisible,
   visible = false,
   linkToBack = "#",
   phrase = "deletion",
   phraseButton = "Delete",
-}: ConfirmDeleteType) => {
+}) => {
   const [removeClass, setRemoveClass] = useState<boolean>(false);
 
   const handleConfirm = () => {

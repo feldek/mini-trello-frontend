@@ -1,20 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-let initialState = {
+const initialState = {
   authorization: false,
   error: false,
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
-    onSetUser: (state, action) => {
-      return { ...state, authorization: action.payload.authorization };
-    },
-    onClearData: (state, action) => {
-      return action.payload.newData;
-    },
+    onSetUser: (state, action) => ({ ...state, authorization: action.payload.authorization }),
+    onClearData: (state, action) => action.payload.newData,
   },
 });
 

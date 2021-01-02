@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
-import s from "./TasksCard.module.css";
-import { useDispatch } from "react-redux";
-import { Link, useRouteMatch } from "react-router-dom";
-import DeleteIcon from "../../../ExtraComponents/DeleteIcon";
-import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
-import { deleteTask } from "../../../Reducers/Actions/TaskActions";
+import React, { useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
+import { useDispatch } from 'react-redux';
+import { Link, useRouteMatch } from 'react-router-dom';
+import s from './TasksCard.module.css';
+import DeleteIcon from '../../../ExtraComponents/DeleteIcon';
+import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete';
+import { deleteTask } from '../../../Reducers/Actions/TaskActions';
 
 const Drag = ({ currentTask }) => {
   const dispatch = useDispatch();
@@ -14,9 +14,9 @@ const Drag = ({ currentTask }) => {
   const match = useRouteMatch();
   const grid = 7;
   const getItemStyle = (isDragging, draggableStyle) => ({
-    userSelect: "none",
+    userSelect: 'none',
     margin: `${grid + 1}px`,
-    background: isDragging ? "#c2dcf7" : "#e1f0ff",
+    background: isDragging ? '#c2dcf7' : '#e1f0ff',
     ...draggableStyle,
   });
 
@@ -32,37 +32,36 @@ const Drag = ({ currentTask }) => {
   return (
     <>
       {currentTask.map(
-        (item, index) =>
-          item.visibility && (
-            <div key={`task${item.id}`}>
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    key={`task123${item.id}`}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={getItemStyle(
-                      snapshot.isDragging,
-                      provided.draggableProps.style
-                    )}
-                    className={s.taskContainer}
-                  >
-                    <DeleteIcon
-                      size={"s"}
-                      handleDelete={() => handleConfirmDelete(item.id)}
-                    />
-                    <Link
-                      to={`${match.url}/description/${item.id}`}
-                      className={s.taskText}
-                    >
-                      {item.name}
-                    </Link>
-                  </div>
+        (item, index) => item.visibility && (
+        <div key={`task${item.id}`}>
+          <Draggable key={item.id} draggableId={item.id} index={index}>
+            {(provided, snapshot) => (
+              <div
+                key={`task123${item.id}`}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={getItemStyle(
+                  snapshot.isDragging,
+                  provided.draggableProps.style,
                 )}
-              </Draggable>
-            </div>
-          )
+                className={s.taskContainer}
+              >
+                <DeleteIcon
+                  size="s"
+                  handleDelete={() => handleConfirmDelete(item.id)}
+                />
+                <Link
+                  to={`${match.url}/description/${item.id}`}
+                  className={s.taskText}
+                >
+                  {item.name}
+                </Link>
+              </div>
+            )}
+          </Draggable>
+        </div>
+        ),
       )}
       <ConfirmDelete
         onConfirm={handleDelete}

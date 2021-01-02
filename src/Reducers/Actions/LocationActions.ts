@@ -42,7 +42,7 @@ type GetLocationType = {
   longitude: number | null;
 };
 export const getLocation = (): ThunkLocationType => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       const result = await requestLocation();
       dispatch(

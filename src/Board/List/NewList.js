@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { Form, Input, Button } from "antd";
-import s from "./NewList.module.css";
-import { createListSaga } from "../../Reducers/Sagas/ListSaga";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { Form, Input, Button } from 'antd';
+import s from './NewList.module.css';
+import { createListSaga } from '../../Reducers/Sagas/ListSaga';
 
-let NewList = () => {
-  let [toggle, setToggle] = useState(false);
-  let boardId = useLocation().pathname.replace("/board/", "");
+const NewList = () => {
+  const [toggle, setToggle] = useState(false);
+  const boardId = useLocation().pathname.replace('/board/', '');
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -22,7 +22,7 @@ let NewList = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -56,7 +56,7 @@ let NewList = () => {
             rules={[
               {
                 required: true,
-                message: "Please input boardname!",
+                message: 'Please input boardname!',
               },
             ]}
           >
@@ -67,12 +67,12 @@ let NewList = () => {
           </Form.Item>
 
           <Form.Item layout="horizontal">
-            <Button type="primary" htmlType="submit" style={{ float: "left" }}>
+            <Button type="primary" htmlType="submit" style={{ float: 'left' }}>
               Submit
             </Button>
 
             <Button
-              style={{ float: "right" }}
+              style={{ float: 'right' }}
               htmlType="button"
               onClick={() => setToggle(false)}
             >

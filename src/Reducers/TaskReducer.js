@@ -1,5 +1,5 @@
-import { ON_CLEAR_DATA } from "./Actions/BoardActions";
-import { ON_DELETE_BOARD, ON_DELETE_LIST } from "./Actions/ListActions";
+import { ON_CLEAR_DATA } from './Actions/BoardActions';
+import { ON_DELETE_BOARD, ON_DELETE_LIST } from './Actions/ListActions';
 import {
   ON_UPDATE_DESCRIPTION,
   ON_CREATE_TASK,
@@ -8,19 +8,19 @@ import {
   ON_SET_VISIBILITY_TASK,
   ON_UPDATE_TASK,
   ON_CREATE_TASKS,
-} from "./Actions/TaskActions";
+} from './Actions/TaskActions';
 
-let initialState = {
+const initialState = {
   data: [],
   isFetching: false,
 };
 const TaskReducer = (state = initialState, action) => {
   switch (action.type) {
     case ON_CREATE_TASK: {
-      let newData = [...state.data];
+      const newData = [...state.data];
       newData.push({
         name: action.name,
-        description: "",
+        description: '',
         id: action.id,
         order: action.order,
         listId: action.listId,
@@ -29,7 +29,7 @@ const TaskReducer = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_CREATE_TASKS: {
-      let newData = [...state.data];
+      const newData = [...state.data];
       action.data = action.data.map((el) => {
         el.visibility = true;
         return el;
@@ -38,7 +38,7 @@ const TaskReducer = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_UPDATE_TASK: {
-      let newData = state.data.filter((el) => {
+      const newData = state.data.filter((el) => {
         if (el.id === action.id) {
           el.listId = action.listId;
           el.order = action.order;
@@ -49,11 +49,11 @@ const TaskReducer = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_DELETE_TASK: {
-      let newData = state.data.filter((item) => item.id !== action.id);
+      const newData = state.data.filter((item) => item.id !== action.id);
       return { ...state, data: newData };
     }
     case ON_SET_VISIBILITY_TASK: {
-      let newData = state.data.map((item) => {
+      const newData = state.data.map((item) => {
         if (item.id === action.id) {
           item.visibility = action.visibility;
         }
@@ -62,21 +62,21 @@ const TaskReducer = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_DELETE_LIST: {
-      let newData = state.data.filter((item) => item.listId !== action.listId);
+      const newData = state.data.filter((item) => item.listId !== action.listId);
       return { ...state, data: newData };
     }
     case ON_DELETE_BOARD: {
       if (!action.listsId) {
         return state;
       }
-      let newData = state.data.filter((item) => !action.listsId.includes(item.listId));
+      const newData = state.data.filter((item) => !action.listsId.includes(item.listId));
       return { ...state, data: newData };
     }
     case ON_SET_TASKS: {
       if (!action.data) {
         return state;
       }
-      let newData = action.data.map((el) => {
+      const newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });
@@ -84,7 +84,7 @@ const TaskReducer = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_UPDATE_DESCRIPTION: {
-      let newData = state.data.map((item) => {
+      const newData = state.data.map((item) => {
         if (item.id === action.id) {
           item.description = action.description;
         }

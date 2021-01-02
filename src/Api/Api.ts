@@ -65,8 +65,8 @@ const api = {
 };
 
 const refreshTokensAxios = async (config: any) => {
-  let refreshToken = localStorage.getItem("refreshToken");
-  let tokens = await axios.post(
+  const refreshToken = localStorage.getItem("refreshToken");
+  const tokens = await axios.post(
     apiUrl + "auth/refreshTokensAuth",
     {},
     { headers: { Authorization: `Bearer ${refreshToken}` } }

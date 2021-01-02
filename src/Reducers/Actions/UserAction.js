@@ -1,9 +1,9 @@
-import { onSetUser, onClearData } from "../UserReducer";
 import { notification } from "antd";
+import { onSetUser, onClearData } from "../UserReducer";
 import { api } from "../../Api/Api";
 
 export const signIn = ({ email, password }) => async (dispatch) => {
-  let result = await api.postRequest("auth/signIn", { email, password });
+  const result = await api.postRequest("auth/signIn", { email, password });
   localStorage.setItem("token", result.payload.token);
   localStorage.setItem("refreshToken", result.payload.refreshToken);
   if (result.status) {
@@ -16,7 +16,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 };
 
 export const signUp = ({ email, password }) => async (dispatch) => {
-  let result = await api.postRequest("auth/signUp", { email, password });
+  const result = await api.postRequest("auth/signUp", { email, password });
   localStorage.setItem("token", result.payload.token);
   localStorage.setItem("refreshToken", result.payload.refreshToken);
   if (result.status) {
@@ -28,7 +28,7 @@ export const signUp = ({ email, password }) => async (dispatch) => {
   return result.status;
 };
 
-export const recoveryPassword = ({ email, password }) => async (dispatch) => {
+export const recoveryPassword = ({ email, password }) => async () => {
   const result = await api.postRequest("auth/recoveryPassword", {
     email,
     password,
@@ -36,7 +36,7 @@ export const recoveryPassword = ({ email, password }) => async (dispatch) => {
   notificationAntd(result);
   return result;
 };
-export const changePassword = ({ oldPassword, newPassword }) => async (dispatch) => {
+export const changePassword = ({ oldPassword, newPassword }) => async () => {
   const result = await api.postRequestAuth("auth/changePassword", {
     oldPassword,
     newPassword,
@@ -44,9 +44,7 @@ export const changePassword = ({ oldPassword, newPassword }) => async (dispatch)
   notificationAntd(result);
   return result;
 };
-export const clearedData = () => (dispatch) => {
-  return dispatch(onClearData({ newData: [] }));
-};
+export const clearedData = () => (dispatch) => dispatch(onClearData({ newData: [] }));
 
 export const notificationAntd = ({ payload = undefined, status }) => {
   if (status) {

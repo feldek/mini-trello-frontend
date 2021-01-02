@@ -1,8 +1,8 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Form, Input, Button } from "antd";
-import s from "./NewTask.module.css";
-import { createTask } from "../../../Reducers/Actions/TaskActions";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Form, Input, Button } from 'antd';
+import s from './NewTask.module.css';
+import { createTask } from '../../../Reducers/Actions/TaskActions';
 
 const NewTask = ({ uuid, listId }) => {
   const [form] = Form.useForm();
@@ -13,7 +13,7 @@ const NewTask = ({ uuid, listId }) => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   const onReset = () => {
@@ -33,7 +33,7 @@ const NewTask = ({ uuid, listId }) => {
         rules={[
           {
             required: true,
-            message: "Please input task name!",
+            message: 'Please input task name!',
           },
         ]}
       >

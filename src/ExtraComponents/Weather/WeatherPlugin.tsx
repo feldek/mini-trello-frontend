@@ -5,7 +5,7 @@ import { getWeather } from "../../Reducers/Actions/WeatherActions";
 import { useTypeSelector } from "../../Reducers/TypeHook";
 import s from "./WeatherPlugin.module.css";
 
-const WeatherPlugin = () => {
+const WeatherPlugin: React.FC = () => {
   const dispatch = useDispatch();
   const weather = useTypeSelector((s) => s.weather.data);
   const date = new Date();
@@ -21,7 +21,11 @@ const WeatherPlugin = () => {
     tempetature = `${Math.round(weather.temp)}`;
   }
   return (
-    <div className={s.background}>
+    <div
+      className={s.background}
+      onClick={() => dispatch(getWeather())}
+      refresh-Tooltip="click to refresh"
+    >
       <div className={s.header}>
         <div>
           <EnvironmentFilled /> {weather.sity}

@@ -81,18 +81,18 @@ export const onCreateBoardError = ({
   return { type: ON_DELETE_BOARD, boardId, listsId };
 };
 
-export const createBoard = ({ name, id }: DataBoardType) => async (
+export const createBoard = ({ name, id }: DataBoardType):ThunkBoardType => async (
   dispatch: Dispatch<ActionsBoardType>,
   getState: () => RootStateType
 ) => {
   dispatch(onCreateBoardStart({ name, id }));
-  let result = await api.postRequestAuth<{ status: boolean }>("board", {
+  const result = await api.postRequestAuth<{ status: boolean }>("board", {
     name,
     id,
   });
   if (!result.status) {
     notificationAntd(result);
-    let listsId = getState()
+    const listsId = getState()
       .lists.data.filter((el: any) => el.boardId === id)
       .map((el: any) => el.id);
     dispatch(onCreateBoardError({ boardId: id, listsId }));
@@ -144,11 +144,11 @@ export const deleteBoard = ({ boardId }: DeleteBoardType): ThunkBoardType => asy
   getState
 ) => {
   dispatch(onDeleteBoardStart({ boardId }));
-  let result = await api.deleteRequestAuth<{ status: boolean }>("board", { id: boardId });
+  const result = await api.deleteRequestAuth<{ status: boolean }>("board", { id: boardId });
   if (!result.status) {
     dispatch(onDeleteBoardError({ boardId }));
   } else {
-    let listsId = getState()
+    const listsId = getState()
       .lists.data.filter((el: any) => el.boardId === boardId)
       .map((el: any) => el.id);
     onDeleteBoardSuccess({ boardId, listsId });

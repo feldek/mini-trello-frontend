@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
-import s from "./SignIn.module.css";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { recoveryPassword } from "../Reducers/Actions/UserAction";
-import { useHistory } from "react-router-dom";
+import React, { useState } from 'react';
+import { Form, Input, Button } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { recoveryPassword } from '../Reducers/Actions/UserAction';
+import s from './SignIn.module.css';
 
 const RecoveryPassword = () => {
   const dispatch = useDispatch();
@@ -14,11 +14,11 @@ const RecoveryPassword = () => {
   const handleAuthorization = async (values) => {
     setLoading(true);
     const result = await dispatch(
-      recoveryPassword({ email: values.email, password: values.password })
+      recoveryPassword({ email: values.email, password: values.password }),
     );
     setLoading(false);
     if (result.status) {
-      history.push("/");
+      history.push('/');
     }
   };
 
@@ -37,12 +37,12 @@ const RecoveryPassword = () => {
             name="email"
             rules={[
               {
-                type: "email",
-                message: "The input is not valid E-mail!",
+                type: 'email',
+                message: 'The input is not valid E-mail!',
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: 'Please input your E-mail!',
               },
             ]}
           >
@@ -57,7 +57,7 @@ const RecoveryPassword = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: 'Please input your password!',
               },
             ]}
             hasFeedback
@@ -67,21 +67,21 @@ const RecoveryPassword = () => {
           <Form.Item
             name="confirm"
             label="Confirm New Password"
-            dependencies={["password"]}
+            dependencies={['password']}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: 'Please confirm your password!',
               },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
 
                   return Promise.reject(
-                    "The two passwords that you entered do not match!"
+                    'The two passwords that you entered do not match!',
                   );
                 },
               }),

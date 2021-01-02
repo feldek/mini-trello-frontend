@@ -13,7 +13,7 @@ import Header from "./Header";
 import { deleteBoardsSaga, getBoardsSaga } from "../Reducers/Sagas/BoardSaga";
 import classNames from "classnames";
 
-const Boards = () => {
+const Boards = (): JSX.Element => {
   const dispatch = useDispatch();
   const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
   const [boardId, setBoardId] = useState<string>("");

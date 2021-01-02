@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
-import PageNotFound from "../../../ExtraComponents/PageNotFound";
-import { Card, Button, Spin } from "antd";
-import "./TasksCard.css";
-import "../../AntDesignStyle.css";
-import s from "./TasksCard.module.css";
-import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
-import { getTasks, stepOrder, updateTask } from "../../../Reducers/Actions/TaskActions";
-import classNames from "classnames";
-import Lists from "./Lists";
-import { deleteListSaga, getListsSaga } from "../../../Reducers/Sagas/ListSaga";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, Link } from 'react-router-dom';
+import { Card, Button, Spin } from 'antd';
+import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import PageNotFound from '../../../ExtraComponents/PageNotFound';
+import './TasksCard.css';
+import '../../AntDesignStyle.css';
+import s from './TasksCard.module.css';
+import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete';
+import { getTasks, stepOrder, updateTask } from '../../../Reducers/Actions/TaskActions';
+import Lists from './Lists';
+import { deleteListSaga, getListsSaga } from '../../../Reducers/Sagas/ListSaga';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -36,13 +36,13 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 const grid = 7;
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "#ffffffd0" : "#ffffffd0",
+  background: isDraggingOver ? '#ffffffd0' : '#ffffffd0',
   padding: grid,
 });
 
 const TasksCard = () => {
   const params = useParams();
-  const boardId = params.boardId;
+  const { boardId } = params;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,16 +57,14 @@ const TasksCard = () => {
   const [listId, setListId] = useState(false);
   const isFetchingLists = useSelector((state) => state.lists.isFetching);
   const currentLists = useSelector((state) => state.lists.data).filter(
-    (elem) => elem.boardId === boardId
+    (elem) => elem.boardId === boardId,
   );
-  let listsId = currentLists.map((el) => el.id);
+  const listsId = currentLists.map((el) => el.id);
   const tasks = useSelector((state) => state.tasks.data);
   let currentTasks = tasks.filter((item) => listsId.includes(item.listId));
 
-  let dragState = [];
-  listsId.map((item) =>
-    dragState.push(currentTasks.filter((task) => task.listId === item))
-  );
+  const dragState = [];
+  listsId.map((item) => dragState.push(currentTasks.filter((task) => task.listId === item)));
   currentTasks = dragState;
 
   const handleDelete = (el) => {
@@ -96,18 +94,16 @@ const TasksCard = () => {
       newState[sInd] = items;
 
       if (destination.index === 0) {
-        order =
-          newState[dInd].length === 1
-            ? 0
-            : newState[dInd][destination.index + 1].order - stepOrder;
+        order = newState[dInd].length === 1
+          ? 0
+          : newState[dInd][destination.index + 1].order - stepOrder;
       } else if (destination.index === newState[dInd].length - 1) {
         order = newState[dInd][destination.index - 1].order + stepOrder;
       } else {
-        order =
-          newState[dInd][destination.index - 1].order +
-          (newState[dInd][destination.index + 1].order -
-            newState[dInd][destination.index - 1].order) /
-            2;
+        order = newState[dInd][destination.index - 1].order
+          + (newState[dInd][destination.index + 1].order
+            - newState[dInd][destination.index - 1].order)
+            / 2;
       }
       dListId = newState[sInd][0].listId;
     } else {
@@ -115,25 +111,23 @@ const TasksCard = () => {
         currentTasks[sInd],
         currentTasks[dInd],
         source,
-        destination
+        destination,
       );
       const newState = [...currentTasks];
       newState[sInd] = affectState[sInd];
       dListId = currentLists[dInd].id;
 
       if (destination.index === 0) {
-        order =
-          newState[dInd].length === 0
-            ? 0
-            : newState[dInd][destination.index].order - stepOrder;
+        order = newState[dInd].length === 0
+          ? 0
+          : newState[dInd][destination.index].order - stepOrder;
       } else if (destination.index === newState[dInd].length) {
         order = newState[dInd][destination.index - 1].order + stepOrder;
       } else {
-        order =
-          newState[dInd][destination.index - 1].order +
-          (newState[dInd][destination.index].order -
-            newState[dInd][destination.index - 1].order) /
-            2;
+        order = newState[dInd][destination.index - 1].order
+          + (newState[dInd][destination.index].order
+            - newState[dInd][destination.index - 1].order)
+            / 2;
       }
     }
     dispatch(updateTask({ id: result.draggableId, order, listId: dListId }));
@@ -146,8 +140,8 @@ const TasksCard = () => {
             <FontAwesomeIcon
               icon={faArrowCircleLeft}
               style={{
-                fontSize: "31px",
-                padding: "4px",
+                fontSize: '31px',
+                padding: '4px',
               }}
             />
             Back
@@ -155,10 +149,10 @@ const TasksCard = () => {
         </Link>
         {isFetchingLists ? (
           <div className={s.containerSpin}>
-            <Spin tip="Loading..." style={{ width: "100%", height: "100px" }}></Spin>
+            <Spin tip="Loading..." style={{ width: '100%', height: '100px' }} />
           </div>
         ) : (
-          <Card className={classNames(`${s.totalCard}`, "totalCard")}>
+          <Card className={classNames(`${s.totalCard}`, 'totalCard')}>
             <Lists
               onDragEnd={onDragEnd}
               currentLists={currentLists}

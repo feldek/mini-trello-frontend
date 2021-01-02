@@ -1,7 +1,7 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { clearedData } from "../Reducers/Actions/UserAction";
-import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { clearedData } from '../Reducers/Actions/UserAction';
+import ConfirmDelete from '../ExtraComponents/ConfirmDelete';
 
 const LogOut = ({ visible, setVisible }) => {
   const dispatch = useDispatch();

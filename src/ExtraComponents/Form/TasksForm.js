@@ -1,10 +1,12 @@
-import { Button, Input } from "antd";
-import React, { useState } from "react";
-import { Controller, ErrorMessage, useFieldArray } from "react-hook-form";
-import ConfirmDelete from "../ConfirmDelete";
-import s from "./ArrayForm.module.css";
+import { Button, Input } from 'antd';
+import React, { useState } from 'react';
+import { Controller, ErrorMessage, useFieldArray } from 'react-hook-form';
+import ConfirmDelete from '../ConfirmDelete';
+import s from './ArrayForm.module.css';
 
-const TasksForm = ({ register, control, errors, setValue, listInd }) => {
+const TasksForm = ({
+  register, control, errors, setValue, listInd,
+}) => {
   const { fields: tasks, append: appendTask, remove: removeTask } = useFieldArray({
     control,
     name: `lists[${listInd}].tasks`,
@@ -12,13 +14,13 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
 
   const [descriptionId, setDescriptionId] = useState([]);
   const handleDeleteDescription = ({ id, index }) => {
-    setValue(`lists[${listInd}].tasks[${index}].description`, "");
-    let result = descriptionId.filter((el) => el !== id);
+    setValue(`lists[${listInd}].tasks[${index}].description`, '');
+    const result = descriptionId.filter((el) => el !== id);
     setDescriptionId([...result]);
   };
 
-  let [toggleDelete, setToggleDelete] = useState(false);
-  let [functionConfirm, setFunctionConfirm] = useState();
+  const [toggleDelete, setToggleDelete] = useState(false);
+  const [functionConfirm, setFunctionConfirm] = useState();
 
   const handleDelete = (func) => {
     setFunctionConfirm(() => func);
@@ -28,7 +30,7 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
   return (
     <>
       {tasks.map((item, index) => {
-        let showDescription = descriptionId.includes(item.id);
+        const showDescription = descriptionId.includes(item.id);
 
         return (
           <div key={item.id} className={s.containerTask}>
@@ -39,7 +41,7 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
                   placeholder="Task Name"
                   name={`lists[${listInd}].tasks[${index}].name`}
                   ref={register({ required: true })}
-                  defaultValue={""}
+                  defaultValue=""
                 />
                 <ErrorMessage
                   errors={errors}
@@ -51,7 +53,7 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
               {!showDescription ? (
                 <Button
                   htmlType="button"
-                  style={{ marginLeft: "5px" }}
+                  style={{ marginLeft: '5px' }}
                   onClick={() => setDescriptionId([...descriptionId, item.id])}
                 >
                   Add Description
@@ -59,14 +61,12 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
               ) : (
                 <Button
                   danger
-                  className={"deleteDescription"}
+                  className="deleteDescription"
                   htmlType="button"
                   style={{
-                    marginLeft: "5px",
+                    marginLeft: '5px',
                   }}
-                  onClick={() =>
-                    handleDelete(() => handleDeleteDescription({ id: item.id, index }))
-                  }
+                  onClick={() => handleDelete(() => handleDeleteDescription({ id: item.id, index }))}
                 >
                   Delete Description
                 </Button>
@@ -75,7 +75,7 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
               <Button
                 danger
                 htmlType="button"
-                style={{ marginLeft: "5px" }}
+                style={{ marginLeft: '5px' }}
                 onClick={() => handleDelete(() => removeTask(index))}
               >
                 Delete
@@ -83,16 +83,16 @@ const TasksForm = ({ register, control, errors, setValue, listInd }) => {
             </div>
             {showDescription && (
               <Controller
-                as={
+                as={(
                   <Input.TextArea
-                    autoSize={true}
+                    autoSize
                     placeholder="Create new Description"
-                    className={"texstArea"}
+                    className="texstArea"
                   />
-                }
+                )}
                 name={`lists[${listInd}].tasks[${index}].description`}
                 control={control}
-                defaultValue={""}
+                defaultValue=""
               />
             )}
           </div>

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { Modal, Form, Input } from "antd";
-import { LockOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { changePassword } from "../Reducers/Actions/UserAction";
+import React, { useState } from 'react';
+import { Modal, Form, Input } from 'antd';
+import { LockOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { changePassword } from '../Reducers/Actions/UserAction';
 
-const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
+const ModalChangePasswordForm = ({
+  visible, onChange, onCancel, loading,
+}) => {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -22,7 +24,7 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
             onChange(values);
           })
           .catch((info) => {
-            console.log("Validate Failed:", info);
+            console.log('Validate Failed:', info);
           });
       }}
     >
@@ -30,7 +32,7 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
         layout="vertical"
         form={form}
         name="register"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         scrollToFirstError
         onFinish={onChange}
       >
@@ -40,7 +42,7 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
           rules={[
             {
               required: true,
-              message: "Please input your old password!",
+              message: 'Please input your old password!',
             },
           ]}
           hasFeedback
@@ -53,7 +55,7 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: 'Please input your password!',
             },
           ]}
           hasFeedback
@@ -64,19 +66,19 @@ const ModalChangePasswordForm = ({ visible, onChange, onCancel, loading }) => {
         <Form.Item
           name="confirm"
           label="Confirm Password"
-          dependencies={["password"]}
+          dependencies={['password']}
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Please confirm your password!",
+              message: 'Please confirm your password!',
             },
             ({ getFieldValue }) => ({
               validator(rule, value) {
-                if (!value || getFieldValue("password") === value) {
+                if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject("The two passwords that you entered do not match!");
+                return Promise.reject('The two passwords that you entered do not match!');
               },
             }),
           ]}
@@ -94,11 +96,11 @@ const СhangePassword = ({ visible, setVisible }) => {
 
   const handleRequest = async (values) => {
     setLoading(true);
-    let result = await dispatch(
+    const result = await dispatch(
       changePassword({
         oldPassword: values.oldPassword,
         newPassword: values.password,
-      })
+      }),
     );
     if (!result.error) setVisible(false);
     setLoading(false);

@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { useParams, Link, useHistory } from "react-router-dom";
-import { Card } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { Form, Input, Button } from "antd";
-import s from "./Description.module.css";
-import PageNotFound from "../../../../ExtraComponents/PageNotFound";
-import ConfirmDelete from "../../../../ExtraComponents/ConfirmDelete";
-import { updateDescription } from "../../../../Reducers/Actions/TaskActions";
-import classNames from "classnames";
+import React, { useState } from 'react';
+import { useParams, Link, useHistory } from 'react-router-dom';
+import {
+  Card, Form, Input, Button,
+} from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 
-let ContainerDescription = () => {
-  let id = useParams().descriptionId;
-  let task = useSelector((state) => state.tasks.data).find((item) => item.id === id);
-  let content = !task ? <PageNotFound /> : <Description task={task} id={id} />;
+import classNames from 'classnames';
+import s from './Description.module.css';
+import PageNotFound from '../../../../ExtraComponents/PageNotFound';
+import ConfirmDelete from '../../../../ExtraComponents/ConfirmDelete';
+import { updateDescription } from '../../../../Reducers/Actions/TaskActions';
+
+const ContainerDescription = () => {
+  const id = useParams().descriptionId;
+  const task = useSelector((state) => state.tasks.data).find((item) => item.id === id);
+  const content = !task ? <PageNotFound /> : <Description task={task} id={id} />;
   return content;
 };
-export let Description = ({ task, id }) => {
-  let history = useHistory();
+export const Description = ({ task, id }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [removeClass, setRemoveClass] = useState(false);
 
-  let boardId = useParams().boardId;
-  let [toggle, setToggle] = useState(task.description !== "");
+  const { boardId } = useParams();
+  const [toggle, setToggle] = useState(task.description !== '');
   const handleDelayRemove = () => {
     setRemoveClass(true);
     setTimeout(() => {
@@ -36,22 +38,22 @@ export let Description = ({ task, id }) => {
     toggle && setToggle(!toggle);
   };
 
-  let [toggleDelete, setToggleDelete] = useState(false);
+  const [toggleDelete, setToggleDelete] = useState(false);
 
   const onReset = () => {
     form.resetFields();
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
-  let changeDescription = (
+  const changeDescription = (
     <div key={`textArea${id}`}>
       <Form.Item name="description">
         <Input.TextArea
           className={s.textArea}
-          autoSize={true}
+          autoSize
           placeholder="Create new Description"
         />
       </Form.Item>
@@ -74,7 +76,7 @@ export let Description = ({ task, id }) => {
     </div>
   );
 
-  let description = (
+  const description = (
     <div key={`descriptionText${id}`}>
       <Form.Item onClick={() => setToggle(false)} className={s.textDescription}>
         {task.description}
@@ -115,7 +117,7 @@ export let Description = ({ task, id }) => {
                 className={s.form}
                 fields={[
                   {
-                    name: ["description"],
+                    name: ['description'],
                     value: task.description,
                   },
                 ]}
@@ -126,7 +128,7 @@ export let Description = ({ task, id }) => {
           </Card>
         </div>
         <ConfirmDelete
-          onConfirm={() => dispatch(updateDescription({ description: "", id }))}
+          onConfirm={() => dispatch(updateDescription({ description: '', id }))}
           setVisible={setToggleDelete}
           visible={toggleDelete}
           linkToBack={`/board/${boardId}`}

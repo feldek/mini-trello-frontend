@@ -1,45 +1,45 @@
-import React from "react";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import s from "./DeleteIcon.module.css";
+import React from 'react';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import s from './DeleteIcon.module.css';
 
-const DeleteIcon = ({ size = "s", handleDelete, styleParams=null }) => {
+const DeleteIcon = ({ size = 's', handleDelete, styleParams = null }) => {
   let styleIcon;
   switch (size) {
-    case "s": {
+    case 's': {
       styleIcon = {
-        fontSize: "18px",
-        width: "18px",
+        fontSize: '18px',
+        width: '18px',
       };
       break;
     }
-    case "m": {
+    case 'm': {
       styleIcon = {
-        fontSize: "20px",
-        width: "20px",
+        fontSize: '20px',
+        width: '20px',
       };
       styleParams = {
-        padding: "3px",
+        padding: '3px',
       };
       break;
     }
-    case "l": {
+    case 'l': {
       styleIcon = {
-        fontSize: "26px",
-        width: "26px",
+        fontSize: '26px',
+        width: '26px',
       };
       break;
     }
-    case "xl": {
+    case 'xl': {
       break;
     }
     default:
       styleIcon = {
-        fontSize: "26px",
-        width: "26px",
+        fontSize: '26px',
+        width: '26px',
       };
   }
-  styleIcon.color = "rgba(0, 0, 0, 0.65)";
+  styleIcon.color = 'rgba(0, 0, 0, 0.65)';
 
   return (
     <button className={s.button} type="button" onClick={handleDelete} style={styleParams}>
@@ -47,5 +47,8 @@ const DeleteIcon = ({ size = "s", handleDelete, styleParams=null }) => {
     </button>
   );
 };
+// DeleteIcon.propTypes = {
+//   size: PropTypes.string, handleDelete: PropTypes.func, styleParams?: PropTypes.object
+// };
 
 export default DeleteIcon;

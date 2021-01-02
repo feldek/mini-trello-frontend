@@ -5,12 +5,33 @@
   z-index: 10;
   border-radius: 10px;
   padding: 0px 10px;
+  cursor: pointer;
 }
+[refresh-Tooltip] {
+  position: relative;
+}
+[refresh-Tooltip]::after {
+  content: attr(refresh-Tooltip);
+  position: absolute;
+  border-radius: 4px;
+  left: 10%;
+  top: 90%;
+  background: white;
+  color: rgba(0, 0, 0, 0.85);
+  padding: 0.2em;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  opacity: 0;
+  transition: 1s;
+}
+[refresh-Tooltip]:hover::after {
+  opacity: 1;
+}
+
 .header {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
 }
 .plugin {
   display: flex;
@@ -28,20 +49,18 @@
   flex-grow: 1;
   font-size: small;
 }
- img {
+img {
   margin: -22% 0%;
   overflow: hidden;
   height: 60px;
 }
-.boxTemp{
+.boxTemp {
   padding: 0px 10px;
 }
 
 @media (max-width: 600px) {
-  .boxTemp{
+  .boxTemp {
     padding: 0px 0px;
     margin: 0 -10px;
   }
-
-
 }

@@ -1,12 +1,12 @@
-import React from "react";
-import {  useSelector } from "react-redux";
-import {  useRouteMatch } from "react-router-dom";
-import s from "./List.module.css";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import s from './List.module.css';
 
-let List = ({ listId }) => {
-  let boardId = useRouteMatch().params.boardId;
-  let lists = useSelector((state) => state.lists.data);
-  let list = lists
+const List = ({ listId }) => {
+  const { boardId } = useRouteMatch().params;
+  const lists = useSelector((state) => state.lists.data);
+  const list = lists
     .filter((elem) => elem.boardId === boardId)
     .find((elem) => elem.id === listId);
 

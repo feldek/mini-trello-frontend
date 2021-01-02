@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
-import s from "./SignUp.module.css";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { signUp } from "../Reducers/Actions/UserAction";
+import React, { useState } from 'react';
+import { Form, Input, Button } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import s from './SignUp.module.css';
+import { signUp } from '../Reducers/Actions/UserAction';
 
 const SignUp = () => {
   const [form] = Form.useForm();
@@ -14,7 +14,7 @@ const SignUp = () => {
     try {
       setDisabled(true);
       const result = await dispatch(
-        signUp({ email: values.email, password: values.password })
+        signUp({ email: values.email, password: values.password }),
       );
       if (!result) {
         throw new Error();
@@ -33,7 +33,7 @@ const SignUp = () => {
           form={form}
           name="register"
           onFinish={handleRequest}
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           scrollToFirstError
         >
           <Form.Item
@@ -41,12 +41,12 @@ const SignUp = () => {
             label="E-mail"
             rules={[
               {
-                type: "email",
-                message: "The input is not valid E-mail!",
+                type: 'email',
+                message: 'The input is not valid E-mail!',
               },
               {
                 required: true,
-                message: "Please input your E-mail!",
+                message: 'Please input your E-mail!',
               },
             ]}
           >
@@ -59,7 +59,7 @@ const SignUp = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: 'Please input your password!',
               },
             ]}
             hasFeedback
@@ -70,21 +70,21 @@ const SignUp = () => {
           <Form.Item
             name="confirm"
             label="Confirm Password"
-            dependencies={["password"]}
+            dependencies={['password']}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: 'Please confirm your password!',
               },
               ({ getFieldValue }) => ({
                 validator(rule, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
 
                   return Promise.reject(
-                    "The two passwords that you entered do not match!"
+                    'The two passwords that you entered do not match!',
                   );
                 },
               }),

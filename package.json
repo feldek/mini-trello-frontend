@@ -17,14 +17,13 @@
     "@types/react-redux": "^7.1.11",
     "@types/react-router-dom": "^5.1.6",
     "@types/webpack-env": "^1.16.0",
-    "@typescript-eslint/eslint-plugin": "^4.9.1",
-    "@typescript-eslint/parser": "^4.9.1",
     "antd": "^4.9.1",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.3",
     "fetch-wrap": "^0.1.2",
     "local-storage-hook": "^1.2.0",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
@@ -45,10 +44,9 @@
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "browserslist": {
     "production": [
@@ -63,6 +61,9 @@
     ]
   },
   "devDependencies": {
-    "@types/uuid": "^8.3.0"
+    "eslint": "^7.16.0",
+    "eslint-plugin-react": "^7.22.0",
+    "@typescript-eslint/eslint-plugin": "^4.11.1",
+    "@typescript-eslint/parser": "^4.11.1"
   }
 }

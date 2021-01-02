@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { store, persistor } from "./Reducers/Store";
-import { PersistGate } from "redux-persist/integration/react";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import { store, persistor } from './Reducers/Store';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,7 +18,7 @@ ReactDOM.render(
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 serviceWorker.unregister();

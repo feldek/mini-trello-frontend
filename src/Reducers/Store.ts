@@ -22,7 +22,7 @@ const persistConfig = {
 
 const sagaMiddleware = createSagaMiddleware();
 
-let reducers = combineReducers({
+const reducers = combineReducers({
   user: UserReducer,
   boards: BoardReduser,
   lists: ListReduser,
@@ -33,11 +33,11 @@ let reducers = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
-export let store = createStore(
+export const store = createStore(
   persistedReducer,
   composeWithDevTools(applyMiddleware(thunkMiddleware, sagaMiddleware))
 );
-export let persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 export default function* rootSaga() {
   yield all([boardSaga(),listSaga()]);

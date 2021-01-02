@@ -15,7 +15,7 @@ const initialState: InitialStateType = { data: [], isFetching: false };
 const BoardReduser = (state = initialState, action: ActionsBoardType): InitialStateType => {
   switch (action.type) {
     case ON_CREATE_BOARD: {
-      let newData = [...state.data];
+      const newData = [...state.data];
       newData.push({ id: action.id, name: action.name, visibility: action.visibility });
       return { ...state, data: newData };
     }
@@ -23,7 +23,7 @@ const BoardReduser = (state = initialState, action: ActionsBoardType): InitialSt
       if (!action.data) {
         return state;
       }
-      let newData = action.data.map((el) => {
+      const newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });
@@ -36,11 +36,11 @@ const BoardReduser = (state = initialState, action: ActionsBoardType): InitialSt
       return { ...state, isFetching: action.isFetching };
     }
     case ON_DELETE_BOARD: {
-      let newData = state.data.filter((el) => action.boardId !== el.id);
+      const newData = state.data.filter((el) => action.boardId !== el.id);
       return { ...state, data: newData };
     }
     case ON_SET_VISIBILITY_BOARD: {
-      let newData = state.data.map((el) => {
+      const newData = state.data.map((el) => {
         if (action.boardId === el.id) {
           el.visibility = action.visibility;
         }
