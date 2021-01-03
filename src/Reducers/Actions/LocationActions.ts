@@ -1,4 +1,4 @@
-import { requestLocation } from "./../../Api/Api";
+import { api } from "./../../Api/Api";
 import { ThunkAction } from "redux-thunk";
 import { RootStateType } from "../Store";
 
@@ -44,17 +44,18 @@ type GetLocationType = {
 export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
     try {
-      const result = await requestLocation();
+      const result = await api.getRequestAuth<{ status: boolean; payload: any }>(
+        "geoplugin"
+      );
       dispatch(
         onSetLocation({
-          sity: result.data.geoplugin_city,
-          countryCode: result.data.geoplugin_countryCode,
-          countryName: result.data.geoplugin_countryName,
-          latitude: result.data.geoplugin_latitude,
-          longitude: result.data.geoplugin_longitude,
+          sity: result.payload.geoplugin_city,
+          countryCode: result.payload.geoplugin_countryCode,
+          countryName: result.payload.geoplugin_countryName,
+          latitude: result.payload.geoplugin_latitude,
+          longitude: result.payload.geoplugin_longitude,
         })
       );
-      console.log(result);
     } catch (err) {
       console.log(err);
       dispatch(

@@ -79,9 +79,6 @@ const refreshTokensAxios = async (config: any) => {
   return instanceAuth(config);
 };
 
-export const requestLocation = async () => {
-  return await axios.get("http://www.geoplugin.net/json.gp");
-};
 export const requestWeather = async ({ lat, lon, appid, units }:{lat: number, lon:number, appid:string, units:string}) => {
   return await axios.get("http://api.openweathermap.org/data/2.5/weather", {
     params: { lat, lon, appid, units },
