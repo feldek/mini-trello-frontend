@@ -45,7 +45,7 @@ export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
     try {
       const result = await api.getRequestAuth<{ status: boolean; payload: any }>(
-        "geoplugin"
+        "api/geoplugin"
       );
       dispatch(
         onSetLocation({

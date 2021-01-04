@@ -1,5 +1,5 @@
 import { getLocation } from "./LocationActions";
-import { requestWeather } from "./../../Api/Api";
+import { api } from "./../../Api/Api";
 import { ThunkAction } from "redux-thunk";
 import { RootStateType } from "../Store";
 
@@ -20,7 +20,6 @@ type ThunkWeatherType = ThunkAction<
   unknown,
   ActionsWeatherType
 >;
-
 
 type onClearWeather = {
   type: typeof ON_CLEAR_WEATHER;
@@ -51,7 +50,7 @@ type onSetWeatherType = {
   pressure: number;
   windSpeed: number;
   sity: string;
-  icon: string
+  icon: string;
 };
 export const onSetWeather = ({
   weatherDescription,
@@ -74,7 +73,7 @@ export const onSetWeather = ({
     pressure,
     windSpeed,
     sity,
-    icon
+    icon,
   };
 };
 
@@ -87,7 +86,7 @@ type GetWeatherType = {
   pressure: number;
   windSpeed: number;
   sity: string;
-  icon: string
+  icon: string;
 };
 
 export const getWeather = (requestInterval = 0): ThunkWeatherType => {
@@ -103,14 +102,14 @@ export const getWeather = (requestInterval = 0): ThunkWeatherType => {
         if (locationState.latitude === null || locationState.longitude === null) {
           throw new Error();
         }
-        const weatherData = await requestWeather({
-          lat: locationState.latitude,
-          lon: locationState.longitude,
-          appid: "09c9100efc9d8293dc475e96d7fbeed7",
-          units: "metric",
-        });
-        console.log(weatherData.data);
-        const data = weatherData.data;
+        const weatherData = await api.getRequestAuth<{ status: boolean; payload: any }>(
+          "api/weatherplugin",
+          {
+            lat: locationState.latitude,
+            lon: locationState.longitude,
+          }
+        );
+        const data = weatherData.payload;
         dispatch(
           onSetWeather({
             weatherDescription: data.weather[0].description,
@@ -121,7 +120,7 @@ export const getWeather = (requestInterval = 0): ThunkWeatherType => {
             pressure: data.main.pressure,
             windSpeed: data.wind.speed,
             sity: data.name,
-            icon: data.weather[0].icon
+            icon: data.weather[0].icon,
           })
         );
         dispatch(onSetIsFenching(false));
