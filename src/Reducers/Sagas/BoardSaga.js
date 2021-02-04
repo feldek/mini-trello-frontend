@@ -18,15 +18,15 @@ const CREATE_BOARDS = 'CREATE_BOARDS';
 const DELETE_BOARDS = 'DELETE_BOARDS';
 
 export const getBoardsSaga = () => ({ type: GET_BOARDS });
-function* watchGetBoards() {
-  yield takeEvery(GET_BOARDS, function* () {
+export function* watchGetBoards() {
+  // yield takeEvery(GET_BOARDS, function* () {
     yield put(onSetIsFenchingBoards(true));
     const boards = yield call(() => api.getRequestAuth('boards'));
     if (boards.status) {
       yield put(onSetBoards(boards.payload));
     }
     yield put(onSetIsFenchingBoards(false));
-  });
+  // });
 }
 
 export const createBoardsSaga = ({ name, id }) => ({ type: CREATE_BOARDS, name, id });

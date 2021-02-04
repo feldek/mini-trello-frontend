@@ -10,7 +10,7 @@ import "./Boards.css";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import { deleteBoardsSaga, getBoardsSaga } from "../Reducers/Sagas/BoardSaga";
+import { deleteBoardsSaga, getBoardsSaga, watchGetBoards } from "../Reducers/Sagas/BoardSaga";
 import classNames from "classnames";
 
 const Boards = (): JSX.Element => {
@@ -22,7 +22,8 @@ const Boards = (): JSX.Element => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(getBoardsSaga());
+      // await dispatch(getBoardsSaga());
+      await watchGetBoards();
     }
     fetchData();
   }, []);
