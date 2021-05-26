@@ -1,5 +1,4 @@
 import { InitialStateType, ThunkLocationType, ActionsLocationType } from "./LocationTypes";
-import { api } from "../../Api/Api";
 import axios from "axios";
 
 export const ON_SET_LOCATION = "ON_SET_LOCATION";
@@ -16,7 +15,7 @@ export const onSetLocation = ({
   return { type: ON_SET_LOCATION, sity, countryCode, countryName, latitude, longitude };
 };
 
-interface LocationType {
+interface ApiLocationType {
   sity: string;
   countryCode: number;
   countryName: string;
@@ -24,32 +23,54 @@ interface LocationType {
   longitude: number;
 }
 
+interface GeolocationType {
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
 export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
     try {
-      const result = await axios.get<LocationType>(
-        "https://api.ipdata.co/?api-key=a3e875691c4fd0211a8f3f9f566fc2c56be06cbd8f60735d6e48f031"
-      );
+      const { coords }: GeolocationType = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+
       dispatch(
         onSetLocation({
-          sity: result.data.sity,
-          countryCode: result.data.countryCode,
-          countryName: result.data.countryName,
-          latitude: result.data.latitude,
-          longitude: result.data.longitude,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
         })
       );
     } catch (err) {
       console.log(err);
-      dispatch(
-        onSetLocation({
-          sity: null,
-          countryCode: null,
-          countryName: null,
-          latitude: null,
-          longitude: null,
-        })
+
+      const result = await axios.get<ApiLocationType>(
+        "https://api.ipdata.co/?api-key=a3e875691c4fd0211a8f3f9f566fc2c56be06cbd8f60735d6e48f031"
       );
+
+      if (result.status === 200) {
+        dispatch(
+          onSetLocation({
+            sity: result.data.sity,
+            countryCode: result.data.countryCode,
+            countryName: result.data.countryName,
+            latitude: result.data.latitude,
+            longitude: result.data.longitude,
+          })
+        );
+      } else {
+        dispatch(
+          onSetLocation({
+            sity: null,
+            countryCode: null,
+            countryName: null,
+            latitude: null,
+            longitude: null,
+          })
+        );
+      }
     }
   };
 };

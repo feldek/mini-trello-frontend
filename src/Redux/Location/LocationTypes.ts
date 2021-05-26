@@ -3,9 +3,9 @@ import { ThunkAction } from "redux-thunk";
 import { RootStateType } from "../Store";
 
 export type InitialStateType = {
-  sity: string | null;
-  countryCode: number | null;
-  countryName: string | null;
+  sity?: string | null;
+  countryCode?: number | null;
+  countryName?: string | null;
   latitude: number | null;
   longitude: number | null;
 };
