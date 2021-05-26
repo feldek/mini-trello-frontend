@@ -1,12 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### `Приложение - "Список дел"`
-Для работы необходима регистрация. Зарегистировавшись, пользователь попадает на страницу для создания досок.<br />
+Frontend for App - "To do list"
+Registration is required to work. After registering, the user is taken to the page for creating boards.<br />
 
-Сперва создается доска. Нажав на нужную нам доску(предварительно создав ее), мы переходим на страницу создания списков и задач. Далее создаем списки. В списках создаются задачи. Задачи можно переносить между списками путем перетаскивания. Для задач можно оставлять описание(кликнув по задаче).<br />
+First, a board is created. By clicking on the board we need (creating it), we go to the page for creating lists and tasks. Next, we create lists. In task lists. Tasks can be moved between lists by dragg and dropp. For tasks, you can leave a description (by clicking on the task).<br />
 
-Аутентификафия выполнена посредством цифрового сертификата(токены: access and refresh). Доступна смена пароля(после подтверждения электронной почты). Присутствует функция восстановления пароля(на  эл. почту приходит ссылка, для восстановления). <br />
+Authentication is done through a digital certificate (tokens: access and refresh). Password change is available (after confirmation email). There is a password recovery function (a link is sent to the e-mail for recovery).<br />
 
-Имеется динамическая форма, для создания одним запросом доски + списков/задач. (arrayForm в настройках)
+There is a dynamic form for creating a board + lists / tasks with one request. (arrayForm in settings)<br />
 
-PS: saga, ts, createSlice использовалось для тестового режама. (в последствии переведу все на них)
+PS: saga, ts, createSlice was used for test mode. (later I will translate everything into them)<br />
+
