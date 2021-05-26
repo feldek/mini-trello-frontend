@@ -20,7 +20,8 @@ instance.interceptors.response.use(
 
 const instanceAuth = axios.create({ baseURL: apiUrl });
 instanceAuth.interceptors.request.use(function (config) {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || undefined;
+
   config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

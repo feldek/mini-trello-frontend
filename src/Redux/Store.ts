@@ -1,19 +1,18 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import BoardReduser from "./BoardReducer";
-import ListReduser from "./ListReducer";
-import TaskReducer from "./TaskReducer";
+import BoardReduser from "./Board/BoardReducer";
+import ListReduser from "./List/ListReducer";
+import TaskReducer from "./Task/TaskReducer";
 import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import UserReducer from "./UserReducer";
+import UserReducer from "./User/UserReducer";
 import createSagaMiddleware from "redux-saga";
-import boardSaga from "./Sagas/BoardSaga";
-import { all } from "redux-saga/effects";
-import listSaga from "./Sagas/ListSaga";
-import LocationReduser from "./LocationReducer";
-import WeatherReduser from "./WeatherReducer";
-
+import { listSaga } from "./List/ListSaga";
+import { boardSaga } from "./Board/BoardSaga";
+import { all, fork } from "redux-saga/effects";
+import LocationReduser from "./Location/LocationReducer";
+import WeatherReduser from "./Weather/WeatherReducer";
 
 const persistConfig = {
   key: "root",
@@ -39,12 +38,10 @@ export const store = createStore(
 );
 export const persistor = persistStore(store);
 
-export default function* rootSaga() {
-  yield all([boardSaga(),listSaga()]);
-}
+export const rootSaga = function* rootSaga() {  
+  yield all([fork(boardSaga), fork(listSaga)]);
+};
 
 sagaMiddleware.run(rootSaga);
 
 export type RootStateType = ReturnType<typeof reducers>;
-
-

@@ -1,5 +1,5 @@
-import { ON_CLEAR_DATA } from './Actions/BoardActions';
-import { ON_DELETE_BOARD, ON_DELETE_LIST } from './Actions/ListActions';
+import { ON_DELETE_BOARD, ON_DELETE_LIST } from '../List/ListActions';
+import { ON_CLEAR_DATA } from '../User/UserConstants';
 import {
   ON_UPDATE_DESCRIPTION,
   ON_CREATE_TASK,
@@ -8,7 +8,7 @@ import {
   ON_SET_VISIBILITY_TASK,
   ON_UPDATE_TASK,
   ON_CREATE_TASKS,
-} from './Actions/TaskActions';
+} from './TaskActions';
 
 const initialState = {
   data: [],

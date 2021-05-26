@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import { onSetUser, onClearData } from "../UserReducer";
+import { onSetUser, onClearData } from "./UserReducer";
 import { api } from "../../Api/Api";
 
 export const signIn = ({ email, password }) => async (dispatch) => {

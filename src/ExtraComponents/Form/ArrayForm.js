@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 import TasksForm from './TasksForm';
 import s from './ArrayForm.module.css';
 import './ArrayForm.css';
-import { createTasks, stepOrder } from '../../Reducers/Actions/TaskActions';
+import { createTasks, stepOrder } from '../../Redux/Task/TaskActions';
 import ConfirmDelete from '../ConfirmDelete';
-import { createLists } from '../../Reducers/Actions/ListActions';
-import { createBoard } from '../../Reducers/Actions/BoardActions';
+import { createLists } from '../../Redux/List/ListActions';
+import { createBoard } from '../../Redux/Board/BoardActions';
 import DeleteIcon from '../DeleteIcon';
 
 const ArrayForm = ({ visible, setVisible }) => {

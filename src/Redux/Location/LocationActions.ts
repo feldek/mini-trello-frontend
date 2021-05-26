@@ -1,52 +1,24 @@
-import { api } from "./../../Api/Api";
-import { ThunkAction } from "redux-thunk";
-import { RootStateType } from "../Store";
+import { InitialStateType, ThunkLocationType, ActionsLocationType } from "./LocationTypes";
+import { api } from "../../Api/Api";
 
 export const ON_SET_LOCATION = "ON_SET_LOCATION";
-export const ON_CLEAR_DATA = "user/onClearData";
 export const ON_SET_IS_FETCHING_LOCATION = "ON_SET_IS_FETCHING_LOCATION";
 export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
 
-export type ActionsLocationType = onSetLocationType;
-
-type ThunkLocationType = ThunkAction<
-  Promise<void>,
-  RootStateType,
-  unknown,
-  ActionsLocationType
->;
-
-type onSetLocationType = {
-  type: typeof ON_SET_LOCATION;
-  sity: string | null;
-  countryCode: number | null;
-  countryName: string | null;
-  latitude: number | null;
-  longitude: number | null;
-};
 export const onSetLocation = ({
   sity,
   countryCode,
   countryName,
   latitude,
   longitude,
-}: GetLocationType): onSetLocationType => {
+}: InitialStateType): ActionsLocationType => {
   return { type: ON_SET_LOCATION, sity, countryCode, countryName, latitude, longitude };
 };
 
-type GetLocationType = {
-  sity: string | null;
-  countryCode: number | null;
-  countryName: string | null;
-  latitude: number | null;
-  longitude: number | null;
-};
 export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
     try {
-      const result = await api.getRequestAuth<{ status: boolean; payload: any }>(
-        "api/geoplugin"
-      );
+      const result = await api.getRequestAuth<{ status: boolean; payload: any }>("api/geoplugin");
       dispatch(
         onSetLocation({
           sity: result.payload.geoplugin_city,

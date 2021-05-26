@@ -1,12 +1,13 @@
 import {
-  ON_CLEAR_DATA,
+  ActionsBoardType,
+  ON_SET_BOARDS,
   ON_CREATE_BOARD,
   ON_DELETE_BOARD,
-  ON_SET_BOARDS,
-  ON_SET_IS_FETCHING_BOARDS,
   ON_SET_VISIBILITY_BOARD,
-  ActionsBoardType
-} from "./Actions/BoardActions";
+  ON_SET_IS_FETCHING_BOARDS,
+} from "./BoardActions";
+
+import { ON_CLEAR_DATA } from "../User/UserConstants";
 
 export type DataBoardType = { name: string; id: string; visibility?: boolean };
 type InitialStateType = { data: DataBoardType[]; isFetching: boolean };
@@ -32,7 +33,7 @@ const BoardReduser = (state = initialState, action: ActionsBoardType): InitialSt
     case ON_CLEAR_DATA: {
       return { ...state, data: action.payload.newData };
     }
-    case ON_SET_IS_FETCHING_BOARDS: {      
+    case ON_SET_IS_FETCHING_BOARDS: {
       return { ...state, isFetching: action.isFetching };
     }
     case ON_DELETE_BOARD: {

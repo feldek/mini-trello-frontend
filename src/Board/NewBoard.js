@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import s from './NewBoard.module.css';
 import './NewBoard.css';
 import { uuid } from 'uuidv4';
-import { createBoardsSaga } from '../Reducers/Sagas/BoardSaga';
+import { createBoardsSaga } from '../Redux/Board/BoardSaga';
 
 const NewBoard = () => {
   const dispatch = useDispatch();

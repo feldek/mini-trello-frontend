@@ -1,4 +1,5 @@
-import { ON_CLEAR_DATA, ON_DELETE_BOARD } from './Actions/BoardActions';
+import { ON_DELETE_BOARD } from "../Board/BoardActions";
+import { ON_CLEAR_DATA } from "../User/UserConstants";
 
 import {
   ON_CREATE_LIST,
@@ -7,7 +8,7 @@ import {
   ON_SET_IS_FETCHING_LISTS,
   ON_SET_LISTS,
   ON_SET_VISIBILITY_LIST,
-} from './Actions/ListActions';
+} from "./ListActions";
 
 const initialState = {
   data: [],

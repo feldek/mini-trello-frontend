@@ -4,7 +4,7 @@ import {
   ON_SET_IS_FETCHING_WEATHER,
   ActionsWeatherType,
   ON_SET_UPDATE_DATE,
-} from "./Actions/WeatherActions";
+} from "./WeatherActions";
 
 export type InitialStateType = {
   data: {

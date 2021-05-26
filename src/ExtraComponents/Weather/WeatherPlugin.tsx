@@ -1,8 +1,8 @@
 import { EnvironmentFilled } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getWeather } from "../../Reducers/Actions/WeatherActions";
-import { useTypeSelector } from "../../Reducers/TypeHook";
+import { getWeather } from "../../Redux/Weather/WeatherActions";
+import { useTypeSelector } from "../../Redux/TypeHook";
 import s from "./WeatherPlugin.module.css";
 
 const WeatherPlugin: React.FC = () => {

@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import s from './Description.module.css';
 import PageNotFound from '../../../../ExtraComponents/PageNotFound';
 import ConfirmDelete from '../../../../ExtraComponents/ConfirmDelete';
-import { updateDescription } from '../../../../Reducers/Actions/TaskActions';
+import { updateDescription } from '../../../../Redux/Task/TaskActions';
 
 const ContainerDescription = () => {
   const id = useParams().descriptionId;

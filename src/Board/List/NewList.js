@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import s from './NewList.module.css';
-import { createListSaga } from '../../Reducers/Sagas/ListSaga';
+import { createListSaga } from '../../Redux/List/ListSaga';
 
 const NewList = () => {
   const [toggle, setToggle] = useState(false);

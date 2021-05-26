@@ -5,7 +5,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import s from './TasksCard.module.css';
 import DeleteIcon from '../../../ExtraComponents/DeleteIcon';
 import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete';
-import { deleteTask } from '../../../Reducers/Actions/TaskActions';
+import { deleteTask } from '../../../Redux/Task/TaskActions';
 
 const Drag = ({ currentTask }) => {
   const dispatch = useDispatch();

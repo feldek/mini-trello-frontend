@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { clearedData } from '../Reducers/Actions/UserAction';
+import { clearedData } from '../Redux/User/UserAction';
 import ConfirmDelete from '../ExtraComponents/ConfirmDelete';
 
 const LogOut = ({ visible, setVisible }) => {
