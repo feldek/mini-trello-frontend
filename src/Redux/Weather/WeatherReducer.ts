@@ -1,26 +1,11 @@
+import { InitialStateType, ActionsWeatherType } from './WeatherTypes';
 import {
   ON_SET_WEATHER,
   ON_CLEAR_WEATHER,
   ON_SET_IS_FETCHING_WEATHER,
-  ActionsWeatherType,
   ON_SET_UPDATE_DATE,
 } from "./WeatherActions";
 
-export type InitialStateType = {
-  data: {
-    weatherDescription: string;
-    temp: null | number;
-    feels_like: null | number;
-    temp_min: null | number;
-    temp_max: null | number;
-    pressure: null | number;
-    windSpeed: null | number;
-    sity: string;
-    icon: string;
-  };
-  isFetching: boolean;
-  previousUpdateTime: null | number;
-};
 const initialState: InitialStateType = {
   data: {
     weatherDescription: "",

@@ -1,11 +1,20 @@
 import { Dispatch } from "react";
-import { ThunkAction } from "redux-thunk";
 
+import {
+  DataBoardType,
+  onSetBoardsType,
+  onCreateBoardStartType,
+  onCreateBoardErrorType,
+  onDeleteBoardSuccessType,
+  onDeleteBoardStartType,
+  onDeleteBoardErrorType,  
+  onSetIsFenchingBoardsType,
+  ActionsBoardType,
+  ThunkBoardType
+} from "./BoardTypes";
 import { api } from "../../Api/Api";
-import { DataBoardType } from "./BoardReducer";
 import { RootStateType } from "../Store";
 import { notificationAntd } from "../User/UserAction";
-import { ON_CLEAR_DATA } from "../User/UserConstants";
 
 export const ON_SET_BOARDS = "ON_SET_BOARDS";
 export const ON_CREATE_BOARD = "ON_CREATE_BOARD";
@@ -13,12 +22,6 @@ export const ON_DELETE_BOARD = "ON_DELETE_BOARD";
 export const ON_SET_VISIBILITY_BOARD = "ON_SET_VISIBILITY_BOARD";
 export const ON_SET_IS_FETCHING_BOARDS = "ON_SET_IS_FETCHING_BOARDS";
 
-export type onClearData = {
-  type: typeof ON_CLEAR_DATA;
-  payload: { newData: [] };
-};
-
-type onSetBoardsType = { type: typeof ON_SET_BOARDS; data: DataBoardType[] };
 export const onSetBoards = (data: DataBoardType[]): onSetBoardsType => {
   return { type: ON_SET_BOARDS, data };
 };
@@ -37,20 +40,10 @@ export const getBoards = (): ThunkBoardType => {
   };
 };
 
-type onCreateBoardStartType = {
-  type: typeof ON_CREATE_BOARD;
-  id: string;
-  name: string;
-  visibility: boolean;
-};
 export const onCreateBoardStart = ({ id, name, visibility = true }: DataBoardType): onCreateBoardStartType => {
   return { type: ON_CREATE_BOARD, id, name, visibility };
 };
-type onCreateBoardErrorType = {
-  type: typeof ON_DELETE_BOARD;
-  boardId: string;
-  listsId: string;
-};
+
 export const onCreateBoardError = ({
   boardId,
   listsId,
@@ -77,11 +70,7 @@ export const createBoard =
       dispatch(onCreateBoardError({ boardId: id, listsId }));
     }
   };
-type onDeleteBoardSuccessType = {
-  type: typeof ON_DELETE_BOARD;
-  boardId: string;
-  listsId: string;
-};
+
 export const onDeleteBoardSuccess = ({
   boardId,
   listsId,
@@ -92,26 +81,17 @@ export const onDeleteBoardSuccess = ({
   return { type: ON_DELETE_BOARD, boardId, listsId };
 };
 
-type onDeleteBoardStartType = {
-  type: typeof ON_SET_VISIBILITY_BOARD;
-  boardId: string;
-  visibility: boolean;
-};
 export const onDeleteBoardStart = ({ boardId }: { boardId: string }): onDeleteBoardStartType => {
   return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: false };
 };
-type onDeleteBoardErrorType = {
-  type: typeof ON_SET_VISIBILITY_BOARD;
-  boardId: string;
-  visibility: boolean;
-};
+
 export const onDeleteBoardError = ({ boardId }: { boardId: string }): onDeleteBoardErrorType => {
   return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
 };
 
-type DeleteBoardType = { boardId: string };
+
 export const deleteBoard =
-  ({ boardId }: DeleteBoardType): ThunkBoardType =>
+  ({ boardId }: { boardId: string }): ThunkBoardType =>
   async (dispatch, getState) => {
     dispatch(onDeleteBoardStart({ boardId }));
     const result = await api.deleteRequestAuth<{ status: boolean }>("board", { id: boardId });
@@ -124,22 +104,9 @@ export const deleteBoard =
       onDeleteBoardSuccess({ boardId, listsId });
     }
   };
-type onSetIsFenchingBoardsType = {
-  type: typeof ON_SET_IS_FETCHING_BOARDS;
-  isFetching: boolean;
-};
+
 export const onSetIsFenchingBoards = (isFetching: boolean): onSetIsFenchingBoardsType => {
   return { type: ON_SET_IS_FETCHING_BOARDS, isFetching };
 };
 
-export type ActionsBoardType =
-  | onSetBoardsType
-  | onCreateBoardStartType
-  | onCreateBoardErrorType
-  | onDeleteBoardSuccessType
-  | onDeleteBoardStartType
-  | onDeleteBoardErrorType
-  | onClearData
-  | onSetIsFenchingBoardsType;
 
-type ThunkBoardType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsBoardType>;

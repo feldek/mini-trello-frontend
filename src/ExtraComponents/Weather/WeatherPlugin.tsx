@@ -11,7 +11,7 @@ const WeatherPlugin: React.FC = () => {
   const date = new Date();
   useEffect(() => {
     dispatch(getWeather(3600000));
-  }, []);
+  }, [dispatch]);
 
   let tempetature = "";
   if (!weather.temp) {
@@ -21,11 +21,7 @@ const WeatherPlugin: React.FC = () => {
     tempetature = `${Math.round(weather.temp)}`;
   }
   return (
-    <div
-      className={s.background}
-      onClick={() => dispatch(getWeather())}
-      refresh-Tooltip="click to refresh"
-    >
+    <div className={s.background} onClick={() => dispatch(getWeather())} refresh-Tooltip="click to refresh">
       <div className={s.header}>
         <div>
           <EnvironmentFilled /> {weather.sity}
@@ -35,22 +31,14 @@ const WeatherPlugin: React.FC = () => {
       <div className={s.plugin}>
         <div className={s.boxTemp}>
           <div className={s.temp}>{tempetature}&#8451;</div>
-          {weather.icon ? (
-            <img
-              src={require(`./weatherPicture/${weather.icon}.png`)}
-              alt="weather logo"
-            />
-          ) : (
-            "logo"
-          )}
+          {weather.icon ? <img src={require(`./weatherPicture/${weather.icon}.png`)} alt="weather logo" /> : "logo"}
         </div>
 
         {!window.matchMedia("(max-width: 600px)").matches && (
           <div className={s.extraData}>
             <div>{weather.weatherDescription}</div>
             <div>
-              feels like:{" "}
-              {weather.feels_like ? Math.round(weather.feels_like) : weather.feels_like}
+              feels like: {weather.feels_like ? Math.round(weather.feels_like) : weather.feels_like}
               &#8451;
             </div>
             <div>winter: {weather.windSpeed}m/s</div>

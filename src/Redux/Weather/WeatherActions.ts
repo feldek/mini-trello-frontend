@@ -1,38 +1,17 @@
+import {
+  GetWeatherType,
+  ThunkWeatherType,
+  onSetIsFenchingType,
+  onSetUpdateDateType,
+  onSetWeatherType,
+} from "./WeatherTypes";
 import { getLocation } from "../Location/LocationActions";
 import { api } from "../../Api/Api";
-import { ThunkAction } from "redux-thunk";
-import { RootStateType } from "../Store";
 
 export const ON_SET_WEATHER = "ON_SET_WEATHER";
 export const ON_CLEAR_WEATHER = "ON_CLEAR_WEATHER";
 export const ON_SET_IS_FETCHING_WEATHER = "ON_SET_IS_FETCHING_WEATHER";
 export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
-
-type GetWeatherType = {
-  weatherDescription: string;
-  temp: number;
-  feels_like: number;
-  temp_min: number;
-  temp_max: number;
-  pressure: number;
-  windSpeed: number;
-  sity: string;
-  icon: string;
-};
-
-type onClearWeather = { type: typeof ON_CLEAR_WEATHER };
-type onSetIsFenchingType = {
-  type: typeof ON_SET_IS_FETCHING_WEATHER;
-  isFetching: boolean;
-};
-type onSetUpdateDateType = {
-  type: typeof ON_SET_UPDATE_DATE;
-  previousUpdateTime: number;
-};
-type onSetWeatherType = GetWeatherType & { type: typeof ON_SET_WEATHER };
-
-export type ActionsWeatherType = onSetWeatherType | onSetIsFenchingType | onSetUpdateDateType | onClearWeather;
-type ThunkWeatherType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsWeatherType>;
 
 export const onSetIsFenching = (isFetching: boolean): onSetIsFenchingType => {
   return { type: ON_SET_IS_FETCHING_WEATHER, isFetching };

@@ -1,5 +1,5 @@
-import {
-  ActionsBoardType,
+import { ActionsBoardType, InitialStateType } from './BoardTypes';
+import {  
   ON_SET_BOARDS,
   ON_CREATE_BOARD,
   ON_DELETE_BOARD,
@@ -9,8 +9,6 @@ import {
 
 import { ON_CLEAR_DATA } from "../User/UserConstants";
 
-export type DataBoardType = { name: string; id: string; visibility?: boolean };
-type InitialStateType = { data: DataBoardType[]; isFetching: boolean };
 const initialState: InitialStateType = { data: [], isFetching: false };
 
 const BoardReduser = (state = initialState, action: ActionsBoardType): InitialStateType => {

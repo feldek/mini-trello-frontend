@@ -5,14 +5,19 @@ import { Card, Button, Spin } from "antd";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import PageNotFound from "../../../ExtraComponents/PageNotFound";
+
+
 import "./TasksCard.css";
 import "../../AntDesignStyle.css";
 import s from "./TasksCard.module.css";
-import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
+
 import { getTasks, stepOrder, updateTask } from "../../../Redux/Task/TaskActions";
-import Lists from "./Lists";
 import { deleteListSaga, getListsSaga } from "../../../Redux/List/ListSaga";
+import PageNotFound from "../../../ExtraComponents/PageNotFound";
+import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
+import Lists from "./Lists";
+
+
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -48,7 +53,7 @@ const TasksCard = () => {
   useEffect(() => {
     dispatch(getListsSaga({ boardId: params.boardId }));
     dispatch(getTasks({ boardId: params.boardId }));
-  }, []);
+  }, [dispatch, params]);
 
   const [toggleDelete, setToggleDelete] = useState(false);
   const [listId, setListId] = useState(false);

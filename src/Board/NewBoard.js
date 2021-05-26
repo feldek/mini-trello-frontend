@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, Input, Button } from 'antd';
-import 'antd/dist/antd.css';
-import s from './NewBoard.module.css';
-import './NewBoard.css';
-import { uuid } from 'uuidv4';
-import { createBoardsSaga } from '../Redux/Board/BoardSaga';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Form, Input, Button } from "antd";
+import "antd/dist/antd.css";
+import s from "./NewBoard.module.css";
+import "./NewBoard.css";
+import { uuid } from "uuidv4";
+import { createBoardsSaga } from "../Redux/Board/BoardSaga";
 
 const NewBoard = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const NewBoard = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   const onReset = () => {
@@ -47,7 +47,7 @@ const NewBoard = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input boardname!',
+                message: "Please input boardname!",
               },
             ]}
           >
