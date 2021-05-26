@@ -1,0 +1,107 @@
+.content {
+  display: flex;
+  flex-direction: column;
+}
+.button:hover {
+  color: red;
+}
+.boards {
+  display: flex;
+  flex-wrap: wrap;
+}
+.board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: white;
+}
+
+.board :global {
+  animation-name: visibility;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+.board.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+
+.boardLink {
+  flex: 1;
+  padding: 24px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 3px;
+  cursor: pointer;
+  background: none;
+  -webkit-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+}
+.button:hover:before {
+  border-radius: 5px;
+  font-size: 10px;
+  color: white;
+  background-color: rgb(121, 120, 126);
+  position: absolute;
+  padding: 2px 4px;
+  top: 100%;
+  left: -20%;
+  content: attr(data-title);
+}
+.output:hover {
+  color: red;
+}
+.background {
+  background-color: #ebedee;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+@media (min-width: 1000px) {
+  .content {
+    width: 70%;
+    margin-top: 50px;
+  }
+  .board {
+    width: 300px !important;
+    margin: 3px;
+  }
+  .boards {
+    margin: -3px;
+  }
+}
+@media (min-width: 600px) and (max-width: 1000px) {
+  .content {
+    margin-top: 30px;
+    width: 90%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 6px;
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .content {
+    margin-top: 25px;
+    width: 95%;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    width: 100%;
+  }
+  .boardLink{
+    padding: 10px;
+  }
+}

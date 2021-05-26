@@ -1,0 +1,80 @@
+.linkToBoard {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(241, 241, 241, 0.521);
+  z-index: 2;
+}
+.background {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  z-index: 3;
+}
+.boxModal {
+  height: 500px;
+  align-items: center;
+  cursor: default;
+  z-index: 3;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.boxModal :global {
+  animation-name: innerZoom;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+.boxModal.remove :global {
+  animation-name: visibilityRemove;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+.card {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  outline: 1px solid #f0f0f0;
+  outline-offset: -10px;
+  background: white;
+}
+.form {
+  width: 400px;
+}
+.textArea {
+  min-height: 97px !important;
+  max-height: 358px !important;
+}
+.textDescription {
+  max-height: 358px;
+  min-height: 97px;
+  padding: 0px 12px;
+  border: 1px solid #f0f0f0;
+}
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.button {
+  margin-left: 4px;
+}
+.stopPropagation {
+  display: table;
+  margin-top: 100px;
+}
+@media (max-width: 600px) {
+  .card {
+    width: 95vw;
+  }
+  .form {
+    width: 80vw;
+  }
+}
+@media (max-width: 400px) {
+  .button {
+    padding: 4px 10px;
+  }
+}

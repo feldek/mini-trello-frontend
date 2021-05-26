@@ -1,0 +1,17 @@
+.list {
+  display: flex;
+  justify-content: center;
+  white-space: normal;
+  align-items: center;
+}
+
+.boxLists {
+  font-size: 24px;
+}
+
+@media (max-width: 600px) {
+  .boxLists {
+    font-size: 18px;
+  }
+}
+

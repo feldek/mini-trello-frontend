@@ -1,0 +1,27 @@
+.box {
+  margin: auto;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+form .newTaskLabel {
+  display: flex;
+  font-size: 20px;
+  width: 100%;
+}
+.button {
+  padding: 4px 8px;
+  margin-left: 5px;
+}
+@media (max-width: 600px) {
+  .button {
+    padding: 4px 6px;
+  }
+}

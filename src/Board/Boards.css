@@ -1,0 +1,13 @@
+.boardsContent > .ant-card.ant-card-bordered > .ant-card-head {
+  background-color: #ebedee;
+}
+.boardsContent .ant-card-head-title {
+  display: flex;
+  justify-content: center;
+}
+.boardsContent > .ant-card.ant-card-bordered > .ant-card-head {
+  margin: -1px;
+}
+.boardsContent > .ant-card.ant-card-bordered {
+  background: none;
+}

@@ -1,0 +1,19 @@
+.background .login-form {
+  width: 300px;
+}
+.background .ant-form-item-control-input-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.background .ant-checkbox-wrapper.ant-checkbox-wrapper-checked {
+  width: 150px;
+}
+.background .login-form-button {
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .background .login-form {
+    width: 100%;
+  }
+}
