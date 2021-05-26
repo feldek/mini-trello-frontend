@@ -14,7 +14,6 @@ import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
 import { deleteBoardsSaga, getBoardsSaga } from "../Redux/Board/BoardSaga";
-import { getBoards } from "../Redux/Board/BoardActions";
 
 const Boards = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -25,7 +24,6 @@ const Boards = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(getBoardsSaga());
-    
   }, []);
 
   const handleDelete = (id: string) => {
