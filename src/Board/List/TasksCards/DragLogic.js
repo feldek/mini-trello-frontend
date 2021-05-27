@@ -12,7 +12,7 @@ import "../../AntDesignStyle.css";
 import s from "./TasksCard.module.css";
 
 import { getTasks, stepOrder, updateTask } from "../../../Redux/Task/TaskActions";
-import { deleteListSaga, getListsSaga } from "../../../Redux/List/ListSaga";
+import { deleteListSaga, getListsSaga } from "../../../Redux/List/ListSagas";
 import PageNotFound from "../../../ExtraComponents/PageNotFound";
 import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
 import Lists from "./Lists";

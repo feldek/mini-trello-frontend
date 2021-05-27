@@ -4,14 +4,12 @@ import {
   onSetIsFenchingType,
   onSetUpdateDateType,
   onSetWeatherType,
+  ON_SET_IS_FETCHING_WEATHER,
+  ON_SET_UPDATE_DATE,
+  ON_SET_WEATHER,
 } from "./WeatherTypes";
 import { getLocation } from "../Location/LocationActions";
 import { api } from "../../Api/Api";
-
-export const ON_SET_WEATHER = "ON_SET_WEATHER";
-export const ON_CLEAR_WEATHER = "ON_CLEAR_WEATHER";
-export const ON_SET_IS_FETCHING_WEATHER = "ON_SET_IS_FETCHING_WEATHER";
-export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
 
 export const onSetIsFenching = (isFetching: boolean): onSetIsFenchingType => {
   return { type: ON_SET_IS_FETCHING_WEATHER, isFetching };
@@ -20,28 +18,10 @@ export const onSetUpdateDate = (previousUpdateTime: number): onSetUpdateDateType
   return { type: ON_SET_UPDATE_DATE, previousUpdateTime };
 };
 
-export const onSetWeather = ({
-  weatherDescription,
-  temp,
-  feels_like,
-  temp_min,
-  temp_max,
-  pressure,
-  windSpeed,
-  sity,
-  icon,
-}: GetWeatherType): onSetWeatherType => {
+export const onSetWeather = (payload: GetWeatherType): onSetWeatherType => {
   return {
     type: ON_SET_WEATHER,
-    weatherDescription,
-    temp,
-    feels_like,
-    temp_min,
-    temp_max,
-    pressure,
-    windSpeed,
-    sity,
-    icon,
+    ...payload,
   };
 };
 

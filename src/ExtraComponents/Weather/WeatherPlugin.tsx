@@ -1,7 +1,7 @@
 import { EnvironmentFilled } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getWeather } from "../../Redux/Weather/WeatherActions";
+import { getWeatherSaga } from "../../Redux/Weather/WeatherSagas";
 import { useTypeSelector } from "../../Redux/TypeHook";
 import s from "./WeatherPlugin.module.css";
 
@@ -10,7 +10,7 @@ const WeatherPlugin: React.FC = () => {
   const weather = useTypeSelector((s) => s.weather.data);
   const date = new Date();
   useEffect(() => {
-    dispatch(getWeather(3600000));
+    dispatch(getWeatherSaga(3600000));
   }, [dispatch]);
 
   let tempetature = "";
@@ -21,7 +21,7 @@ const WeatherPlugin: React.FC = () => {
     tempetature = `${Math.round(weather.temp)}`;
   }
   return (
-    <div className={s.background} onClick={() => dispatch(getWeather())} refresh-Tooltip="click to refresh">
+    <div className={s.background} onClick={() => dispatch(getWeatherSaga())} refresh-Tooltip="click to refresh">
       <div className={s.header}>
         <div>
           <EnvironmentFilled /> {weather.sity}

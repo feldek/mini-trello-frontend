@@ -1,5 +1,5 @@
 
-export const BOARD_SAGA = {
+export const BOARD_SAGAS = {
   GET_BOARDS: "board/getBoards",  
   CREATE_BOARD: "board/createBoard",
   DELETE_BOARD: "board/deleteBoard",

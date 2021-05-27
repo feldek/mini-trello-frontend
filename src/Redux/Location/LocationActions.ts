@@ -1,34 +1,16 @@
-import { InitialStateType, ThunkLocationType, ActionsLocationType } from "./LocationTypes";
 import axios from "axios";
+import {
+  InitialStateType,
+  ThunkLocationType,
+  ActionsLocationType,
+  ON_SET_LOCATION,
+  ApiLocationType,
+  GeolocationType,
+} from "./LocationTypes";
 
-export const ON_SET_LOCATION = "ON_SET_LOCATION";
-export const ON_SET_IS_FETCHING_LOCATION = "ON_SET_IS_FETCHING_LOCATION";
-export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
-
-export const onSetLocation = ({
-  sity,
-  countryCode,
-  countryName,
-  latitude,
-  longitude,
-}: InitialStateType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, sity, countryCode, countryName, latitude, longitude };
+export const onSetLocation = (payload: InitialStateType): ActionsLocationType => {
+  return { type: ON_SET_LOCATION, ...payload };
 };
-
-interface ApiLocationType {
-  sity: string;
-  countryCode: number;
-  countryName: string;
-  latitude: number;
-  longitude: number;
-}
-
-interface GeolocationType {
-  coords: {
-    latitude: number;
-    longitude: number;
-  };
-}
 
 export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
