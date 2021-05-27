@@ -1,10 +1,11 @@
-import { InitialStateType, ActionsWeatherType } from './WeatherTypes';
 import {
+  InitialStateType,
+  ActionsWeatherType,
   ON_SET_WEATHER,
   ON_CLEAR_WEATHER,
   ON_SET_IS_FETCHING_WEATHER,
   ON_SET_UPDATE_DATE,
-} from "./WeatherActions";
+} from "./WeatherTypes";
 
 const initialState: InitialStateType = {
   data: {
@@ -22,10 +23,7 @@ const initialState: InitialStateType = {
   previousUpdateTime: null,
 };
 
-const WeatherReduser = (
-  state = initialState,
-  action: ActionsWeatherType
-): InitialStateType => {
+const WeatherReduser = (state = initialState, action: ActionsWeatherType): InitialStateType => {
   switch (action.type) {
     case ON_SET_WEATHER: {
       return {

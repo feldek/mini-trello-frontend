@@ -8,14 +8,8 @@ import {
   GeolocationType,
 } from "./LocationTypes";
 
-export const onSetLocation = ({
-  sity,
-  countryCode,
-  countryName,
-  latitude,
-  longitude,
-}: InitialStateType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, sity, countryCode, countryName, latitude, longitude };
+export const onSetLocation = (payload: InitialStateType): ActionsLocationType => {
+  return { type: ON_SET_LOCATION, ...payload };
 };
 
 export const getLocation = (): ThunkLocationType => {

@@ -1,4 +1,3 @@
-import { ON_CLEAR_WEATHER, ON_SET_IS_FETCHING_WEATHER, ON_SET_UPDATE_DATE, ON_SET_WEATHER } from "./WeatherActions";
 import { ThunkAction } from "redux-thunk";
 import { RootStateType } from "../Store";
 
@@ -20,6 +19,12 @@ export type InitialStateType = {
   previousUpdateTime: null | number;
 };
 
+export const GET_WEATHER = "ON_GET_WEATHER";
+export const ON_SET_WEATHER = "ON_SET_WEATHER";
+export const ON_CLEAR_WEATHER = "ON_CLEAR_WEATHER";
+export const ON_SET_IS_FETCHING_WEATHER = "ON_SET_IS_FETCHING_WEATHER";
+export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
+
 type onClearWeather = { type: typeof ON_CLEAR_WEATHER };
 export type onSetIsFenchingType = {
   type: typeof ON_SET_IS_FETCHING_WEATHER;
@@ -29,6 +34,23 @@ export type onSetUpdateDateType = {
   type: typeof ON_SET_UPDATE_DATE;
   previousUpdateTime: number;
 };
+export type onGetWeatherType = {
+  type: typeof GET_WEATHER;
+  requestInterval: number;
+};
+export type ApiGetWeatherType = {
+  weather: { description: string; icon: string }[];
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+  };
+  wind: { speed: number };
+  name: string;
+};
+
 export type onSetWeatherType = GetWeatherType & { type: typeof ON_SET_WEATHER };
 
 export type ActionsWeatherType = onSetWeatherType | onSetIsFenchingType | onSetUpdateDateType | onClearWeather;

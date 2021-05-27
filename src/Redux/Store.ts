@@ -1,3 +1,4 @@
+import { weatherSaga } from "./Weather/WeatherSagas";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import BoardReduser from "./Board/BoardReducer";
 import ListReduser from "./List/ListReducer";
@@ -40,7 +41,7 @@ export const store = createStore(
 export const persistor = persistStore(store);
 
 export const rootSaga = function* rootSaga() {
-  yield all([fork(boardSaga), fork(listSaga), fork(locationSaga)]);
+  yield all([fork(boardSaga), fork(listSaga), fork(locationSaga), fork(weatherSaga)]);
 };
 
 sagaMiddleware.run(rootSaga);

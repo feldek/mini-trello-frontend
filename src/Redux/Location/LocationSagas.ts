@@ -9,14 +9,8 @@ import {
   ON_SET_LOCATION,
 } from "./LocationTypes";
 
-const onSetLocation = ({
-  sity,
-  countryCode,
-  countryName,
-  latitude,
-  longitude,
-}: InitialStateType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, sity, countryCode, countryName, latitude, longitude };
+const onSetLocation = (payload: InitialStateType): ActionsLocationType => {
+  return { type: ON_SET_LOCATION, ...payload };
 };
 
 export const getLocationSaga = (): { type: typeof GET_LOCATION } => ({ type: GET_LOCATION });
@@ -70,5 +64,3 @@ function* sagas() {
 }
 
 export const locationSaga = sagas;
-
-

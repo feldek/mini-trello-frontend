@@ -1,4 +1,3 @@
-import { RootStateType } from "../Redux/Store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,11 +8,12 @@ import classNames from "classnames";
 import s from "./Boards.module.css";
 import "./Boards.css";
 
+import { RootStateType } from "../Redux/Store";
 import NewBoard from "./NewBoard";
 import DeleteIcon from "../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
 import Header from "./Header";
-import { deleteBoardsSaga, getBoardsSaga } from "../Redux/Board/BoardSaga";
+import { deleteBoardsSaga, getBoardsSaga } from "../Redux/Board/BoardSagas";
 
 const Boards = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Boards = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(getBoardsSaga());
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = (id: string) => {
     dispatch(deleteBoardsSaga({ boardId: id }));
