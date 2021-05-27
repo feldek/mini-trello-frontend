@@ -1,5 +1,5 @@
 import { InitialStateType, ActionsLocationType } from "./LocationTypes";
-import { ON_SET_LOCATION } from "./LocationActions";
+import { ON_SET_LOCATION } from "./LocationTypes";
 
 const initialState: InitialStateType = {
   sity: "",

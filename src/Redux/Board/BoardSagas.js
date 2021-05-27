@@ -10,9 +10,9 @@ import {
   onSetIsFenchingBoards,
 } from "./BoardActions";
 import { notificationAntd } from "../User/UserAction";
-import { BOARD_SAGA } from "./BoardConstants.ts";
+import { BOARD_SAGAS } from "./BoardConstants.ts";
 
-export const getBoardsSaga = () => ({ type: BOARD_SAGA.GET_BOARDS });
+export const getBoardsSaga = () => ({ type: BOARD_SAGAS.GET_BOARDS });
 function* watchGetBoards() {
   yield put(onSetIsFenchingBoards(true));
   const boards = yield api.getRequestAuth("boards");
@@ -22,7 +22,7 @@ function* watchGetBoards() {
   yield put(onSetIsFenchingBoards(false));
 }
 
-export const createBoardsSaga = ({ name, id }) => ({ type: BOARD_SAGA.CREATE_BOARD, name, id });
+export const createBoardsSaga = ({ name, id }) => ({ type: BOARD_SAGAS.CREATE_BOARD, name, id });
 function* watchCreateBoards({ name, id }) {
   yield put(onCreateBoardStart({ name, id }));
   const result = yield api.postRequestAuth("board", { name, id });
@@ -33,7 +33,7 @@ function* watchCreateBoards({ name, id }) {
   }
 }
 
-export const deleteBoardsSaga = ({ boardId }) => ({ type: BOARD_SAGA.DELETE_BOARD, boardId });
+export const deleteBoardsSaga = ({ boardId }) => ({ type: BOARD_SAGAS.DELETE_BOARD, boardId });
 function* watchDeleteBoards({ boardId }) {
   yield put(onDeleteBoardStart({ boardId }));
   const result = yield api.deleteRequestAuth("board", { id: boardId });
@@ -47,9 +47,9 @@ function* watchDeleteBoards({ boardId }) {
 
 function* sagas() {
   yield all([
-    takeLatest(BOARD_SAGA.GET_BOARDS, watchGetBoards),    
-    takeLatest(BOARD_SAGA.CREATE_BOARD, watchCreateBoards),
-    takeLatest(BOARD_SAGA.DELETE_BOARD, watchDeleteBoards),
+    takeLatest(BOARD_SAGAS.GET_BOARDS, watchGetBoards),    
+    takeLatest(BOARD_SAGAS.CREATE_BOARD, watchCreateBoards),
+    takeLatest(BOARD_SAGAS.DELETE_BOARD, watchDeleteBoards),
   ]);
 }
 

@@ -8,11 +8,12 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import UserReducer from "./User/UserReducer";
 import createSagaMiddleware from "redux-saga";
-import { listSaga } from "./List/ListSaga";
-import { boardSaga } from "./Board/BoardSaga";
+import { listSaga } from "./List/ListSagas";
+import { boardSaga } from "./Board/BoardSagas";
 import { all, fork } from "redux-saga/effects";
 import LocationReduser from "./Location/LocationReducer";
 import WeatherReduser from "./Weather/WeatherReducer";
+import { locationSaga } from "./Location/LocationSagas";
 
 const persistConfig = {
   key: "root",
@@ -38,8 +39,8 @@ export const store = createStore(
 );
 export const persistor = persistStore(store);
 
-export const rootSaga = function* rootSaga() {  
-  yield all([fork(boardSaga), fork(listSaga)]);
+export const rootSaga = function* rootSaga() {
+  yield all([fork(boardSaga), fork(listSaga), fork(locationSaga)]);
 };
 
 sagaMiddleware.run(rootSaga);
