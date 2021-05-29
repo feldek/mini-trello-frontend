@@ -1,17 +1,17 @@
-import { ActionsBoardType, InitialStateType } from './BoardTypes';
+import { ActionsBoardType, InitialBoardType } from './BoardTypes';
 import {  
   ON_SET_BOARDS,
   ON_CREATE_BOARD,
   ON_DELETE_BOARD,
   ON_SET_VISIBILITY_BOARD,
   ON_SET_IS_FETCHING_BOARDS,
-} from "./BoardActions";
+} from "./BoardTypes";
 
 import { ON_CLEAR_DATA } from "../User/UserConstants";
 
-const initialState: InitialStateType = { data: [], isFetching: false };
+const initialState: InitialBoardType = { data: [], isFetching: false };
 
-const BoardReduser = (state = initialState, action: ActionsBoardType): InitialStateType => {
+const BoardReduser = (state = initialState, action: ActionsBoardType): InitialBoardType => {
   switch (action.type) {
     case ON_CREATE_BOARD: {
       const newData = [...state.data];

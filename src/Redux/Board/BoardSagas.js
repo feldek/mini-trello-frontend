@@ -10,7 +10,7 @@ import {
   onSetIsFenchingBoards,
 } from "./BoardActions";
 import { notificationAntd } from "../User/UserAction";
-import { BOARD_SAGAS } from "./BoardConstants.ts";
+import { BOARD_SAGAS } from "./BoardTypes";
 
 export const getBoardsSaga = () => ({ type: BOARD_SAGAS.GET_BOARDS });
 function* watchGetBoards() {
