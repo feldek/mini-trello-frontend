@@ -1,25 +1,16 @@
-import { InitialLocationType, ActionsLocationType } from "./LocationTypes";
+import { InitialLocationType, LocationActionsType } from "./LocationTypes";
 import { ON_SET_LOCATION } from "./LocationTypes";
 
-const initialState: InitialLocationType = {
-  sity: "",
-  countryCode: null,
-  countryName: "",
+export const initialLocation: InitialLocationType = {
   latitude: null,
   longitude: null,
 };
 
-const LocationReduser = (state = initialState, action: ActionsLocationType): InitialLocationType => {
+const LocationReduser = (state = initialLocation, action: LocationActionsType): InitialLocationType => {
   switch (action.type) {
     case ON_SET_LOCATION: {
-      return {
-        ...state,
-        sity: action.sity,
-        countryCode: action.countryCode,
-        countryName: action.countryName,
-        latitude: action.latitude,
-        longitude: action.longitude,
-      };
+      console.log(action.payload);
+      return { ...state, ...action.payload };
     }
     default:
       return state;

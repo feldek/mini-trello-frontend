@@ -1,9 +1,9 @@
 import { weatherSaga } from "./Weather/WeatherSagas";
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { combineReducers, createStore, applyMiddleware, Action } from "redux";
 import BoardReduser from "./Board/BoardReducer";
 import ListReduser from "./List/ListReducer";
 import TaskReducer from "./Task/TaskReducer";
-import thunkMiddleware from "redux-thunk";
+import thunkMiddleware, { ThunkAction } from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -47,3 +47,10 @@ export const rootSaga = function* rootSaga() {
 sagaMiddleware.run(rootSaga);
 
 export type RootStateType = ReturnType<typeof reducers>;
+
+export type InferActionsTypes<T> = T extends {
+  [key: string]: (...args: any[]) => infer U;
+}
+  ? U
+  : never;
+export type BaseThunkType<A extends Action, R = Promise<void>> = ThunkAction<R, RootStateType, unknown, A>;

@@ -1,16 +1,9 @@
 import axios from "axios";
 import { put, all, takeLatest } from "redux-saga/effects";
-import {
-  ActionsLocationType,
-  ApiLocationType,
-  CoordsType,
-  InitialLocationType,
-  GET_LOCATION,
-  ON_SET_LOCATION,
-} from "./LocationTypes";
+import { LocationActionsType, CoordsType, InitialLocationType, GET_LOCATION, ON_SET_LOCATION } from "./LocationTypes";
 
-const onSetLocation = (payload: InitialLocationType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, ...payload };
+const onSetLocation = (data: InitialLocationType): LocationActionsType => {
+  return { type: ON_SET_LOCATION, payload: { ...data } };
 };
 
 export const getLocationSaga = (): { type: typeof GET_LOCATION } => ({ type: GET_LOCATION });
@@ -30,7 +23,7 @@ function* watchGetLocation() {
   } catch (err) {
     console.log(err);
 
-    const result: { data: ApiLocationType; status: number } = yield axios.get(
+    const result: { data: InitialLocationType; status: number } = yield axios.get(
       "https://api.ipdata.co/?api-key=a3e875691c4fd0211a8f3f9f566fc2c56be06cbd8f60735d6e48f031"
     );
 
@@ -48,9 +41,6 @@ function* watchGetLocation() {
     } else {
       yield put(
         onSetLocation({
-          sity: null,
-          countryCode: null,
-          countryName: null,
           latitude: null,
           longitude: null,
         })
