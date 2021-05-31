@@ -3,12 +3,12 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { uuid } from 'uuidv4';
 import { Card } from 'antd';
 import classNames from 'classnames';
-import NewList from '../NewList';
-import List from '../List';
-import NewTask from './NewTask';
-import Tasks from './Tasks';
-import DeleteIcon from '../../../ExtraComponents/DeleteIcon';
-import s from './TasksCard.module.css';
+import NewList from './List/NewList';
+import List from './List/List';
+import NewTask from './Tasks/NewTask';
+import Tasks from './Tasks/Tasks';
+import DeleteIcon from '../../ExtraComponents/DeleteIcon';
+import s from './Cards.module.css';
 
 const Lists = ({
   onDragEnd, currentLists, currentTasks, getListStyle, handleDelete,

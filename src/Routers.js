@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Boards from './Board/Boards';
-import TasksCard from './Board/List/TasksCards/DragLogic';
-import PageNotFound from './ExtraComponents/PageNotFound';
-import ContainerDescription from './Board/List/TasksCards/Description/Description';
+import Boards from './Pages/Boards/Boards';
+import TasksCard from './Pages/Cards/DragLogic';
+import PageNotFound from './ExtraComponents/PageNotFound/PageNotFound';
+import ContainerDescription from './Pages/Cards/Description/Description';
 import SignIn from './Authorization/SignIn';
 import ProtectedRoute from './Authorization/ProtectedRoute';
 import SignUp from './Authorization/SignUp';

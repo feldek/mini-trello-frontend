@@ -8,12 +8,12 @@ import classNames from "classnames";
 import s from "./Boards.module.css";
 import "./Boards.css";
 
-import { RootStateType } from "../Redux/Store";
-import NewBoard from "./NewBoard";
-import DeleteIcon from "../ExtraComponents/DeleteIcon";
-import ConfirmDelete from "../ExtraComponents/ConfirmDelete";
-import Header from "./Header";
-import { deleteBoardsSaga, getBoardsSaga } from "../Redux/Board/BoardSagas";
+import { RootStateType } from "../../Redux/Store";
+import NewBoard from "./NewBoard/NewBoard";
+import DeleteIcon from "../../ExtraComponents/DeleteIcon";
+import ConfirmDelete from "../../ExtraComponents/ConfirmDelete/ConfirmDelete";
+import Header from "./Header/Header";
+import { deleteBoardsSaga, getBoardsSaga } from "../../Redux/Board/BoardSagas";
 
 const Boards = (): JSX.Element => {
   const dispatch = useDispatch();

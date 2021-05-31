@@ -2,13 +2,13 @@ import { SettingOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import React, { useState } from 'react';
-import LogOut from '../Authorization/LogOut';
-import ChangePassword from '../Authorization/СhangePassword';
-import ArrayForm from '../ExtraComponents/Form/ArrayForm';
+import LogOut from '../../../Authorization/LogOut';
+import ChangePassword from '../../../Authorization/СhangePassword';
+import ArrayForm from '../../../ExtraComponents/Form/ArrayForm';
 import s from './Header.module.css';
 import './Header.css';
 import classNames from 'classnames';
-import WeatherPlugin from '../ExtraComponents/Weather/WeatherPlugin';
+import WeatherPlugin from '../../../ExtraComponents/Weather/WeatherPlugin';
 
 const Header = () => {
   const [visiblePass, setVisiblePass] = useState(false);
