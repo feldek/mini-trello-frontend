@@ -1,17 +1,18 @@
-import { weatherSaga } from "./Weather/WeatherSagas";
 import { combineReducers, createStore, applyMiddleware, Action } from "redux";
-import BoardReduser from "./Board/BoardReducer";
-import ListReduser from "./List/ListReducer";
-import TaskReducer from "./Task/TaskReducer";
 import thunkMiddleware, { ThunkAction } from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import UserReducer from "./User/UserReducer";
 import createSagaMiddleware from "redux-saga";
+import { all, fork } from "redux-saga/effects";
+
+import { weatherSaga } from "./Weather/WeatherSagas";
+import BoardReduser from "./Board/BoardReducer";
+import ListReduser from "./List/ListReducer";
+import TaskReducer from "./Task/TaskReducer";
+import UserReducer from "./User/UserReducer";
 import { listSaga } from "./List/ListSagas";
 import { boardSaga } from "./Board/BoardSagas";
-import { all, fork } from "redux-saga/effects";
 import LocationReduser from "./Location/LocationReducer";
 import WeatherReduser from "./Weather/WeatherReducer";
 import { locationSaga } from "./Location/LocationSagas";
@@ -40,7 +41,7 @@ export const store = createStore(
 );
 export const persistor = persistStore(store);
 
-export const rootSaga = function* rootSaga() {
+export const rootSaga = function* rootSaga(): any {
   yield all([fork(boardSaga), fork(listSaga), fork(locationSaga), fork(weatherSaga)]);
 };
 

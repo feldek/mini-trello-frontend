@@ -1,5 +1,4 @@
-import { InitialLocationType, LocationActionsType } from "./LocationTypes";
-import { ON_SET_LOCATION } from "./LocationTypes";
+import { InitialLocationType, LocationActionsType, locationConsts } from "./LocationTypes";
 
 export const initialLocation: InitialLocationType = {
   latitude: null,
@@ -8,8 +7,7 @@ export const initialLocation: InitialLocationType = {
 
 const LocationReduser = (state = initialLocation, action: LocationActionsType): InitialLocationType => {
   switch (action.type) {
-    case ON_SET_LOCATION: {
-      console.log(action.payload);
+    case locationConsts.ON_SET_LOCATION: {
       return { ...state, ...action.payload };
     }
     default:

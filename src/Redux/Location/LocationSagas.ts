@@ -1,21 +1,17 @@
 import axios from "axios";
 import { put, all, takeLatest } from "redux-saga/effects";
-import { LocationActionsType, CoordsType, InitialLocationType, GET_LOCATION, ON_SET_LOCATION } from "./LocationTypes";
 
-const onSetLocation = (data: InitialLocationType): LocationActionsType => {
-  return { type: ON_SET_LOCATION, payload: { ...data } };
-};
+import { locationActions } from "./LocationActions";
+import { CoordsType, InitialLocationType, locationConsts } from "./LocationTypes";
 
-export const getLocationSaga = (): { type: typeof GET_LOCATION } => ({ type: GET_LOCATION });
 function* watchGetLocation() {
   try {
     const { coords }: CoordsType = yield new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    console.log(coords);
 
     yield put(
-      onSetLocation({
+      locationActions.onSetLocation({
         latitude: coords.latitude,
         longitude: coords.longitude,
       })
@@ -30,7 +26,7 @@ function* watchGetLocation() {
     console.log(result);
     if (result.status === 200) {
       yield put(
-        onSetLocation({
+        locationActions.onSetLocation({
           sity: result.data.sity,
           countryCode: result.data.countryCode,
           countryName: result.data.countryName,
@@ -40,7 +36,7 @@ function* watchGetLocation() {
       );
     } else {
       yield put(
-        onSetLocation({
+        locationActions.onSetLocation({
           latitude: null,
           longitude: null,
         })
@@ -49,8 +45,8 @@ function* watchGetLocation() {
   }
 }
 
-function* sagas() {
-  yield all([takeLatest(GET_LOCATION, watchGetLocation)]);
+function* sagas(): any {
+  yield all([takeLatest(locationConsts.GET_LOCATION, watchGetLocation)]);
 }
 
 export const locationSaga = sagas;

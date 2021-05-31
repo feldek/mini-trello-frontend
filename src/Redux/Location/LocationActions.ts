@@ -1,5 +1,12 @@
 import axios from "axios";
-import { LocationThunkType, InitialLocationType, ON_SET_LOCATION, CoordsType } from "./LocationTypes";
+
+import { LocationThunkType, InitialLocationType, CoordsType, locationConsts } from "./LocationTypes";
+
+export const locationActions = {
+  onSetLocation: (data: InitialLocationType) =>
+    ({ type: locationConsts.ON_SET_LOCATION, payload: { ...data } } as const),
+  getLocationSaga: () => ({ type: locationConsts.GET_LOCATION } as const),
+};
 
 export const getLocation = (): LocationThunkType => {
   return async (dispatch) => {
@@ -41,8 +48,4 @@ export const getLocation = (): LocationThunkType => {
       }
     }
   };
-};
-
-export const locationActions = {
-  onSetLocation: (data: InitialLocationType) => ({ type: ON_SET_LOCATION, payload: { ...data } } as const),
 };

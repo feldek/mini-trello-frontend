@@ -3,8 +3,7 @@ import { api } from "../../Api/Api";
 import {
   ON_CREATE_LIST,
   ON_CREATE_LISTS,
-  ON_DELETE_LIST,
-  ON_DELETE_BOARD,
+  ON_DELETE_LIST,  
   ON_SET_LISTS,
   ON_SET_VISIBILITY_LIST,
   ON_SET_IS_FETCHING_LISTS,

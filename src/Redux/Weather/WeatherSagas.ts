@@ -1,47 +1,20 @@
-import { InitialLocationType as InitialLocationType } from "./../Location/LocationTypes";
-import { ApiGetWeatherType, GET_WEATHER } from "./WeatherTypes";
+import { locationActions } from "./../Location/LocationActions";
 import { put, all, takeLatest, select } from "redux-saga/effects";
-import {
-  GetWeatherType,
-  onSetIsFenchingType,
-  onSetUpdateDateType,
-  onSetWeatherType,
-  onGetWeatherType,
-  ON_SET_IS_FETCHING_WEATHER,
-  ON_SET_UPDATE_DATE,
-  ON_SET_WEATHER,
-} from "./WeatherTypes";
-import { getLocationSaga } from "../Location/LocationSagas";
+
+import { ApiGetWeatherType , onGetWeatherSagaType, weatherConsts } from "./WeatherTypes";
+import { weatherActions } from "./WeatherActions";
+import { InitialLocationType } from "./../Location/LocationTypes";
 import { api } from "../../Api/Api";
 
-const onSetIsFenching = (isFetching: boolean): onSetIsFenchingType => {
-  return { type: ON_SET_IS_FETCHING_WEATHER, isFetching };
-};
-const onSetUpdateDate = (previousUpdateTime: number): onSetUpdateDateType => {
-  return { type: ON_SET_UPDATE_DATE, previousUpdateTime };
-};
-
-const onSetWeather = (payload: GetWeatherType): onSetWeatherType => {
-  return {
-    type: ON_SET_WEATHER,
-    ...payload,
-  };
-};
-
-export const getWeatherSaga = (requestInterval = 0): onGetWeatherType => ({
-  type: GET_WEATHER,
-  requestInterval,
-});
-
-function* watchGetWeather(action: onGetWeatherType) {
+function* watchGetWeather(action: onGetWeatherSagaType) {
   try {
-    const { requestInterval } = action;
+    const { requestInterval } = action.payload;
     const previousUpdateTime: number = yield select((s) => s.weather.previousUpdateTime);
     const currentTime = new Date().getTime();
     if (!previousUpdateTime || currentTime - previousUpdateTime > requestInterval) {
-      yield put(onSetIsFenching(true));
-      yield put(onSetUpdateDate(currentTime));
-      yield put(getLocationSaga());
+      yield put(weatherActions.onSetIsFenching(true));
+      yield put(weatherActions.onSetUpdateDate(currentTime));
+      yield put(locationActions.getLocationSaga());
 
       const locationState: InitialLocationType = yield select((s) => s.location);
       if (locationState.latitude === null || locationState.longitude === null) {
@@ -53,7 +26,7 @@ function* watchGetWeather(action: onGetWeatherType) {
         lon: locationState.longitude,
       });
       yield put(
-        onSetWeather({
+        weatherActions.onSetWeather({
           weatherDescription: payload.weather[0].description,
           temp: payload.main.temp,
           feels_like: payload.main.feels_like,
@@ -65,15 +38,15 @@ function* watchGetWeather(action: onGetWeatherType) {
           icon: payload.weather[0].icon,
         })
       );
-      yield put(onSetIsFenching(false));
+      yield put(weatherActions.onSetIsFenching(false));
     }
   } catch (err) {
     console.log(err);
   }
 }
 
-function* sagas() {
-  yield all([takeLatest(GET_WEATHER, watchGetWeather)]);
+function* sagas(): any {
+  yield all([takeLatest(weatherConsts.GET_WEATHER, watchGetWeather)]);
 }
 
 export const weatherSaga = sagas;

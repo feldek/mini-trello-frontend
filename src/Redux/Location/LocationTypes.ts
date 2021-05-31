@@ -1,8 +1,10 @@
 import { BaseThunkType, InferActionsTypes } from "../Store";
 import { locationActions } from "./LocationActions";
 
-export const ON_SET_LOCATION = "ON_SET_LOCATION";
-export const GET_LOCATION = "GET_LOCATION";
+export const locationConsts = {
+  ON_SET_LOCATION: "ON_SET_LOCATION",
+  GET_LOCATION: "GET_LOCATION",
+} as const;
 
 export type InitialLocationType = {
   sity?: string;

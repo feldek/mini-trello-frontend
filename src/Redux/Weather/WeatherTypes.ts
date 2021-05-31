@@ -1,7 +1,7 @@
-import { ThunkAction } from "redux-thunk";
-import { RootStateType } from "../Store";
+import { BaseThunkType, InferActionsTypes } from "../Store";
+import { weatherActions } from "./WeatherActions";
 
-export type GetWeatherType = {
+export type WeatherType = {
   weatherDescription: string;
   temp: null | number;
   feels_like: null | number;
@@ -12,33 +12,21 @@ export type GetWeatherType = {
   sity: string;
   icon: string;
 };
-
 export type InitialWeatherType = {
-  data: GetWeatherType;
+  data: WeatherType;
   isFetching: boolean;
   previousUpdateTime: null | number;
 };
 
-export const GET_WEATHER = "ON_GET_WEATHER";
-export const ON_SET_WEATHER = "ON_SET_WEATHER";
-export const ON_CLEAR_WEATHER = "ON_CLEAR_WEATHER";
-export const ON_SET_IS_FETCHING_WEATHER = "ON_SET_IS_FETCHING_WEATHER";
-export const ON_SET_UPDATE_DATE = "ON_SET_UPDATE_DATE";
+export const weatherConsts = {
+  GET_WEATHER: "ON_GET_WEATHER",
+  ON_SET_WEATHER: "ON_SET_WEATHER",
+  ON_SET_IS_FETCHING_WEATHER: "ON_SET_IS_FETCHING_WEATHER",
+  ON_SET_UPDATE_DATE: "ON_SET_UPDATE_DATE",
+} as const;
 
-type onClearWeather = { type: typeof ON_CLEAR_WEATHER };
-export type onSetIsFenchingType = {
-  type: typeof ON_SET_IS_FETCHING_WEATHER;
-  isFetching: boolean;
-};
-export type onSetUpdateDateType = {
-  type: typeof ON_SET_UPDATE_DATE;
-  previousUpdateTime: number;
-};
-export type onGetWeatherType = {
-  type: typeof GET_WEATHER;
-  requestInterval: number;
-};
-export type onSetWeatherType = GetWeatherType & { type: typeof ON_SET_WEATHER };
+export type WeatherActionsType = InferActionsTypes<typeof weatherActions>;
+export type WeatherThunkType = BaseThunkType<WeatherActionsType>;
 
 export type ApiGetWeatherType = {
   weather: { description: string; icon: string }[];
@@ -53,5 +41,9 @@ export type ApiGetWeatherType = {
   name: string;
 };
 
-export type ActionsWeatherType = onSetWeatherType | onSetIsFenchingType | onSetUpdateDateType | onClearWeather;
-export type ThunkWeatherType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsWeatherType>;
+export type onGetWeatherSagaType = {
+  type: typeof weatherConsts.GET_WEATHER;
+  payload: {
+    requestInterval: number;
+  };
+};
