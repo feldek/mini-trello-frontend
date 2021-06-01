@@ -1,4 +1,4 @@
-import { ON_DELETE_BOARD } from "../Board/BoardTypes";
+import { boardConsts } from "../Board/BoardTypes";
 import { ON_CLEAR_DATA } from "../User/UserConstants";
 
 import {
@@ -63,7 +63,7 @@ const ListReduser = (state = initialState, action) => {
     case ON_CLEAR_DATA: {
       return { ...state, data: action.payload.newData };
     }
-    case ON_DELETE_BOARD: {
+    case boardConsts.ON_DELETE_BOARD: {
       const newData = state.data.filter((item) => action.boardId !== item.boardId);
       return { ...state, data: newData };
     }
