@@ -1,7 +1,7 @@
-import { InitialStateType, ActionsLocationType } from "./LocationTypes";
+import { InitialLocationType, ActionsLocationType } from "./LocationTypes";
 import { ON_SET_LOCATION } from "./LocationTypes";
 
-const initialState: InitialStateType = {
+const initialState: InitialLocationType = {
   sity: "",
   countryCode: null,
   countryName: "",
@@ -9,7 +9,7 @@ const initialState: InitialStateType = {
   longitude: null,
 };
 
-const LocationReduser = (state = initialState, action: ActionsLocationType): InitialStateType => {
+const LocationReduser = (state = initialState, action: ActionsLocationType): InitialLocationType => {
   switch (action.type) {
     case ON_SET_LOCATION: {
       return {

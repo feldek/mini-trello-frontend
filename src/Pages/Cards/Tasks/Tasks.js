@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useDispatch } from 'react-redux';
 import { Link, useRouteMatch } from 'react-router-dom';
-import s from './TasksCard.module.css';
+import s from '../Cards.module.css';
 import DeleteIcon from '../../../ExtraComponents/DeleteIcon';
-import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete';
+import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete/ConfirmDelete';
 import { deleteTask } from '../../../Redux/Task/TaskActions';
 
 const Drag = ({ currentTask }) => {

@@ -1,4 +1,4 @@
-import { InitialStateType as InitialLocationType } from "./../Location/LocationTypes";
+import { InitialLocationType as InitialLocationType } from "./../Location/LocationTypes";
 import { ApiGetWeatherType, GET_WEATHER } from "./WeatherTypes";
 import { put, all, takeLatest, select } from "redux-saga/effects";
 import {

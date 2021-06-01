@@ -1,32 +1,15 @@
 import { Dispatch } from "react";
 
-import {
-  DataBoardType,
-  onSetBoardsType,
-  onCreateBoardStartType,
-  onCreateBoardErrorType,
-  onDeleteBoardSuccessType,
-  onDeleteBoardStartType,
-  onDeleteBoardErrorType,  
-  onSetIsFenchingBoardsType,
-  ActionsBoardType,
-  ThunkBoardType
-} from "./BoardTypes";
+import * as types from "./BoardTypes";
 import { api } from "../../Api/Api";
 import { RootStateType } from "../Store";
 import { notificationAntd } from "../User/UserAction";
 
-export const ON_SET_BOARDS = "ON_SET_BOARDS";
-export const ON_CREATE_BOARD = "ON_CREATE_BOARD";
-export const ON_DELETE_BOARD = "ON_DELETE_BOARD";
-export const ON_SET_VISIBILITY_BOARD = "ON_SET_VISIBILITY_BOARD";
-export const ON_SET_IS_FETCHING_BOARDS = "ON_SET_IS_FETCHING_BOARDS";
-
-export const onSetBoards = (data: DataBoardType[]): onSetBoardsType => {
-  return { type: ON_SET_BOARDS, data };
+export const onSetBoards = (data: types.DataBoardType[]): types.onSetBoardsType => {
+  return { type: types.ON_SET_BOARDS, data };
 };
 
-export const getBoards = (): ThunkBoardType => {
+export const getBoards = (): types.ThunkBoardType => {
   return async (dispatch) => {
     dispatch(onSetIsFenchingBoards(true));
     const boards = await api.getRequestAuth<{
@@ -40,8 +23,12 @@ export const getBoards = (): ThunkBoardType => {
   };
 };
 
-export const onCreateBoardStart = ({ id, name, visibility = true }: DataBoardType): onCreateBoardStartType => {
-  return { type: ON_CREATE_BOARD, id, name, visibility };
+export const onCreateBoardStart = ({
+  id,
+  name,
+  visibility = true,
+}: types.DataBoardType): types.onCreateBoardStartType => {
+  return { type: types.ON_CREATE_BOARD, id, name, visibility };
 };
 
 export const onCreateBoardError = ({
@@ -50,13 +37,13 @@ export const onCreateBoardError = ({
 }: {
   boardId: string;
   listsId: string;
-}): onCreateBoardErrorType => {
-  return { type: ON_DELETE_BOARD, boardId, listsId };
+}): types.onCreateBoardErrorType => {
+  return { type: types.ON_DELETE_BOARD, boardId, listsId };
 };
 
 export const createBoard =
-  ({ name, id }: DataBoardType): ThunkBoardType =>
-  async (dispatch: Dispatch<ActionsBoardType>, getState: () => RootStateType) => {
+  ({ name, id }: types.DataBoardType): types.ThunkBoardType =>
+  async (dispatch: Dispatch<types.ActionsBoardType>, getState: () => RootStateType) => {
     dispatch(onCreateBoardStart({ name, id }));
     const result = await api.postRequestAuth<{ status: boolean }>("board", {
       name,
@@ -77,21 +64,20 @@ export const onDeleteBoardSuccess = ({
 }: {
   boardId: string;
   listsId: string;
-}): onDeleteBoardSuccessType => {
-  return { type: ON_DELETE_BOARD, boardId, listsId };
+}): types.onDeleteBoardSuccessType => {
+  return { type: types.ON_DELETE_BOARD, boardId, listsId };
 };
 
-export const onDeleteBoardStart = ({ boardId }: { boardId: string }): onDeleteBoardStartType => {
-  return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: false };
+export const onDeleteBoardStart = ({ boardId }: { boardId: string }): types.onDeleteBoardStartType => {
+  return { type: types.ON_SET_VISIBILITY_BOARD, boardId, visibility: false };
 };
 
-export const onDeleteBoardError = ({ boardId }: { boardId: string }): onDeleteBoardErrorType => {
-  return { type: ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
+export const onDeleteBoardError = ({ boardId }: { boardId: string }): types.onDeleteBoardErrorType => {
+  return { type: types.ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
 };
-
 
 export const deleteBoard =
-  ({ boardId }: { boardId: string }): ThunkBoardType =>
+  ({ boardId }: { boardId: string }): types.ThunkBoardType =>
   async (dispatch, getState) => {
     dispatch(onDeleteBoardStart({ boardId }));
     const result = await api.deleteRequestAuth<{ status: boolean }>("board", { id: boardId });
@@ -105,8 +91,6 @@ export const deleteBoard =
     }
   };
 
-export const onSetIsFenchingBoards = (isFetching: boolean): onSetIsFenchingBoardsType => {
-  return { type: ON_SET_IS_FETCHING_BOARDS, isFetching };
+export const onSetIsFenchingBoards = (isFetching: boolean): types.onSetIsFenchingBoardsType => {
+  return { type: types.ON_SET_IS_FETCHING_BOARDS, isFetching };
 };
-
-

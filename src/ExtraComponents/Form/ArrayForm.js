@@ -8,7 +8,7 @@ import TasksForm from './TasksForm';
 import s from './ArrayForm.module.css';
 import './ArrayForm.css';
 import { createTasks, stepOrder } from '../../Redux/Task/TaskActions';
-import ConfirmDelete from '../ConfirmDelete';
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete';
 import { createLists } from '../../Redux/List/ListActions';
 import { createBoard } from '../../Redux/Board/BoardActions';
 import DeleteIcon from '../DeleteIcon';

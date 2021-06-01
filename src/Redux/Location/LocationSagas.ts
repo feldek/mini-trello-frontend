@@ -3,20 +3,20 @@ import { put, all, takeLatest } from "redux-saga/effects";
 import {
   ActionsLocationType,
   ApiLocationType,
-  GeolocationType,
+  CoordsType,
+  InitialLocationType,
   GET_LOCATION,
-  InitialStateType,
   ON_SET_LOCATION,
 } from "./LocationTypes";
 
-const onSetLocation = (payload: InitialStateType): ActionsLocationType => {
+const onSetLocation = (payload: InitialLocationType): ActionsLocationType => {
   return { type: ON_SET_LOCATION, ...payload };
 };
 
 export const getLocationSaga = (): { type: typeof GET_LOCATION } => ({ type: GET_LOCATION });
 function* watchGetLocation() {
   try {
-    const { coords }: GeolocationType = yield new Promise((resolve, reject) => {
+    const { coords }: CoordsType = yield new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
     console.log(coords);

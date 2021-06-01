@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-import "./TasksCard.css";
-import "../../AntDesignStyle.css";
-import s from "./TasksCard.module.css";
+import "./Tasks/TasksCard.css";
+import "../../GlobalStyles/AntDesignStyle.css";
+import s from "./Cards.module.css";
 
-import { getTasks, stepOrder, updateTask } from "../../../Redux/Task/TaskActions";
-import { deleteListSaga, getListsSaga } from "../../../Redux/List/ListSagas";
-import PageNotFound from "../../../ExtraComponents/PageNotFound";
-import ConfirmDelete from "../../../ExtraComponents/ConfirmDelete";
+import { getTasks, stepOrder, updateTask } from "../../Redux/Task/TaskActions";
+import { deleteListSaga, getListsSaga } from "../../Redux/List/ListSagas";
+import PageNotFound from "../../ExtraComponents/PageNotFound/PageNotFound";
+import ConfirmDelete from "../../ExtraComponents/ConfirmDelete/ConfirmDelete";
 import Lists from "./Lists";
 
 

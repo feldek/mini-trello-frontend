@@ -1,4 +1,4 @@
-@import "./Animation.module.css";
+@import "../../../GlobalStyles/Animation.module.css";
 /* without this import global animations doesn't work */
 
 .createAntd {

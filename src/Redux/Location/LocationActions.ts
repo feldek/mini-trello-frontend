@@ -1,21 +1,21 @@
 import axios from "axios";
 import {
-  InitialStateType,
+  InitialLocationType,
   ThunkLocationType,
   ActionsLocationType,
   ON_SET_LOCATION,
   ApiLocationType,
-  GeolocationType,
+  CoordsType,
 } from "./LocationTypes";
 
-export const onSetLocation = (payload: InitialStateType): ActionsLocationType => {
+export const onSetLocation = (payload: InitialLocationType): ActionsLocationType => {
   return { type: ON_SET_LOCATION, ...payload };
 };
 
 export const getLocation = (): ThunkLocationType => {
   return async (dispatch) => {
     try {
-      const { coords }: GeolocationType = await new Promise((resolve, reject) => {
+      const { coords }: CoordsType = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
 

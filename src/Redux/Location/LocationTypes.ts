@@ -4,7 +4,7 @@ import { RootStateType } from "../Store";
 export const ON_SET_LOCATION = "ON_SET_LOCATION";
 export const GET_LOCATION = "GET_LOCATION";
 
-export type InitialStateType = {
+export type InitialLocationType = {
   sity?: string | null;
   countryCode?: number | null;
   countryName?: string | null;
@@ -12,7 +12,7 @@ export type InitialStateType = {
   longitude: number | null;
 };
 
-export type ActionsLocationType = InitialStateType & { type: typeof ON_SET_LOCATION };
+export type ActionsLocationType = InitialLocationType & { type: typeof ON_SET_LOCATION };
 export type ThunkLocationType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsLocationType>;
 
 export type ApiLocationType = {
@@ -23,7 +23,7 @@ export type ApiLocationType = {
   longitude: number;
 };
 
-export type GeolocationType = {
+export type CoordsType = {
   coords: {
     latitude: number;
     longitude: number;

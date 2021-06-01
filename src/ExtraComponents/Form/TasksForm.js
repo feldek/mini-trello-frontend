@@ -1,7 +1,7 @@
 import { Button, Input } from 'antd';
 import React, { useState } from 'react';
 import { Controller, ErrorMessage, useFieldArray } from 'react-hook-form';
-import ConfirmDelete from '../ConfirmDelete';
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete';
 import s from './ArrayForm.module.css';
 
 const TasksForm = ({

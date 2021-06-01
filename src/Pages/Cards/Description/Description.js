@@ -7,9 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import classNames from 'classnames';
 import s from './Description.module.css';
-import PageNotFound from '../../../../ExtraComponents/PageNotFound';
-import ConfirmDelete from '../../../../ExtraComponents/ConfirmDelete';
-import { updateDescription } from '../../../../Redux/Task/TaskActions';
+import PageNotFound from '../../../ExtraComponents/PageNotFound/PageNotFound';
+import ConfirmDelete from '../../../ExtraComponents/ConfirmDelete/ConfirmDelete';
+import { updateDescription } from '../../../Redux/Task/TaskActions';
 
 const ContainerDescription = () => {
   const id = useParams().descriptionId;

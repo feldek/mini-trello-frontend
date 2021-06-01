@@ -13,7 +13,7 @@ export type GetWeatherType = {
   icon: string;
 };
 
-export type InitialStateType = {
+export type InitialWeatherType = {
   data: GetWeatherType;
   isFetching: boolean;
   previousUpdateTime: null | number;
@@ -38,6 +38,8 @@ export type onGetWeatherType = {
   type: typeof GET_WEATHER;
   requestInterval: number;
 };
+export type onSetWeatherType = GetWeatherType & { type: typeof ON_SET_WEATHER };
+
 export type ApiGetWeatherType = {
   weather: { description: string; icon: string }[];
   main: {
@@ -50,8 +52,6 @@ export type ApiGetWeatherType = {
   wind: { speed: number };
   name: string;
 };
-
-export type onSetWeatherType = GetWeatherType & { type: typeof ON_SET_WEATHER };
 
 export type ActionsWeatherType = onSetWeatherType | onSetIsFenchingType | onSetUpdateDateType | onClearWeather;
 export type ThunkWeatherType = ThunkAction<Promise<void>, RootStateType, unknown, ActionsWeatherType>;

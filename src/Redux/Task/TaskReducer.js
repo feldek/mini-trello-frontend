@@ -1,4 +1,4 @@
-import { ON_DELETE_BOARD, ON_DELETE_LIST } from '../List/ListActions';
+import { ON_DELETE_BOARD, ON_DELETE_LIST } from '../List/ListConatants';
 import { ON_CLEAR_DATA } from '../User/UserConstants';
 import {
   ON_UPDATE_DESCRIPTION,
