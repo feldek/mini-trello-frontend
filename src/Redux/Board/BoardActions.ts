@@ -6,16 +6,17 @@ import { RootStateType } from "../Store";
 import { notificationAntd } from "../User/UserAction";
 import { ON_CLEAR_DATA } from "../User/UserConstants";
 
+
 export const boardActions = {
   onSetBoards: (data: DataBoardType[]) => ({ type: boardConsts.ON_SET_BOARDS, payload: [...data] } as const),
 
   onCreateBoardStart: ({ id, name, visibility = true }: DataBoardType) =>
     ({ type: boardConsts.ON_CREATE_BOARD, payload: { id, name, visibility } } as const),
 
-  onCreateBoardError: ({ boardId, listsId }: { boardId: string; listsId: string }) =>
+  onCreateBoardError: ({ boardId, listsId }: { boardId: string; listsId: string[] }) =>
     ({ type: boardConsts.ON_DELETE_BOARD, payload: { boardId, listsId } } as const),
 
-  onDeleteBoardSuccess: ({ boardId, listsId }: { boardId: string; listsId: string }) =>
+  onDeleteBoardSuccess: ({ boardId, listsId }: { boardId: string; listsId: string[] }) =>
     ({ type: boardConsts.ON_DELETE_BOARD, payload: { boardId, listsId } } as const),
 
   onDeleteBoardStart: ({ boardId }: { boardId: string }) =>
@@ -34,7 +35,7 @@ export const getBoards = (): BoardThunkType => {
   return async (dispatch) => {
     dispatch(boardActions.onSetIsFenchingBoards(true));
     const boards = await api.getRequestAuth<{
-      payload: [{ id: string; name: string }];
+      payload: DataBoardType[];
       status: boolean;
     }>("boards");
     if (boards.status) {
@@ -54,7 +55,7 @@ export const createBoard =
     });
     if (!result.status) {
       notificationAntd(result);
-      const listsId = getState()
+      const listsId: string[] = getState()
         .lists.data.filter((el: any) => el.boardId === id)
         .map((el: any) => el.id);
       dispatch(boardActions.onCreateBoardError({ boardId: id, listsId }));
@@ -69,7 +70,7 @@ export const deleteBoard =
     if (!result.status) {
       dispatch(boardActions.onDeleteBoardError({ boardId }));
     } else {
-      const listsId = getState()
+      const listsId: string[] = getState()
         .lists.data.filter((el: any) => el.boardId === boardId)
         .map((el: any) => el.id);
       boardActions.onDeleteBoardSuccess({ boardId, listsId });

@@ -5,7 +5,6 @@ import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
-import { createBoardsSaga } from "../../../Redux/Board/BoardSagas";
 import { createBoard } from "../../../Redux/Board/BoardActions";
 
 const NewBoard = () => {

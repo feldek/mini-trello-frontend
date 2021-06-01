@@ -5,7 +5,7 @@ import { LocationThunkType, InitialLocationType, CoordsType, locationConsts } fr
 export const locationActions = {
   onSetLocation: (data: InitialLocationType) =>
     ({ type: locationConsts.ON_SET_LOCATION, payload: { ...data } } as const),
-  getLocationSaga: () => ({ type: locationConsts.GET_LOCATION } as const),
+  getLocationSaga: () => ({ type: locationConsts.GET_LOCATION_SAGA } as const),
 };
 
 export const getLocation = (): LocationThunkType => {

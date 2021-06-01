@@ -19,10 +19,11 @@ export type InitialWeatherType = {
 };
 
 export const weatherConsts = {
-  GET_WEATHER: "ON_GET_WEATHER",
   ON_SET_WEATHER: "ON_SET_WEATHER",
   ON_SET_IS_FETCHING_WEATHER: "ON_SET_IS_FETCHING_WEATHER",
   ON_SET_UPDATE_DATE: "ON_SET_UPDATE_DATE",
+
+  GET_WEATHER_SAGA: "ON_GET_WEATHER_SAGA",
 } as const;
 
 export type WeatherActionsType = InferActionsTypes<typeof weatherActions>;
@@ -42,7 +43,7 @@ export type ApiGetWeatherType = {
 };
 
 export type onGetWeatherSagaType = {
-  type: typeof weatherConsts.GET_WEATHER;
+  type: typeof weatherConsts.GET_WEATHER_SAGA;
   payload: {
     requestInterval: number;
   };

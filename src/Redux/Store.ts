@@ -36,7 +36,7 @@ const reducers = combineReducers({
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = createStore(
-  persistedReducer,
+  persistedReducer,  
   composeWithDevTools(applyMiddleware(thunkMiddleware, sagaMiddleware))
 );
 export const persistor = persistStore(store);

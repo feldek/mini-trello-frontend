@@ -46,7 +46,7 @@ function* watchGetWeather(action: onGetWeatherSagaType) {
 }
 
 function* sagas(): any {
-  yield all([takeLatest(weatherConsts.GET_WEATHER, watchGetWeather)]);
+  yield all([takeLatest(weatherConsts.GET_WEATHER_SAGA, watchGetWeather)]);
 }
 
 export const weatherSaga = sagas;

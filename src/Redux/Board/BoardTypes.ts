@@ -1,5 +1,5 @@
-import { BaseThunkType, InferActionsTypes } from './../Store';
-import { boardActions } from './BoardActions';
+import { BaseThunkType, InferActionsTypes } from "./../Store";
+import { boardActions } from "./BoardActions";
 
 export const boardConsts = {
   ON_SET_BOARDS: "ON_SET_BOARDS",
@@ -18,9 +18,5 @@ export const boardSagas = {
 export type DataBoardType = { name: string; id: string; visibility?: boolean };
 export type InitialBoardType = { data: DataBoardType[]; isFetching: boolean };
 
-
 export type BoardActionsType = InferActionsTypes<typeof boardActions>;
 export type BoardThunkType = BaseThunkType<BoardActionsType>;
-
-
-

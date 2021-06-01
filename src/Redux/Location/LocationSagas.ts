@@ -46,7 +46,7 @@ function* watchGetLocation() {
 }
 
 function* sagas(): any {
-  yield all([takeLatest(locationConsts.GET_LOCATION, watchGetLocation)]);
+  yield all([takeLatest(locationConsts.GET_LOCATION_SAGA, watchGetLocation)]);
 }
 
 export const locationSaga = sagas;

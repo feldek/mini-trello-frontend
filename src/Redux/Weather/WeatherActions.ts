@@ -9,7 +9,7 @@ export const weatherActions = {
     ({ type: weatherConsts.ON_SET_UPDATE_DATE, payload: { previousUpdateTime } } as const),
   onSetWeather: (data: WeatherType) => ({ type: weatherConsts.ON_SET_WEATHER, payload: { ...data } } as const),
   getWeatherSaga: (requestInterval = 0) =>
-    ({ type: weatherConsts.GET_WEATHER, payload: { requestInterval } } as const),
+    ({ type: weatherConsts.GET_WEATHER_SAGA, payload: { requestInterval } } as const),
 };
 
 export const getWeather = (requestInterval = 0): WeatherThunkType => {

@@ -3,7 +3,8 @@ import { locationActions } from "./LocationActions";
 
 export const locationConsts = {
   ON_SET_LOCATION: "ON_SET_LOCATION",
-  GET_LOCATION: "GET_LOCATION",
+
+  GET_LOCATION_SAGA: "GET_LOCATION_SAGA",
 } as const;
 
 export type InitialLocationType = {
@@ -23,6 +24,3 @@ export type CoordsType = {
     longitude: number;
   };
 };
-
-
-
