@@ -1,47 +1,41 @@
-import { ActionsBoardType, InitialBoardType } from './BoardTypes';
-import {  
-  ON_SET_BOARDS,
-  ON_CREATE_BOARD,
-  ON_DELETE_BOARD,
-  ON_SET_VISIBILITY_BOARD,
-  ON_SET_IS_FETCHING_BOARDS,
-} from "./BoardTypes";
-
+import { BoardActionsType, DataBoardType, InitialBoardType } from "./BoardTypes";
+import { boardConsts } from "./BoardTypes";
 import { ON_CLEAR_DATA } from "../User/UserConstants";
 
-const initialState: InitialBoardType = { data: [], isFetching: false };
+const initialState: InitialBoardType = { data: [] as DataBoardType[], isFetching: false };
 
-const BoardReduser = (state = initialState, action: ActionsBoardType): InitialBoardType => {
+const BoardReduser = (state = initialState, action: BoardActionsType): InitialBoardType => {
   switch (action.type) {
-    case ON_CREATE_BOARD: {
-      const newData = [...state.data];
-      newData.push({ id: action.id, name: action.name, visibility: action.visibility });
-      return { ...state, data: newData };
+    case boardConsts.ON_CREATE_BOARD: {
+      const {
+        payload: { id, name, visibility },
+      } = action;
+      return { ...state, data: [...state.data, { id, name, visibility }] };
     }
-    case ON_SET_BOARDS: {
-      if (!action.data) {
+    case boardConsts.ON_SET_BOARDS: {
+      if (!action.payload) {
         return state;
       }
-      const newData = action.data.map((el) => {
+      const newData = action.payload.map((el) => {
         el.visibility = true;
         return el;
       });
       return { ...state, data: newData };
     }
     case ON_CLEAR_DATA: {
-      return { ...state, data: action.payload.newData };
+      return { ...state, data: action.payload };
     }
-    case ON_SET_IS_FETCHING_BOARDS: {
-      return { ...state, isFetching: action.isFetching };
+    case boardConsts.ON_SET_IS_FETCHING_BOARDS: {
+      return { ...state, isFetching: action.payload.isFetching };
     }
-    case ON_DELETE_BOARD: {
-      const newData = state.data.filter((el) => action.boardId !== el.id);
+    case boardConsts.ON_DELETE_BOARD: {
+      const newData = state.data.filter((el) => action.payload.boardId !== el.id);
       return { ...state, data: newData };
     }
-    case ON_SET_VISIBILITY_BOARD: {
+    case boardConsts.ON_SET_VISIBILITY_BOARD: {
       const newData = state.data.map((el) => {
-        if (action.boardId === el.id) {
-          el.visibility = action.visibility;
+        if (action.payload.boardId === el.id) {
+          el.visibility = action.payload.visibility;
         }
         return el;
       });

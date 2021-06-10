@@ -1,4 +1,5 @@
-import { ON_DELETE_BOARD, ON_DELETE_LIST } from '../List/ListConatants';
+import { listConsts } from '../List/ListTypes';
+import { boardConsts } from '../Board/BoardTypes';
 import { ON_CLEAR_DATA } from '../User/UserConstants';
 import {
   ON_UPDATE_DESCRIPTION,
@@ -61,11 +62,11 @@ const TaskReducer = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_DELETE_LIST: {
+    case listConsts.ON_DELETE_LIST: {
       const newData = state.data.filter((item) => item.listId !== action.listId);
       return { ...state, data: newData };
     }
-    case ON_DELETE_BOARD: {
+    case boardConsts.ON_DELETE_BOARD: {
       if (!action.listsId) {
         return state;
       }

@@ -1,28 +1,17 @@
 import axios from "axios";
 import { put, all, takeLatest } from "redux-saga/effects";
-import {
-  ActionsLocationType,
-  ApiLocationType,
-  CoordsType,
-  InitialLocationType,
-  GET_LOCATION,
-  ON_SET_LOCATION,
-} from "./LocationTypes";
 
-const onSetLocation = (payload: InitialLocationType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, ...payload };
-};
+import { locationActions } from "./LocationActions";
+import { CoordsType, InitialLocationType, locationConsts } from "./LocationTypes";
 
-export const getLocationSaga = (): { type: typeof GET_LOCATION } => ({ type: GET_LOCATION });
 function* watchGetLocation() {
   try {
     const { coords }: CoordsType = yield new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    console.log(coords);
 
     yield put(
-      onSetLocation({
+      locationActions.onSetLocation({
         latitude: coords.latitude,
         longitude: coords.longitude,
       })
@@ -30,14 +19,14 @@ function* watchGetLocation() {
   } catch (err) {
     console.log(err);
 
-    const result: { data: ApiLocationType; status: number } = yield axios.get(
+    const result: { data: InitialLocationType; status: number } = yield axios.get(
       "https://api.ipdata.co/?api-key=a3e875691c4fd0211a8f3f9f566fc2c56be06cbd8f60735d6e48f031"
     );
 
     console.log(result);
     if (result.status === 200) {
       yield put(
-        onSetLocation({
+        locationActions.onSetLocation({
           sity: result.data.sity,
           countryCode: result.data.countryCode,
           countryName: result.data.countryName,
@@ -47,10 +36,7 @@ function* watchGetLocation() {
       );
     } else {
       yield put(
-        onSetLocation({
-          sity: null,
-          countryCode: null,
-          countryName: null,
+        locationActions.onSetLocation({
           latitude: null,
           longitude: null,
         })
@@ -59,8 +45,8 @@ function* watchGetLocation() {
   }
 }
 
-function* sagas() {
-  yield all([takeLatest(GET_LOCATION, watchGetLocation)]);
+function* sagas(): any {
+  yield all([takeLatest(locationConsts.GET_LOCATION_SAGA, watchGetLocation)]);
 }
 
 export const locationSaga = sagas;

@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import s from "./NewBoard.module.css";
 import "./NewBoard.css";
 import { uuid } from "uuidv4";
-import { createBoardsSaga } from "../../../Redux/Board/BoardSagas";
+import { createBoard } from "../../../Redux/Board/BoardActions";
 
 const NewBoard = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const NewBoard = () => {
     const id = uuid();
     setToggle(false);
     onReset();
-    dispatch(createBoardsSaga({ name: elem.nameBoard, id }));
+    dispatch(createBoard({ name: elem.nameBoard, id }));
   };
 
   const onFinishFailed = (errorInfo) => {

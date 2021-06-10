@@ -1,23 +1,15 @@
-import { ON_DELETE_BOARD } from "../Board/BoardTypes";
+import { boardConsts } from "../Board/BoardTypes";
 import { ON_CLEAR_DATA } from "../User/UserConstants";
+import { InitialListType, ListActionsType, listConsts } from "./ListTypes";
 
-import {
-  ON_CREATE_LIST,
-  ON_CREATE_LISTS,
-  ON_DELETE_LIST,
-  ON_SET_IS_FETCHING_LISTS,
-  ON_SET_LISTS,
-  ON_SET_VISIBILITY_LIST,
-} from "./ListConatants";
-
-const initialState = {
+const initialState: InitialListType = {
   data: [],
   isFetching: false,
 };
 
-const ListReduser = (state = initialState, action) => {
+const ListReduser = (state = initialState, action: ListActionsType): InitialListType => {
   switch (action.type) {
-    case ON_CREATE_LIST: {
+    case listConsts.ON_CREATE_LIST: {
       const newData = [...state.data];
       newData.push({
         id: action.id,
@@ -27,20 +19,18 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_CREATE_LISTS: {
-      const newData = [...state.data];
-      action.data = action.data.map((el) => {
+    case listConsts.ON_CREATE_LISTS: {
+      const newData = action.data.map((el) => {
         el.visibility = true;
         return el;
       });
-      newData.push(...action.data);
-      return { ...state, data: newData };
+      return { ...state, data: [...state.data, ...newData] };
     }
-    case ON_DELETE_LIST: {
+    case listConsts.ON_DELETE_LIST: {
       const newData = state.data.filter((el) => action.listId !== el.id);
       return { ...state, data: newData };
     }
-    case ON_SET_LISTS: {
+    case listConsts.ON_SET_LISTS: {
       if (!action.data) return state;
       const newData = action.data.map((el) => {
         el.visibility = true;
@@ -48,10 +38,10 @@ const ListReduser = (state = initialState, action) => {
       });
       return { ...state, data: newData };
     }
-    case ON_SET_IS_FETCHING_LISTS: {
+    case listConsts.ON_SET_IS_FETCHING_LISTS: {
       return { ...state, isFetching: action.isFetching };
     }
-    case ON_SET_VISIBILITY_LIST: {
+    case listConsts.ON_SET_VISIBILITY_LIST: {
       const newData = state.data.map((el) => {
         if (action.listId === el.id) {
           el.visibility = action.visibility;
@@ -61,10 +51,10 @@ const ListReduser = (state = initialState, action) => {
       return { ...state, data: newData };
     }
     case ON_CLEAR_DATA: {
-      return { ...state, data: action.payload.newData };
+      return { ...state, data: action.payload };
     }
-    case ON_DELETE_BOARD: {
-      const newData = state.data.filter((item) => action.boardId !== item.boardId);
+    case boardConsts.ON_DELETE_BOARD: {
+      const newData = state.data.filter((item) => action.payload.boardId !== item.boardId);
       return { ...state, data: newData };
     }
     default:
