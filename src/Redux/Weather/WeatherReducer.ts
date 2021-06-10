@@ -1,11 +1,4 @@
-import {
-  InitialWeatherType,
-  ActionsWeatherType,
-  ON_SET_WEATHER,
-  ON_CLEAR_WEATHER,
-  ON_SET_IS_FETCHING_WEATHER,
-  ON_SET_UPDATE_DATE,
-} from "./WeatherTypes";
+import { InitialWeatherType, WeatherActionsType, weatherConsts } from "./WeatherTypes";
 
 const initialState: InitialWeatherType = {
   data: {
@@ -23,32 +16,29 @@ const initialState: InitialWeatherType = {
   previousUpdateTime: null,
 };
 
-const WeatherReduser = (state = initialState, action: ActionsWeatherType): InitialWeatherType => {
+const WeatherReduser = (state = initialState, action: WeatherActionsType): InitialWeatherType => {
   switch (action.type) {
-    case ON_SET_WEATHER: {
+    case weatherConsts.ON_SET_WEATHER: {
       return {
         ...state,
         data: {
-          icon: action.icon,
-          weatherDescription: action.weatherDescription,
-          temp: action.temp,
-          feels_like: action.feels_like,
-          temp_min: action.temp_min,
-          temp_max: action.temp_max,
-          pressure: action.pressure,
-          windSpeed: action.windSpeed,
-          sity: action.sity,
+          icon: action.payload.icon,
+          weatherDescription: action.payload.weatherDescription,
+          temp: action.payload.temp,
+          feels_like: action.payload.feels_like,
+          temp_min: action.payload.temp_min,
+          temp_max: action.payload.temp_max,
+          pressure: action.payload.pressure,
+          windSpeed: action.payload.windSpeed,
+          sity: action.payload.sity,
         },
       };
     }
-    case ON_SET_UPDATE_DATE: {
-      return { ...state, previousUpdateTime: action.previousUpdateTime };
+    case weatherConsts.ON_SET_UPDATE_DATE: {
+      return { ...state, previousUpdateTime: action.payload.previousUpdateTime };
     }
-    case ON_SET_IS_FETCHING_WEATHER: {
-      return { ...state, isFetching: action.isFetching };
-    }
-    case ON_CLEAR_WEATHER: {
-      return { ...initialState };
+    case weatherConsts.ON_SET_IS_FETCHING_WEATHER: {
+      return { ...state, isFetching: action.payload.isFetching };
     }
     default:
       return state;

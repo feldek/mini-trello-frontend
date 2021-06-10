@@ -1,18 +1,14 @@
 import axios from "axios";
-import {
-  InitialLocationType,
-  ThunkLocationType,
-  ActionsLocationType,
-  ON_SET_LOCATION,
-  ApiLocationType,
-  CoordsType,
-} from "./LocationTypes";
 
-export const onSetLocation = (payload: InitialLocationType): ActionsLocationType => {
-  return { type: ON_SET_LOCATION, ...payload };
+import { LocationThunkType, InitialLocationType, CoordsType, locationConsts } from "./LocationTypes";
+
+export const locationActions = {
+  onSetLocation: (data: InitialLocationType) =>
+    ({ type: locationConsts.ON_SET_LOCATION, payload: { ...data } } as const),
+  getLocationSaga: () => ({ type: locationConsts.GET_LOCATION_SAGA } as const),
 };
 
-export const getLocation = (): ThunkLocationType => {
+export const getLocation = (): LocationThunkType => {
   return async (dispatch) => {
     try {
       const { coords }: CoordsType = await new Promise((resolve, reject) => {
@@ -20,7 +16,7 @@ export const getLocation = (): ThunkLocationType => {
       });
 
       dispatch(
-        onSetLocation({
+        locationActions.onSetLocation({
           latitude: coords.latitude,
           longitude: coords.longitude,
         })
@@ -28,13 +24,13 @@ export const getLocation = (): ThunkLocationType => {
     } catch (err) {
       console.log(err);
 
-      const result = await axios.get<ApiLocationType>(
+      const result = await axios.get<InitialLocationType>(
         "https://api.ipdata.co/?api-key=a3e875691c4fd0211a8f3f9f566fc2c56be06cbd8f60735d6e48f031"
       );
 
       if (result.status === 200) {
         dispatch(
-          onSetLocation({
+          locationActions.onSetLocation({
             sity: result.data.sity,
             countryCode: result.data.countryCode,
             countryName: result.data.countryName,
@@ -44,10 +40,7 @@ export const getLocation = (): ThunkLocationType => {
         );
       } else {
         dispatch(
-          onSetLocation({
-            sity: null,
-            countryCode: null,
-            countryName: null,
+          locationActions.onSetLocation({
             latitude: null,
             longitude: null,
           })

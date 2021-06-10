@@ -57,7 +57,7 @@ const TasksCard = () => {
 
   const [toggleDelete, setToggleDelete] = useState(false);
   const [listId, setListId] = useState(false);
-  const isFetchingLists = useSelector((state) => state.lists.isFetching);
+  const isFetchingLists = useSelector((state) => state.lists.isFetching);  
   const currentLists = useSelector((state) => state.lists.data).filter((elem) => elem.boardId === boardId);
   const listsId = currentLists.map((el) => el.id);
   const tasks = useSelector((state) => state.tasks.data);

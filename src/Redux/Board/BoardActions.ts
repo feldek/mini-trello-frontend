@@ -1,96 +1,78 @@
 import { Dispatch } from "react";
 
-import * as types from "./BoardTypes";
 import { api } from "../../Api/Api";
+import { boardConsts, BoardThunkType, BoardActionsType, DataBoardType } from "./BoardTypes";
 import { RootStateType } from "../Store";
 import { notificationAntd } from "../User/UserAction";
+import { ON_CLEAR_DATA } from "../User/UserConstants";
 
-export const onSetBoards = (data: types.DataBoardType[]): types.onSetBoardsType => {
-  return { type: types.ON_SET_BOARDS, data };
+
+export const boardActions = {
+  onSetBoards: (data: DataBoardType[]) => ({ type: boardConsts.ON_SET_BOARDS, payload: [...data] } as const),
+
+  onCreateBoardStart: ({ id, name, visibility = true }: DataBoardType) =>
+    ({ type: boardConsts.ON_CREATE_BOARD, payload: { id, name, visibility } } as const),
+
+  onCreateBoardError: ({ boardId, listsId }: { boardId: string; listsId: string[] }) =>
+    ({ type: boardConsts.ON_DELETE_BOARD, payload: { boardId, listsId } } as const),
+
+  onDeleteBoardSuccess: ({ boardId, listsId }: { boardId: string; listsId: string[] }) =>
+    ({ type: boardConsts.ON_DELETE_BOARD, payload: { boardId, listsId } } as const),
+
+  onDeleteBoardStart: ({ boardId }: { boardId: string }) =>
+    ({ type: boardConsts.ON_SET_VISIBILITY_BOARD, payload: { boardId, visibility: false } } as const),
+
+  onDeleteBoardError: ({ boardId }: { boardId: string }) =>
+    ({ type: boardConsts.ON_SET_VISIBILITY_BOARD, payload: { boardId, visibility: true } } as const),
+
+  onSetIsFenchingBoards: (isFetching: boolean) =>
+    ({ type: boardConsts.ON_SET_IS_FETCHING_BOARDS, payload: { isFetching } } as const),
+
+  onClearData: (payload = []) => ({ type: ON_CLEAR_DATA, payload } as const),
 };
 
-export const getBoards = (): types.ThunkBoardType => {
+export const getBoards = (): BoardThunkType => {
   return async (dispatch) => {
-    dispatch(onSetIsFenchingBoards(true));
+    dispatch(boardActions.onSetIsFenchingBoards(true));
     const boards = await api.getRequestAuth<{
-      payload: [{ id: string; name: string }];
+      payload: DataBoardType[];
       status: boolean;
     }>("boards");
     if (boards.status) {
-      dispatch(onSetBoards(boards.payload));
+      dispatch(boardActions.onSetBoards(boards.payload));
     }
-    dispatch(onSetIsFenchingBoards(false));
+    dispatch(boardActions.onSetIsFenchingBoards(false));
   };
 };
 
-export const onCreateBoardStart = ({
-  id,
-  name,
-  visibility = true,
-}: types.DataBoardType): types.onCreateBoardStartType => {
-  return { type: types.ON_CREATE_BOARD, id, name, visibility };
-};
-
-export const onCreateBoardError = ({
-  boardId,
-  listsId,
-}: {
-  boardId: string;
-  listsId: string;
-}): types.onCreateBoardErrorType => {
-  return { type: types.ON_DELETE_BOARD, boardId, listsId };
-};
-
 export const createBoard =
-  ({ name, id }: types.DataBoardType): types.ThunkBoardType =>
-  async (dispatch: Dispatch<types.ActionsBoardType>, getState: () => RootStateType) => {
-    dispatch(onCreateBoardStart({ name, id }));
+  ({ name, id }: DataBoardType): BoardThunkType =>
+  async (dispatch: Dispatch<BoardActionsType>, getState: () => RootStateType) => {
+    dispatch(boardActions.onCreateBoardStart({ name, id }));
     const result = await api.postRequestAuth<{ status: boolean }>("board", {
       name,
       id,
     });
     if (!result.status) {
       notificationAntd(result);
-      const listsId = getState()
+      const listsId: string[] = getState()
         .lists.data.filter((el: any) => el.boardId === id)
         .map((el: any) => el.id);
-      dispatch(onCreateBoardError({ boardId: id, listsId }));
+      dispatch(boardActions.onCreateBoardError({ boardId: id, listsId }));
     }
   };
-
-export const onDeleteBoardSuccess = ({
-  boardId,
-  listsId,
-}: {
-  boardId: string;
-  listsId: string;
-}): types.onDeleteBoardSuccessType => {
-  return { type: types.ON_DELETE_BOARD, boardId, listsId };
-};
-
-export const onDeleteBoardStart = ({ boardId }: { boardId: string }): types.onDeleteBoardStartType => {
-  return { type: types.ON_SET_VISIBILITY_BOARD, boardId, visibility: false };
-};
-
-export const onDeleteBoardError = ({ boardId }: { boardId: string }): types.onDeleteBoardErrorType => {
-  return { type: types.ON_SET_VISIBILITY_BOARD, boardId, visibility: true };
-};
 
 export const deleteBoard =
-  ({ boardId }: { boardId: string }): types.ThunkBoardType =>
+  ({ boardId }: { boardId: string }): BoardThunkType =>
   async (dispatch, getState) => {
-    dispatch(onDeleteBoardStart({ boardId }));
+    dispatch(boardActions.onDeleteBoardStart({ boardId }));
     const result = await api.deleteRequestAuth<{ status: boolean }>("board", { id: boardId });
     if (!result.status) {
-      dispatch(onDeleteBoardError({ boardId }));
+      dispatch(boardActions.onDeleteBoardError({ boardId }));
     } else {
-      const listsId = getState()
+      const listsId: string[] = getState()
         .lists.data.filter((el: any) => el.boardId === boardId)
         .map((el: any) => el.id);
-      onDeleteBoardSuccess({ boardId, listsId });
+      boardActions.onDeleteBoardSuccess({ boardId, listsId });
     }
   };
-
-export const onSetIsFenchingBoards = (isFetching: boolean): types.onSetIsFenchingBoardsType => {
-  return { type: types.ON_SET_IS_FETCHING_BOARDS, isFetching };
-};
