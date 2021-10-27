@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import s from './NewList.module.css';
-import { createListSaga } from '../../../Redux/List/ListSagas';
+import { createList } from '../../../Redux/List/ListActions';
 
 const NewList = () => {
   const [toggle, setToggle] = useState(false);
@@ -13,7 +13,7 @@ const NewList = () => {
 
   const handleCreate = async (elem) => {
     setToggle(false);
-    await dispatch(createListSaga({ name: elem.nameList, boardId }));
+    await dispatch(createList({ name: elem.nameList, boardId }));
     onReset();
   };
 

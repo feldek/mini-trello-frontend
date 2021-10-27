@@ -1,1 +1,10 @@
 /src/Api/Api.ts
+node_modules
+build
+*.css
+*.scss
+*.png
+*.jpg
+*.svg
+*.eps
+*.html

@@ -13,7 +13,7 @@ import NewBoard from "./NewBoard/NewBoard";
 import DeleteIcon from "../../ExtraComponents/DeleteIcon";
 import ConfirmDelete from "../../ExtraComponents/ConfirmDelete/ConfirmDelete";
 import Header from "./Header/Header";
-import { deleteBoardsSaga, getBoardsSaga } from "../../Redux/Board/BoardSagas";
+import { deleteBoard, getBoards } from "../../Redux/Board/BoardActions";
 
 const Boards = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -23,11 +23,11 @@ const Boards = (): JSX.Element => {
   const isFetching = useSelector((state: RootStateType) => state.boards.isFetching);
 
   useEffect(() => {
-    dispatch(getBoardsSaga());
+    dispatch(getBoards());
   }, [dispatch]);
 
   const handleDelete = (id: string) => {
-    dispatch(deleteBoardsSaga({ boardId: id }));
+    dispatch(deleteBoard({ boardId: id }));
   };
   const onConfirmDelete = (id: string) => {
     setVisibleDelete(true);
@@ -48,16 +48,24 @@ const Boards = (): JSX.Element => {
                   elem.visibility && (
                     <Card.Grid key={`board${elem.id}`} className={s.board}>
                       <DeleteIcon size="m" handleDelete={() => onConfirmDelete(elem.id)} />
-                      <Link to={`/board/${elem.id}`} key={`board${elem.id}`} className={s.boardLink}>
+                      <Link
+                        to={`/board/${elem.id}`}
+                        key={`board${elem.id}`}
+                        className={s.boardLink}
+                      >
                         {elem.name}
                       </Link>
                     </Card.Grid>
-                  )
+                  ),
               )}
             </div>
           )}
         </Card>
-        <ConfirmDelete onConfirm={() => handleDelete(boardId)} setVisible={setVisibleDelete} visible={visibleDelete} />
+        <ConfirmDelete
+          onConfirm={() => handleDelete(boardId)}
+          setVisible={setVisibleDelete}
+          visible={visibleDelete}
+        />
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ const BoardReduser = (state = initialState, action: BoardActionsType): InitialBo
       return { ...state, data: newData };
     }
     case ON_CLEAR_DATA: {
-      return { ...state, data: action.payload };
+      return { ...state, data: [] };
     }
     case boardConsts.ON_SET_IS_FETCHING_BOARDS: {
       return { ...state, isFetching: action.payload.isFetching };
