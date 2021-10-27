@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import { onSetUser, onClearData, onSetUserId } from "./UserReducer";
+import { onSetUser, onClearData, onSetUserId } from "./UserSlice";
 import { api } from "../../Api/Api";
 
 export const signIn =
@@ -32,9 +32,7 @@ export const signUp =
     return result.status;
   };
 
-export const recoveryPassword =
-  ({ email, password }) =>
-  async () => {
+export const recoveryPassword =  ({ email, password }) =>  async () => {
     const result = await api.postRequest("auth/recoveryPassword", {
       email,
       password,
@@ -42,9 +40,7 @@ export const recoveryPassword =
     notificationAntd(result);
     return result;
   };
-export const changePassword =
-  ({ oldPassword, newPassword }) =>
-  async () => {
+export const changePassword =  ({ oldPassword, newPassword }) =>  async () => {
     const result = await api.postRequestAuth("auth/changePassword", {
       oldPassword,
       newPassword,
@@ -55,7 +51,10 @@ export const changePassword =
 
 export const clearedData = () => (dispatch) => dispatch(onClearData({ newData: [] }));
 
-export const setUserId = ({ id }) => (dispatch) =>  dispatch(onSetUserId({ id }));
+export const setUserId =
+  ({ id }) =>
+  (dispatch) =>
+    dispatch(onSetUserId({ id }));
 
 export const notificationAntd = ({ payload = undefined, status }) => {
   if (status) {

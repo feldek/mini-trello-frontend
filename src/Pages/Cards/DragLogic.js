@@ -6,18 +6,16 @@ import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
-
 import "./Tasks/TasksCard.css";
 import "../../GlobalStyles/AntDesignStyle.css";
 import s from "./Cards.module.css";
 
 import { getTasks, stepOrder, updateTask } from "../../Redux/Task/TaskActions";
-import { deleteListSaga, getListsSaga } from "../../Redux/List/ListSagas";
-import PageNotFound from "../../ExtraComponents/PageNotFound/PageNotFound";
+// import PageNotFound from "../../ExtraComponents/PageNotFound/PageNotFound";
 import ConfirmDelete from "../../ExtraComponents/ConfirmDelete/ConfirmDelete";
 import Lists from "./Lists";
-
-
+import { deleteList, getLists } from "../../Redux/List/ListActions";
+// import { getBoards } from "../../Redux/Board/BoardActions";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -51,14 +49,16 @@ const TasksCard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getListsSaga({ boardId: params.boardId }));
-    dispatch(getTasks({ boardId: params.boardId }));
-  }, [dispatch, params]);
+    dispatch(getLists({ boardId }));
+    dispatch(getTasks({ boardId }));
+  }, [dispatch, boardId]);
 
   const [toggleDelete, setToggleDelete] = useState(false);
   const [listId, setListId] = useState(false);
-  const isFetchingLists = useSelector((state) => state.lists.isFetching);  
-  const currentLists = useSelector((state) => state.lists.data).filter((elem) => elem.boardId === boardId);
+  const isFetchingLists = useSelector((state) => state.lists.isFetching);
+  const currentLists = useSelector((state) => state.lists.data).filter(
+    (elem) => elem.boardId === boardId,
+  );
   const listsId = currentLists.map((el) => el.id);
   const tasks = useSelector((state) => state.tasks.data);
   let currentTasks = tasks.filter((item) => listsId.includes(item.listId));
@@ -73,12 +73,17 @@ const TasksCard = () => {
   };
 
   const handleDeleteList = async ({ listId }) => {
-    await dispatch(deleteListSaga({ listId }));
+    await dispatch(deleteList({ listId }));
   };
 
-  if (!useSelector((state) => state.boards.data).find((elem) => elem.id === boardId)) {
-    return <PageNotFound />;
-  }
+  // const boards = useSelector((state) => state.boards.data);
+  // const checkExistBoard = async () => {
+  //   if (!boards.find((elem) => elem.id === boardId)) {
+  //     await dispatch(getBoards());
+  //   }
+  // };
+  // checkExistBoard()
+
   function onDragEnd(result) {
     const { source, destination } = result;
     if (!destination) {
@@ -94,13 +99,16 @@ const TasksCard = () => {
       newState[sInd] = items;
 
       if (destination.index === 0) {
-        order = newState[dInd].length === 1 ? 0 : newState[dInd][destination.index + 1].order - stepOrder;
+        order =
+          newState[dInd].length === 1 ? 0 : newState[dInd][destination.index + 1].order - stepOrder;
       } else if (destination.index === newState[dInd].length - 1) {
         order = newState[dInd][destination.index - 1].order + stepOrder;
       } else {
         order =
           newState[dInd][destination.index - 1].order +
-          (newState[dInd][destination.index + 1].order - newState[dInd][destination.index - 1].order) / 2;
+          (newState[dInd][destination.index + 1].order -
+            newState[dInd][destination.index - 1].order) /
+            2;
       }
       dListId = newState[sInd][0].listId;
     } else {
@@ -110,13 +118,15 @@ const TasksCard = () => {
       dListId = currentLists[dInd].id;
 
       if (destination.index === 0) {
-        order = newState[dInd].length === 0 ? 0 : newState[dInd][destination.index].order - stepOrder;
+        order =
+          newState[dInd].length === 0 ? 0 : newState[dInd][destination.index].order - stepOrder;
       } else if (destination.index === newState[dInd].length) {
         order = newState[dInd][destination.index - 1].order + stepOrder;
       } else {
         order =
           newState[dInd][destination.index - 1].order +
-          (newState[dInd][destination.index].order - newState[dInd][destination.index - 1].order) / 2;
+          (newState[dInd][destination.index].order - newState[dInd][destination.index - 1].order) /
+            2;
       }
     }
     dispatch(updateTask({ id: result.draggableId, order, listId: dListId }));

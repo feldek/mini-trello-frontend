@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { forcedLogOut } from "../Constants";
-import { onSetUser } from "../Redux/User/UserReducer";
+import { clearedData, onSetUser } from "../Redux/User/UserSlice";
 import s from "./SignIn.module.css";
 
 const ForcedLogOut = () => {
   const dispatch = useDispatch();
   const [timer, setTimer] = useState(9);
   useEffect(() => {
+    dispatch(clearedData())
     dispatch(onSetUser({ authorization: false, error: "wrong autentificate token" }));
   }, [dispatch]);
   useEffect(() => {

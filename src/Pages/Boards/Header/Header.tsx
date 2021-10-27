@@ -9,29 +9,17 @@ import s from "./Header.module.css";
 import "./Header.css";
 import classNames from "classnames";
 import WeatherPlugin from "../../../ExtraComponents/Weather/WeatherPlugin";
-import config from "../../../Constants";
-import { useTypeSelector } from "../../../Redux/TypeHook";
+import { UserAvatar } from "./UserAvatar/UserAvatar";
 
 const Header = (): JSX.Element => {
   const [visiblePass, setVisiblePass] = useState(false);
   const [visibleLogOut, setVisibleLogOut] = useState(false);
   const [visibleArrayForm, setVisibleArrayForm] = useState(false);
-  const userId = useTypeSelector((state) => state.user.id);
-  const [errorLoadedAvatar, setErrorLoadedAvatar] = useState(false);
 
   return (
     <>
       <div className={s.header}>
-        {errorLoadedAvatar ? (
-          <img style={{ margin: 0 }} src="user_avatar_default.png" className={s.avatar} />
-        ) : (
-          <img
-            style={{ margin: 0 }}
-            src={`${config.apiUrl}files/userAvatars/user-avatar-main-${userId}.jpg`}
-            onError={() => setErrorLoadedAvatar(true)}
-            className={s.avatar}
-          />
-        )}
+        <UserAvatar />
         <div className={s.boxMenu}>
           <div className={s.menu}>
             <Menu

@@ -5,7 +5,7 @@ import s from "./SignIn.module.css";
 import "./SignIn.css";
 import { useDispatch } from "react-redux";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { signIn } from "../Redux/User/UserAction";
+import { signIn } from "../Redux/User/UserSlice";
 
 const SignIn = () => {
   const dispatch = useDispatch();

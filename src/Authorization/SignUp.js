@@ -3,7 +3,7 @@ import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import s from './SignUp.module.css';
-import { signUp } from '../Redux/User/UserAction';
+import { signUp } from '../Redux/User/UserSlice';
 
 const SignUp = () => {
   const [form] = Form.useForm();
