@@ -22,6 +22,19 @@ export const signIn = createAsyncThunk<boolean, ISignIn, { state: IState }>(
   },
 );
 
+interface IFetchUser {
+  payload: { avatar_url: string };
+  status: boolean;
+}
+
+export const fetchUser = createAsyncThunk<{ avatar_url: string }, void, { state: IState }>(
+  "user/fetchUser",
+  async () => {
+    const { payload } = await api.getRequestAuth<IFetchUser>("auth/fetchUser");
+    return payload;
+  },
+);
+
 export const signUp = createAsyncThunk<boolean, ISignIn, { state: IState }>(
   "user/signIn",
   async ({ email, password }) => {
@@ -61,12 +74,14 @@ interface IUser {
   authorization: boolean;
   error: boolean;
   id: string | null;
+  avatar_url: string | null;
 }
 
 const initialState: IUser = {
   authorization: localStorage.getItem("token") ? true : false,
   error: false,
   id: null,
+  avatar_url: null,
 };
 
 const userSlice = createSlice({
@@ -76,17 +91,21 @@ const userSlice = createSlice({
     onSetUser: (state, action) => ({ ...state, authorization: action.payload.authorization }),
     onClearData: (state, action) => action.payload.newData,
     onSetUserId: (state, action) => ({ ...state, id: action.payload.id }),
+    onSetUserAvatar: (state, action) => ({ ...state, avatar_url: action.payload.avatar_url }),
   },
   extraReducers: (builder) => {
     builder.addCase(signIn.fulfilled, (state, action) => {
       state.authorization = action.payload ? true : false;
+    });
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.avatar_url = action.payload.avatar_url;
     });
   },
 });
 
 export const {
   reducer: UserReducer,
-  actions: { onSetUser, onClearData, onSetUserId },
+  actions: { onSetUser, onClearData, onSetUserId, onSetUserAvatar },
 } = userSlice;
 
 interface INotificationAntd {
