@@ -18,7 +18,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/webpack-env": "^1.16.0",
     "antd": "^4.9.1",
-    "axios": "^0.21.0",
+    "axios": "^1.6.0",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.3",
     "fetch-wrap": "^0.1.2",
